@@ -55,5 +55,18 @@ int main() {
     NpArr<int> dyn_arr2 = pypp_np::full<int>({2, 3, 4}, 7);
     dyn_arr2.print();
 
+    PyList<PyList<PyList<PyList<float>>>> nested_list = {
+        {{{1.1, 2}, {4, 5}}, {{10, 11}, {13, 14}}},
+        {{{1, 2}, {1, 2}}, {{1, 2}, {1, 2}}}};
+
+    NpArr<float> arr_from_nested = pypp_np::array<float>(nested_list);
+    arr_from_nested.print();
+    NpArr<int> arr_from_nested2 = pypp_np::array<int>(PyList({1, 2, 3}));
+    arr_from_nested2.print();
+
+    NpArr<double> d =
+        pypp_np::array<double>(PyList({PyList({1, 2}), PyList({3, 4})}));
+
+    d.print();
     return 0;
 }
