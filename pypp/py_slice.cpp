@@ -1,5 +1,4 @@
 #include "py_slice.h"
-#include <optional>
 
 std::vector<int> compute_slice_indices(int start, std::optional<int> stop,
                                        int step, int n) {
