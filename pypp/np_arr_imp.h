@@ -1,5 +1,6 @@
 #pragma once
 
+#include "py_list.h"
 #include <algorithm>
 #include <initializer_list>
 #include <iostream>
@@ -8,7 +9,7 @@
 #include <string>
 #include <vector>
 
-template <typename T> class DynamicMultiArray {
+template <typename T> class NpArr {
   private:
     std::vector<T> data_;
     std::vector<size_t> shape_;
@@ -72,13 +73,14 @@ template <typename T> class DynamicMultiArray {
 
   public:
     // Constructor takes a vector for the shape
-    DynamicMultiArray(const std::vector<size_t> &shape) : shape_(shape) {
+    NpArr(const std::vector<size_t> &shape) : shape_(shape) {
         if (shape_.empty()) {
             throw std::invalid_argument(
                 "Shape must have at least one dimension.");
         }
-        size_t total_size = std::accumulate(shape_.begin(), shape_.end(), 1,
-                                            std::multiplies<size_t>());
+        size_t total_size =
+            std::accumulate(shape_.begin(), shape_.end(),
+                            static_cast<size_t>(1), std::multiplies<size_t>());
         data_.resize(total_size);
 
         strides_.resize(shape_.size());
@@ -89,8 +91,8 @@ template <typename T> class DynamicMultiArray {
     }
 
     // Constructor that takes an initializer list for convenience
-    DynamicMultiArray(std::initializer_list<size_t> shape)
-        : DynamicMultiArray(std::vector<size_t>(shape)) {}
+    NpArr(std::initializer_list<size_t> shape)
+        : NpArr(std::vector<size_t>(shape)) {}
 
     // Variadic template for direct access, e.g., arr(0, 1, 2)
     template <typename... Dims> T &operator()(size_t i, Dims... dims) {
@@ -105,9 +107,16 @@ template <typename T> class DynamicMultiArray {
     // Fill the entire array with a value
     void fill(const T &value) { std::fill(data_.begin(), data_.end(), value); }
 
-    const std::vector<size_t> &shape() const { return shape_; }
+    const PyList<int> shape() const {
+        std::vector<int> ret;
+        ret.reserve(shape_.size());
+        for (size_t val : shape_) {
+            ret.push_back(static_cast<int>(val));
+        }
+        return PyList(ret);
+    }
 
-    size_t size() const { return data_.size(); }
+    int size() const { return data_.size(); }
 
     // Print method similar to NumPy
     void print(std::ostream &os = std::cout) const {
