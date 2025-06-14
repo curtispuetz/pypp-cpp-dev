@@ -10,7 +10,7 @@
 int main() {
     std::cout << "Hello, World!" << std::endl;
     // Use an initializer list directly
-    auto arr_zeros = np::zeros<int>({2, 3, 4});
+    auto arr_zeros = pypp_np::zeros<int>({2, 3, 4});
 
     std::cout << "Created a zero-initialized array with shape: ";
     for (size_t dim : arr_zeros.shape()) {
@@ -47,7 +47,7 @@ int main() {
     PyList<PyStr> sliced_parts = parts[sl];
     sliced_parts.print();
     parts[PySlice(0, std::nullopt, 2)].print();
-    NpArr<int> dyn_arr = np::ones<int>({2, 3, 4, 2});
+    NpArr<int> dyn_arr = pypp_np::ones<int>({2, 3, 4, 2});
     std::cout << dyn_arr(0, 0, 0, 0) << std::endl;
     dyn_arr.print();
     dyn_arr.shape().print();

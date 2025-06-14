@@ -4,7 +4,7 @@
 #include <initializer_list>
 #include <vector>
 
-namespace np {
+namespace pypp_np {
 
 template <typename T> NpArr<T> zeros(const PyList<size_t> &shape) {
     NpArr<T> arr(shape);
@@ -41,4 +41,4 @@ NpArr<T> full(std::initializer_list<size_t> shape, const T &value) {
     return full<T>(PyList<size_t>(shape), value);
 }
 
-} // namespace np
+} // namespace pypp_np
