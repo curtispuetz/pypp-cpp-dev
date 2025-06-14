@@ -1,9 +1,11 @@
 #pragma once
 
+#include <algorithm>
 #include <initializer_list>
 #include <iostream>
 #include <numeric>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 template <typename T> class DynamicMultiArray {
@@ -30,6 +32,42 @@ template <typename T> class DynamicMultiArray {
             index += indices[k] * strides_[k];
         }
         return index;
+    }
+
+    // Recursive helper for printing
+    void print_recursive(std::ostream &os, size_t dim_index,
+                         std::vector<size_t> &current_indices,
+                         int indent_level) const {
+        if (dim_index == shape_.size() - 1) {
+            // Last dimension, print elements
+            for (size_t i = 0; i < shape_[dim_index]; ++i) {
+                current_indices[dim_index] = i;
+                size_t flat_index = 0;
+                for (size_t k = 0; k < current_indices.size(); ++k) {
+                    flat_index += current_indices[k] * strides_[k];
+                }
+                os << data_[flat_index];
+                if (i < shape_[dim_index] - 1) {
+                    os << " ";
+                }
+            }
+        } else {
+            // Not the last dimension, print opening bracket
+            os << "[";
+            for (size_t i = 0; i < shape_[dim_index]; ++i) {
+                current_indices[dim_index] = i;
+                if (i > 0) {
+                    os << std::string(indent_level,
+                                      ' '); // Indent for subsequent rows
+                }
+                print_recursive(os, dim_index + 1, current_indices,
+                                indent_level + 1);
+                if (i < shape_[dim_index] - 1) {
+                    os << "\n";
+                }
+            }
+            os << "]";
+        }
     }
 
   public:
@@ -70,4 +108,18 @@ template <typename T> class DynamicMultiArray {
     const std::vector<size_t> &shape() const { return shape_; }
 
     size_t size() const { return data_.size(); }
+
+    // Print method similar to NumPy
+    void print(std::ostream &os = std::cout) const {
+        if (data_.empty()) {
+            os << "[]" << std::endl;
+            return;
+        }
+
+        std::vector<size_t> current_indices(shape_.size());
+        print_recursive(
+            os, 0, current_indices,
+            1); // Start recursion from dimension 0, initial indent 1
+        os << std::endl;
+    }
 };

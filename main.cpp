@@ -46,5 +46,10 @@ int main() {
     PySlice sl(1, 5, 2);
     PyList<PyStr> sliced_parts = parts[sl];
     sliced_parts.print();
+    parts[PySlice(0, std::nullopt, 2)].print();
+    DynamicMultiArray<int> dyn_arr = np::ones<int>({2, 3, 4, 2});
+    std::cout << dyn_arr(0, 0, 0, 0) << std::endl;
+    dyn_arr.print();
+
     return 0;
 }
