@@ -1,4 +1,10 @@
+#include "py_dict.h"
+#include "py_list.h"
 #include "py_np_dy_array_creation.h"
+#include "py_set.h"
+#include "py_slice.h"
+#include "py_str.h"
+#include "py_tuple.h"
 #include <iostream>
 
 int main() {
@@ -11,5 +17,34 @@ int main() {
         std::cout << dim << " ";
     }
     std::cout << std::endl;
+    PyStr s = PyStr("This is a test string.");
+    std::cout << "string size: " << s.len() << std::endl;
+    PyList<PyStr> parts = s.split(PyStr(" "));
+    parts.print();
+    std::cout << "Parts lens: " << parts.len() << std::endl;
+    PyTup<int, double, PyStr> tup = PyTup<int, double, PyStr>(42, 3.14, s);
+    tup.print();
+    std::cout << tup.count(42) << std::endl;
+    std::cout << tup.index(3.14) << std::endl;
+    std::cout << "Tuple size: " << tup.len() << std::endl;
+    PySet<int> my_set = {1, 2, 3, 4, 5};
+    my_set.print();
+    std::cout << "Set size: " << my_set.len() << std::endl;
+    PyDict<int, PyStr> my_dict = {
+        {1, PyStr("one")},
+        {2, PyStr("two")},
+        {3, PyStr("three")},
+    };
+    my_dict.print();
+    std::cout << "Dict size: " << my_dict.len() << std::endl;
+    PyDict<PyStr, int> my_dict2 = {
+        {PyStr("one"), 1},
+        {PyStr("two"), 2},
+        {PyStr("three"), 3},
+    };
+    my_dict2.print();
+    PySlice sl(1, 5, 2);
+    PyList<PyStr> sliced_parts = parts[sl];
+    sliced_parts.print();
     return 0;
 }
