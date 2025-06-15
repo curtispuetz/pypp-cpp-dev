@@ -79,6 +79,9 @@ int main() {
 
     PyDict<int, PyDict<int, int>> nested_dict({{0, {{0, 1}}}, {1, {{0, 1}}}});
     nested_dict.print();
+    // dict assignment
+    PyDict<int, int> int_dict = PyDict<int, int>({{0, 1}, {1, 2}});
+    int_dict.print();
 
     return 0;
 }
