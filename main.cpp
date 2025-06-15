@@ -84,13 +84,13 @@ int main() {
     int_dict.print();
 
     // for loops over lists
-    PyList<PyStr> my_py_list = {PyStr("f"), PyStr("d"), PyStr("w")};
-    for (const auto val : my_py_list) {
+    PyList<int> my_py_list = {1, 2, 3};
+    for (const auto &val : my_py_list) {
         std::cout << val;
     }
     // for loops over sets
     PySet<PyStr> my_py_set = {PyStr("a"), PyStr("b"), PyStr("c")};
-    for (const auto val : my_py_set) {
+    for (const auto &val : my_py_set) {
         std::cout << val;
     }
     // for loops over dict items
