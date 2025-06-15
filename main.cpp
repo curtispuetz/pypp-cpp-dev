@@ -85,13 +85,17 @@ int main() {
 
     // for loops over lists
     PyList<PyStr> my_py_list = {PyStr("f"), PyStr("d"), PyStr("w")};
-    for (auto val : my_py_list) {
+    for (const auto val : my_py_list) {
         std::cout << val;
     }
     // for loops over sets
     PySet<PyStr> my_py_set = {PyStr("a"), PyStr("b"), PyStr("c")};
-    for (auto val : my_py_set) {
+    for (const auto val : my_py_set) {
         std::cout << val;
+    }
+    // for loops over dict items
+    for (const auto &[k, v] : int_dict.items()) {
+        std::cout << k << ": " << v << std::endl;
     }
 
     return 0;
