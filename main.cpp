@@ -76,5 +76,9 @@ int main() {
     d.set(PyTup(0, 1), 6.5); // This one will be used in pypp
     std::cout << "After setting element at (0, 1) to 6.5: " << d(0, 1)
               << std::endl;
+
+    PyDict<int, PyDict<int, int>> nested_dict({{0, {{0, 1}}}, {1, {{0, 1}}}});
+    nested_dict.print();
+
     return 0;
 }
