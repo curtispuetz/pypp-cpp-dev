@@ -83,5 +83,11 @@ int main() {
     PyDict<int, int> int_dict = PyDict<int, int>({{0, 1}, {1, 2}});
     int_dict.print();
 
+    // for loops over lists
+    PyList<PyStr> my_py_list = {PyStr("f"), PyStr("d"), PyStr("w")};
+    for (auto val : my_py_list) {
+        std::cout << val;
+    }
+
     return 0;
 }
