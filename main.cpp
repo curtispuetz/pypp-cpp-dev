@@ -88,6 +88,11 @@ int main() {
     for (auto val : my_py_list) {
         std::cout << val;
     }
+    // for loops over sets
+    PySet<PyStr> my_py_set = {PyStr("a"), PyStr("b"), PyStr("c")};
+    for (auto val : my_py_set) {
+        std::cout << val;
+    }
 
     return 0;
 }
