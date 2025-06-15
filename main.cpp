@@ -94,9 +94,19 @@ int main() {
         std::cout << val;
     }
     // for loops over dict items
-    for (const auto &[k, v] : int_dict.items()) {
+    for (const auto &pypp_it_tup : int_dict.items()) {
+        auto &k = pypp_it_tup.get<0>();
+        auto &v = pypp_it_tup.get<1>();
         std::cout << k << ": " << v << std::endl;
     }
+    // for loops over list of tuples
+    PyList<PyTup<int, int>> list_of_tuples = PyList({PyTup(1, 2), PyTup(3, 4)});
+    for (const auto &pypp_it_tup : list_of_tuples) {
+        auto &first = pypp_it_tup.get<0>();
+        auto &second = pypp_it_tup.get<1>();
+        std::cout << first << ", " << second << std::endl;
+    }
+    list_of_tuples.print();
 
     return 0;
 }

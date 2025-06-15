@@ -39,10 +39,10 @@ template <typename K, typename V> class PyDict {
     }
 
     // items()
-    PyList<std::pair<K, V>> items() const {
-        std::vector<std::pair<K, V>> result;
+    PyList<PyTup<K, V>> items() const {
+        std::vector<PyTup<K, V>> result;
         for (const auto &pair : data)
-            result.push_back(pair);
+            result.push_back(PyTup(pair.first, pair.second));
         return PyList(result);
     }
 
