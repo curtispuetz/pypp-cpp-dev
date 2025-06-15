@@ -67,6 +67,14 @@ int main() {
     NpArr<double> d =
         pypp_np::array<double>(PyList({PyList({1, 2}), PyList({3, 4})}));
 
-    d.print();
+    // accessing elements
+    std::cout << "Element at (0, 1): " << d(0, 1) << std::endl;
+    // setting elements
+    d(0, 1) = 5.5; // This one won't be used in pypp
+    std::cout << "After setting element at (0, 1) to 5.5: " << d(0, 1)
+              << std::endl;
+    d.set(PyTup(0, 1), 6.5); // This one will be used in pypp
+    std::cout << "After setting element at (0, 1) to 6.5: " << d(0, 1)
+              << std::endl;
     return 0;
 }
