@@ -1,3 +1,4 @@
+#include "exceptions/exception.h"
 #include "np_arr.h"
 #include "py_dict.h"
 #include "py_list.h"
