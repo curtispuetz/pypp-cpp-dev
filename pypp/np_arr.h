@@ -1,5 +1,6 @@
 #pragma once
 
+#include "exceptions/stdexcept.h"
 #include "np_arr_imp.h"
 #include "np_arr_util.h"
 #include <initializer_list>
