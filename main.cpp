@@ -51,12 +51,12 @@ int main() {
         PyList<PyStr> sliced_parts = parts[sl];
         sliced_parts.print();
         parts[PySlice(0, std::nullopt, 2)].print();
-        NpArr<int> dyn_arr = pypp_np::ones<int>(PyList<size_t>({2, 3, 4, 2}));
+        NpArr<int> dyn_arr = pypp_np::ones<int>(PyList({2, 3, 4, 2}));
         std::cout << dyn_arr(0, 0, 0, 0) << std::endl;
         dyn_arr.print();
         dyn_arr.shape().print();
         std::cout << "Dynamic array size: " << dyn_arr.size() << std::endl;
-        NpArr<int> dyn_arr2 = pypp_np::full<int>({2, 3, 4}, 7);
+        NpArr<int> dyn_arr2 = pypp_np::full<int>(PyList({2, 3, 4}), 7);
         dyn_arr2.print();
 
         PyList<PyList<PyList<PyList<float>>>> nested_list = {
