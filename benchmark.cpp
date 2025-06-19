@@ -2,6 +2,7 @@
 #include "np_arr.h"
 #include "py_dict.h"
 #include "py_list.h"
+#include "py_range.h"
 #include "py_set.h"
 #include "py_slice.h"
 #include "py_str.h"
@@ -79,6 +80,15 @@ int main() {
         std::array<int, size> arr2;
         benchmark("std::array iteration", [&]() {
             for (int i = 0; i < size; ++i) {
+                arr2[i] = i;
+            }
+        });
+
+        // This one is longer. But it adds at most 0.01ms over 50,000
+        // iterations. Which would be 0.2ms for 1 million iterations. So, this
+        // very rarely would matter and therefore is fine to use.
+        benchmark("std::array iteration with PyRange", [&]() {
+            for (const auto &i : PyRange(size)) {
                 arr2[i] = i;
             }
         });
