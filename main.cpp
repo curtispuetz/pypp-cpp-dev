@@ -177,6 +177,17 @@ int main() {
             print(i); // Should print nothing
         }
 
+        // slice printing
+        print(PySlice(10));
+        print(PySlice(5, 10));
+        print(PySlice(5, 10, -5));
+        print(PySlice(1, std::nullopt));
+        // range printing
+        print(PyRange(10));
+        print(PyRange(5, 10));
+        print(PyRange(5, 10, -1));
+        print(PyRange(5, 10, 1));
+
         return 0;
     } catch (...) {
         handle_fatal_exception();
