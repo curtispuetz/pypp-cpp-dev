@@ -13,8 +13,6 @@
 #include <format>
 #include <iostream>
 
-// TODO: after the above, add support for printing, hasing, and formatting range
-// and slice.
 int main() {
     try {
         std::cout << "Hello, World!" << std::endl;
