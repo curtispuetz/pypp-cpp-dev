@@ -2,6 +2,7 @@
 #include "np_arr.h"
 #include "py_dict.h"
 #include "py_list.h"
+#include "py_range.h"
 #include "py_set.h"
 #include "py_slice.h"
 #include "py_str.h"
@@ -158,6 +159,23 @@ int main() {
             {PyStr("two"), PyStr("2")},
         };
         print("Are hashable: PyTup, PyList, PyStr");
+
+        // PyRange
+        for (const auto &i : PyRange(3)) {
+            print(i); // 0, 1, 2
+        }
+        for (const auto &i : PyRange(1, 4)) {
+            print(i); // 1, 2, 3
+        }
+        for (const auto &i : PyRange(10, 4, -2)) {
+            print(i); // 10, 8, 6
+        }
+        for (const auto &i : PyRange(100, 98)) {
+            print(i); // Should print nothing
+        }
+        for (const auto &i : PyRange(50, 100, -1)) {
+            print(i); // Should print nothing
+        }
 
         return 0;
     } catch (...) {
