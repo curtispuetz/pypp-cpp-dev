@@ -7,6 +7,7 @@
 #include "py_str.h"
 #include "py_tuple.h"
 #include "pypp_util/main_error_handler.h"
+#include "pypp_util/print.h"
 #include "pypp_util/to_py_str.h"
 #include <iostream>
 
@@ -123,6 +124,9 @@ int main() {
         to_pystr(1).print();
         to_pystr(3.14).print();
         to_pystr("Hello").print();
+
+        // print
+        print(PyStr("This is a test of the print function."));
 
         return 0;
     } catch (...) {
