@@ -9,8 +9,17 @@
 #include "pypp_util/main_error_handler.h"
 #include "pypp_util/print.h"
 #include "pypp_util/to_py_str.h"
+#include <format>
 #include <iostream>
 
+// TODO: implement a range type. Then see if I can use it for iterating instead
+// of using the typical C++ for loop format. But first do benchmark testing to
+// see if it is equal in speed to the C++ for loop. It should be equal in speed.
+// If not, just a little bit slower.
+// TODO: after the above, see if range and slices can be supported as
+// assignments to variables. Then test that translation in Python.
+// TODO: after the above, add support for printing, hasing, and formatting range
+// and slice.
 int main() {
     try {
         std::cout << "Hello, World!" << std::endl;
@@ -127,6 +136,28 @@ int main() {
 
         // print
         print(PyStr("This is a test of the print function."));
+
+        print(std::format("Formatted string: {}", 42));
+        print(std::format("Formatted string with PyStr: {}, PyTup: {}, PySet: "
+                          "{}, PyList: {}, PyDict: {}, NpArr: {}",
+                          PyStr("Hello"), PyTup(1, 2), PySet({1, 2, 3}),
+                          PyList({1, 2, 3}), PyDict<int, int>({{0, 1}}),
+                          pypp_np::array<int>(PyList({1, 2, 3}))));
+
+        // Testing that hashing works
+        PyDict<PyTup<int, int>, PyStr> dict_of_tups = {
+            {PyTup(1, 2), PyStr("one two")},
+            {PyTup(3, 4), PyStr("three four")},
+        };
+        PyDict<PyList<int>, PyStr> dict_of_lists = {
+            {PyList<int>({1, 2}), PyStr("one two")},
+            {PyList<int>({3, 4}), PyStr("three four")},
+        };
+        PyDict<PyStr, PyStr> dict_of_strs = {
+            {PyStr("one"), PyStr("1")},
+            {PyStr("two"), PyStr("2")},
+        };
+        print("Are hashable: PyTup, PyList, PyStr");
 
         return 0;
     } catch (...) {
