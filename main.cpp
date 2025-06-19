@@ -25,49 +25,49 @@ int main() {
         PyStr s = PyStr("This is a test string.");
         std::cout << "string size: " << s.len() << std::endl;
         PyList<PyStr> parts = s.split(PyStr(" "));
-        parts.print();
+        print(parts);
         std::cout << "Parts lens: " << parts.len() << std::endl;
         PyTup<int, double, PyStr> tup = PyTup<int, double, PyStr>(42, 3.14, s);
-        tup.print();
+        print(tup);
         std::cout << tup.count(42) << std::endl;
         std::cout << tup.index(3.14) << std::endl;
         std::cout << "Tuple size: " << tup.len() << std::endl;
         PySet<int> my_set = {1, 2, 3, 4, 5};
-        my_set.print();
+        print(my_set);
         std::cout << "Set size: " << my_set.len() << std::endl;
         PyDict<int, PyStr> my_dict = {
             {1, PyStr("one")},
             {2, PyStr("two")},
             {3, PyStr("three")},
         };
-        my_dict.print();
+        print(my_dict);
         std::cout << "Dict size: " << my_dict.len() << std::endl;
         PyDict<PyStr, int> my_dict2 = {
             {PyStr("one"), 1},
             {PyStr("two"), 2},
             {PyStr("three"), 3},
         };
-        my_dict2.print();
+        print(my_dict2);
         PySlice sl(1, 5, 2);
         PyList<PyStr> sliced_parts = parts[sl];
-        sliced_parts.print();
-        parts[PySlice(0, std::nullopt, 2)].print();
+        print(sliced_parts);
+        print(parts[PySlice(0, std::nullopt, 2)]);
         NpArr<int> dyn_arr = pypp_np::ones<int>(PyList({2, 3, 4, 2}));
         std::cout << dyn_arr(0, 0, 0, 0) << std::endl;
-        dyn_arr.print();
-        dyn_arr.shape().print();
+        print(dyn_arr);
+        print(dyn_arr.shape());
         std::cout << "Dynamic array size: " << dyn_arr.size() << std::endl;
         NpArr<int> dyn_arr2 = pypp_np::full<int>(PyList({2, 3, 4}), 7);
-        dyn_arr2.print();
+        print(dyn_arr2);
 
         PyList<PyList<PyList<PyList<float>>>> nested_list = {
             {{{1.1, 2}, {4, 5}}, {{10, 11}, {13, 14}}},
             {{{1, 2}, {1, 2}}, {{1, 2}, {1, 2}}}};
 
         NpArr<float> arr_from_nested = pypp_np::array<float>(nested_list);
-        arr_from_nested.print();
+        print(arr_from_nested);
         NpArr<int> arr_from_nested2 = pypp_np::array<int>(PyList({1, 2, 3}));
-        arr_from_nested2.print();
+        print(arr_from_nested2);
 
         NpArr<double> d =
             pypp_np::array<double>(PyList({PyList({1, 2}), PyList({3, 4})}));
@@ -84,10 +84,10 @@ int main() {
 
         PyDict<int, PyDict<int, int>> nested_dict(
             {{0, {{0, 1}}}, {1, {{0, 1}}}});
-        nested_dict.print();
+        print(nested_dict);
         // dict assignment
         PyDict<int, int> int_dict = PyDict<int, int>({{0, 1}, {1, 2}});
-        int_dict.print();
+        print(int_dict);
 
         // for loops over lists
         PyList<int> my_py_list = {1, 2, 3};
@@ -113,7 +113,7 @@ int main() {
             auto &second = pypp_it_tup.get<1>();
             std::cout << first << ", " << second << std::endl;
         }
-        list_of_tuples.print();
+        print(list_of_tuples);
         // basic while loops
         int i = 0;
         while (i < 3) {
@@ -121,9 +121,9 @@ int main() {
             i += 1;
         }
         // to_pystr
-        to_pystr(1).print();
-        to_pystr(3.14).print();
-        to_pystr("Hello").print();
+        print(to_pystr(1));
+        print(to_pystr(3.14));
+        print(to_pystr("Hello"));
 
         // print
         print(PyStr("This is a test of the print function."));
