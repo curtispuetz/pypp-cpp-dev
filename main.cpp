@@ -13,12 +13,6 @@
 #include <format>
 #include <iostream>
 
-// TODO: implement a range type. Then see if I can use it for iterating instead
-// of using the typical C++ for loop format. But first do benchmark testing to
-// see if it is equal in speed to the C++ for loop. It should be equal in speed.
-// If not, just a little bit slower.
-// TODO: after the above, see if range and slices can be supported as
-// assignments to variables. Then test that translation in Python.
 // TODO: after the above, add support for printing, hasing, and formatting range
 // and slice.
 int main() {
@@ -187,6 +181,15 @@ int main() {
         print(PyRange(5, 10));
         print(PyRange(5, 10, -1));
         print(PyRange(5, 10, 1));
+        // formatting slice and range
+        print(std::format("Formatted PySlice: {}", PySlice(1, 10, 2)));
+        print(std::format("Formatted PyRange: {}", PyRange(1, 10, 2)));
+
+        // Using slice and range in sets (for hashing)
+        PySet<PySlice> slice_set = PySet({PySlice(1)});
+        print(slice_set);
+        PySet<PyRange> range_set = PySet({PyRange(1)});
+        print(range_set);
 
         return 0;
     } catch (...) {
