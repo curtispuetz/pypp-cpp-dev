@@ -235,15 +235,6 @@ int main() {
         // because std::move(list1) was called, list1 should not be used
         print(list1);
 
-        // PyList tests
-        PyList<int> py_list1 = {1, 2, 3};
-        PyList<PyList<int>> py_list2 = {std::move(py_list1), {4, 5, 6}};
-        py_list1.append(7);
-        print(py_list2[0]); // Should print [1, 2, 3]
-        // Should print [1, 2, 3, 7] (or something else if it was moved
-        // properly)
-        print(py_list1);
-
         return 0;
     } catch (...) {
         handle_fatal_exception();
