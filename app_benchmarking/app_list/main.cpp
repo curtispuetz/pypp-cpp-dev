@@ -16,7 +16,7 @@ int main() {
         // properly)
         print(py_list1);
 
-        // Speed test vs std::vector.
+        // Test creation speed with big elements vs std::vector.
         // Results: The speed is comparable to std::vector, and the last one
         // that does not use std::move is about 2 times slower on the first
         // call and many times slower on subsequent calls. I think the
@@ -33,40 +33,27 @@ int main() {
         PyList<int> py_big_list3(100000, 1);
         benchmark("Created nested pylist by moving another big std::vector",
                   [&]() {
-                      for (int i = 0; i < 5; ++i) {
-                          PyList<std::vector<int>> small_list = {
-                              std::move(big_list1), std::move(big_list1)};
-                      }
+                      PyList<std::vector<int>> small_list = {
+                          std::move(big_list1), std::move(big_list1)};
                   });
         benchmark(
             "Created nested std::vector by moving another big std::vector",
             [&]() {
-                for (int i = 0; i < 5; ++i) {
-                    std::vector<std::vector<int>> small_list = {
-                        std::move(big_list2), std::move(big_list2)};
-                }
+                std::vector<std::vector<int>> small_list = {
+                    std::move(big_list2), std::move(big_list2)};
             });
         benchmark("Created nested pylist by moving another big pylist", [&]() {
-            for (int i = 0; i < 5; ++i) {
-                PyList<PyList<int>> small_list = {std::move(py_big_list1),
-                                                  std::move(py_big_list1)};
-            }
+            PyList<PyList<int>> small_list = {std::move(py_big_list1),
+                                              std::move(py_big_list1)};
         });
         benchmark("Created nested std::vector by moving another big pylist",
                   [&]() {
-                      for (int i = 0; i < 5; ++i) {
-                          std::vector<PyList<int>> small_list = {
-                              std::move(py_big_list2), std::move(py_big_list2)};
-                      }
+                      std::vector<PyList<int>> small_list = {
+                          std::move(py_big_list2), std::move(py_big_list2)};
                   });
-        benchmark(
-            "Created nested pylist by moving another big pylist without moving",
-            [&]() {
-                for (int i = 0; i < 5; ++i) {
-                    PyList<PyList<int>> small_list = {py_big_list3,
-                                                      py_big_list3};
-                }
-            });
+        benchmark("Created nested pylist by copying another big pylist", [&]() {
+            PyList<PyList<int>> small_list = {py_big_list3, py_big_list3};
+        });
 
         // Do above test but with a different type (PyDict) to be sure
         // Results: The speed is identical.
@@ -79,16 +66,12 @@ int main() {
             big_py_dict2[i] = PyStr("test");
         }
         benchmark("Created pylist by moving a big PyDict", [&]() {
-            for (int i = 0; i < 5; ++i) {
-                PyList<PyDict<int, PyStr>> small_list = {
-                    std::move(big_py_dict1), std::move(big_py_dict1)};
-            }
+            PyList<PyDict<int, PyStr>> small_list = {std::move(big_py_dict1),
+                                                     std::move(big_py_dict1)};
         });
         benchmark("Created std::vector by moving a big PyDict", [&]() {
-            for (int i = 0; i < 5; ++i) {
-                std::vector<PyDict<int, PyStr>> small_list = {
-                    std::move(big_py_dict2), std::move(big_py_dict2)};
-            }
+            std::vector<PyDict<int, PyStr>> small_list = {
+                std::move(big_py_dict2), std::move(big_py_dict2)};
         });
 
         // Test the speed of different ways to initialize.
