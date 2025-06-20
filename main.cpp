@@ -1,6 +1,7 @@
 #include "exceptions/exception.h"
 #include "np_arr.h"
 #include "py_dict.h"
+#include "py_enumerate.h"
 #include "py_list.h"
 #include "py_range.h"
 #include "py_set.h"
@@ -29,7 +30,8 @@ int main() {
         PyList<PyStr> parts = s.split(PyStr(" "));
         print(parts);
         std::cout << "Parts lens: " << parts.len() << std::endl;
-        PyTup<int, double, PyStr> tup = PyTup<int, double, PyStr>(42, 3.14, s);
+        PyTup<int, double, PyStr> tup =
+            PyTup<int, double, PyStr>(42, 3.14, std::move(s));
         print(tup);
         std::cout << tup.count(42) << std::endl;
         std::cout << tup.index(3.14) << std::endl;
@@ -188,6 +190,59 @@ int main() {
         print(slice_set);
         PySet<PyRange> range_set = PySet({PyRange(1)});
         print(range_set);
+
+        // Using PyEnumerate
+        PyList<PyStr> fruits = {PyStr("apple"), PyStr("banana"),
+                                PyStr("cherry")};
+        for (const auto &py_tup : PyEnumerate(fruits)) {
+            std::cout << "Index: " << py_tup.get<0>()
+                      << ", Value: " << py_tup.get<1>() << std::endl;
+        }
+        std::cout << std::endl;
+
+        PyList<int> numbers = {10, 20, 30, 40, 50};
+        PyTup<PyStr, PyList<int>> py_tup(std::move(PyStr("Numbers")),
+                                         std::move(numbers));
+
+        // I need to think about all these references and moves for not just
+        // PyTup, but also PyList, PySet, and PyDict, etc.. In Python, if you
+        // have 2 list variables, and then you add them to a second list of size
+        // 2, what happens? And what happens if you do the same here in the C++?
+
+        // It might be ok to just accept that there is a lot of copying for now
+        // and then later I can optimize it. Even with the copying, I might
+        // still get big performance improvements over Python for the vast
+        // majority of cases
+
+        py_tup.get<1>().append(60);
+        print(numbers);
+
+        // PyTup tests
+        // Looks like I need to use std::move. Should I just move everything
+        // into lists and tuples and then users of pypp need to know that this
+        // is how it works and the variable moved should not be used anymore?
+        PyStr str1("Hello");
+        PyList<int> list1 = {1, 2, 3};
+        PyTup<PyStr, PyList<int>> py_tup1 =
+            PyTup(std::move(str1), std::move(list1));
+        list1.append(4);
+        print(py_tup1.get<0>()); // Should print "Hello"
+        print(py_tup1.get<1>()); // Should print [1, 2, 3]
+        // Should print [1, 2, 3, 4] (or something else if it was moved
+        // properly)
+        // Note: this is not a guarantee that the list was moved properly,
+        // because the PyTup might have made a copy of the list. However,
+        // because std::move(list1) was called, list1 should not be used
+        print(list1);
+
+        // PyList tests
+        PyList<int> py_list1 = {1, 2, 3};
+        PyList<PyList<int>> py_list2 = {std::move(py_list1), {4, 5, 6}};
+        py_list1.append(7);
+        print(py_list2[0]); // Should print [1, 2, 3]
+        // Should print [1, 2, 3, 7] (or something else if it was moved
+        // properly)
+        print(py_list1);
 
         return 0;
     } catch (...) {
