@@ -26,5 +26,9 @@ target_include_directories(pyppDefaultExeName
         ${CMAKE_SOURCE_DIR}/pypp
 )
 
+add_subdirectory(app_benchmarking)
+add_subdirectory(app_optional)
+add_subdirectory(app_text_io)
+
 # Link any needed libraries here (empty for now)
 # target_link_libraries(executable_name PRIVATE some_library)
