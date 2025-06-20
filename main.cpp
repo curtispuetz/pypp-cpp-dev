@@ -217,24 +217,6 @@ int main() {
         py_tup.get<1>().append(60);
         print(numbers);
 
-        // PyTup tests
-        // Looks like I need to use std::move. Should I just move everything
-        // into lists and tuples and then users of pypp need to know that this
-        // is how it works and the variable moved should not be used anymore?
-        PyStr str1("Hello");
-        PyList<int> list1 = {1, 2, 3};
-        PyTup<PyStr, PyList<int>> py_tup1 =
-            PyTup(std::move(str1), std::move(list1));
-        list1.append(4);
-        print(py_tup1.get<0>()); // Should print "Hello"
-        print(py_tup1.get<1>()); // Should print [1, 2, 3]
-        // Should print [1, 2, 3, 4] (or something else if it was moved
-        // properly)
-        // Note: this is not a guarantee that the list was moved properly,
-        // because the PyTup might have made a copy of the list. However,
-        // because std::move(list1) was called, list1 should not be used
-        print(list1);
-
         return 0;
     } catch (...) {
         handle_fatal_exception();

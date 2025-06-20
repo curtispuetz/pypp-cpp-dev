@@ -66,26 +66,6 @@ template <typename... Args> class PyTup {
     }
 
   public:
-    // Constructor
-    // TODO: there is a problem here because the constructor create a copy
-    // rather than a reference.
-    // PyTup(Args... args) : data(std::make_tuple(args...)) {}
-    // PyTup(std::tuple<Args...> &args) : data(args) {}
-    // PyTup(std::tuple<Args...> &&args) : data(std::move(args)) {}
-    // template <typename... UArgs>
-    // PyTup(UArgs &&...args) : data(std::forward<UArgs>(args)...) {}
-
-    // PyTup(const PyTup &other) = default;
-    // PyTup(PyTup &&other) = default;
-    // PyTup(std::tuple<Args...> &args) : data(args) {}
-    // PyTup(std::tuple<Args...> &&args) : data(std::move(args)) {}
-
-    // template <typename... UArgs>
-    // PyTup(UArgs &&...args)
-    //     : data(std::make_tuple(std::forward<UArgs>(args)...)) {}
-    // for moving:
-    // PyTup(Args &&...args) : data(std::forward<Args>(args)...) {}
-
     template <
         typename... UArgs,
         typename = std::enable_if_t<
