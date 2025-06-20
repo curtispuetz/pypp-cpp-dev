@@ -1,0 +1,2 @@
+add_executable(zip_benchmark_test main.cpp)
+target_link_libraries(zip_benchmark_test PRIVATE pypp_common)
