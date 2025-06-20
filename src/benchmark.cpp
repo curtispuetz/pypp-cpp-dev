@@ -25,5 +25,6 @@ void benchmark(const std::string &label, const std::function<void()> &func,
     }
 
     double avg = std::accumulate(timings.begin(), timings.end(), 0.0) / runs;
-    std::cout << avg << " ms (average over " << runs << " runs)" << std::endl;
+    std::cout << avg << " ms (average over " << runs << " runs)" << std::endl
+              << std::endl;
 }

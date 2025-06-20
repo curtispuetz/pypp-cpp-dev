@@ -19,6 +19,16 @@ int main() {
     try {
         const int size = 50000;
 
+        // Testing std::array vs std::vector speed for initialization and
+        // iteration.
+        // Results: std::array is slightly faster for iteration and much faster
+        // for initialization.
+        // Conclusion: It is nice that std::array is so fast, but I just won't
+        // use it because there is actually limited system wide memory you can
+        // use for std::array since it is allocated on the stack. So its a
+        // little risky unless it is small, and if it is small, then std::vector
+        // is fast enough. There is probably cases where std::array is useful,
+        // but I will ognore it for now.
         benchmark("std::vector initialization",
                   [=]() { std::vector<int> vec(size); });
 
@@ -33,55 +43,27 @@ int main() {
                 vec2[0] = v; // just to use the variable
             }
         });
-        benchmark("std::vector push_back", [&]() {
-            std::vector<int> vec3;
-            for (int i = 0; i < size; ++i) {
-                vec3.push_back(i);
-            }
-        });
-        // PyList append speed is almost identical to std::vector push_back
-        benchmark("PyList append", [&]() {
-            PyList<int> py_list;
-            for (int i = 0; i < size; ++i) {
-                py_list.append(i);
-            }
-        });
-
         benchmark("std::array initialization", [&]() {
             std::array<int, size> arr; // fine in main, watch for stack
         });
 
+        // Test array iteration with a tranditional C++ for loop vs. a for loop
+        // with PyRange.
+        // Results: The PyRange is a little slower. But it adds at most 0.01ms
+        // over 50,000 iterations. Which would be 0.2ms for 1 million
+        // iterations. So, this very rarely would matter and therefore is fine
+        // to use.
         std::array<int, size> arr2;
         benchmark("std::array iteration", [&]() {
             for (int i = 0; i < size; ++i) {
                 arr2[i] = i;
             }
         });
-
-        // This one is longer. But it adds at most 0.01ms over 50,000
-        // iterations. Which would be 0.2ms for 1 million iterations. So, this
-        // very rarely would matter and therefore is fine to use.
         benchmark("std::array iteration with PyRange", [&]() {
             for (const auto &i : PyRange(size)) {
                 arr2[i] = i;
             }
         });
-
-        std::vector<std::vector<int>> vec_of_vecs(10, std::vector<int>(10, 1));
-        vec_of_vecs[0][0] = 2; // just to use the variable
-        print(vec_of_vecs[0][0]);
-        print(vec_of_vecs[1][0]);
-        PyList<PyList<int>> py_list_of_lists(10, PyList<int>(10, 1));
-        py_list_of_lists[0][0] = 2; // just to use the variable
-        print(py_list_of_lists[0][0]);
-        print(py_list_of_lists[1][0]);
-
-        std::vector<int> vec_of_ints(10, 1);
-        int insert_val = 5;
-        vec_of_ints.push_back(std::move(insert_val));
-        // Note: primitive types like int are moved by value no matter what,
-        // so the std::move does not change the behavior here.
-        print(insert_val); // should be 5
 
         return 0;
     } catch (...) {

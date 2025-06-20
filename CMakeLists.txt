@@ -32,3 +32,4 @@ target_include_directories(pyppDefaultExeName
 add_subdirectory(app_benchmarking)
 add_subdirectory(app_optional)
 add_subdirectory(app_text_io)
+add_subdirectory(app_random_tests)

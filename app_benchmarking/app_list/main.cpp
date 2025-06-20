@@ -74,6 +74,23 @@ int main() {
             "PyList optimal", [&]() { PyList<int> py_list({1, 2, 3, 4, 5}); },
             50000);
 
+        // Test PyList appending vs std::vector push_back for integers
+        // Results: The speed is almost identical.
+        const int size = 50000;
+        benchmark("std::vector push_back", [&]() {
+            std::vector<int> vec3;
+            for (int i = 0; i < size; ++i) {
+                vec3.push_back(i);
+            }
+        });
+        // PyList append speed is almost identical to std::vector push_back
+        benchmark("PyList append", [&]() {
+            PyList<int> py_list;
+            for (int i = 0; i < size; ++i) {
+                py_list.append(i);
+            }
+        });
+
         return 0;
     } catch (...) {
         handle_fatal_exception();
