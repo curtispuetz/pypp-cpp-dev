@@ -67,88 +67,6 @@ int main() {
             }
         });
 
-        // hard_situations_for_pypp.py
-        int list_size = 50000;
-        int iter_length = 10;
-        PyList<int> larger_list = PyList({1}) * list_size;
-        benchmark("create list of the same list", [&]() {
-            PyList<PyList<int>> list;
-            for (int i = 0; i < iter_length; ++i) {
-                list.append(larger_list);
-            }
-        });
-        benchmark("create list of many creadted lists", [&]() {
-            PyList<PyList<int>> list;
-            for (int i = 0; i < iter_length; ++i) {
-                PyList<int> inner = PyList<int>({1}) * list_size;
-                list.append(inner);
-            }
-        });
-        benchmark("create list of many creadted lists directly", [&]() {
-            PyList<PyList<int>> list;
-            for (int i = 0; i < iter_length; ++i) {
-                list.append(PyList<int>({1}) * list_size);
-            }
-        });
-        benchmark("create list of many creadted lists with move constructor",
-                  [&]() {
-                      PyList<PyList<int>> list;
-                      for (int i = 0; i < iter_length; ++i) {
-                          PyList<int> inner = PyList<int>({1}) * list_size;
-                          list.append(std::move(inner));
-                      }
-                  });
-        benchmark("create list of many creadted lists with move constructor, "
-                  "different way",
-                  [&]() {
-                      // no different to above.
-                      PyList<PyList<int>> list;
-                      for (int i = 0; i < iter_length; ++i) {
-                          list.append(std::move(PyList<int>({1}) * list_size));
-                      }
-                  });
-        benchmark("create list of many creadted lists with move constructor, "
-                  "different second way",
-                  [&]() {
-                      // This one is slower than above.
-                      PyList<PyList<int>> list;
-                      for (int i = 0; i < iter_length; ++i) {
-                          PyList<int> inner = PyList<int>({1});
-                          inner *= list_size;
-                          list.append(std::move(PyList<int>({1}) * list_size));
-                      }
-                  });
-        benchmark("create list of many creadted lists with move constructor, "
-                  "different new third way",
-                  [&]() {
-                      // This is equivalent to the speed of the std::vector
-                      // version below.
-                      PyList<PyList<int>> list;
-                      for (int i = 0; i < iter_length; ++i) {
-                          list.append(
-                              std::move(create_list_full(list_size, 1)));
-                      }
-                  });
-        benchmark("std::vector equavlanet to above", [&]() {
-            std::vector<std::vector<int>> list;
-            list.reserve(iter_length);
-            for (int i = 0; i < iter_length; ++i) {
-                std::vector<int> inner;
-                inner.reserve(list_size);
-                inner.assign(list_size, 1);
-                list.push_back(std::move(inner));
-            }
-        });
-        benchmark("std::vector equavlanet to above, different way", [&]() {
-            // no different to above.
-            std::vector<std::vector<int>> list;
-            list.reserve(iter_length);
-            for (int i = 0; i < iter_length; ++i) {
-                std::vector<int> inner(list_size, 1);
-                list.push_back(std::move(inner));
-            }
-        });
-
         std::vector<std::vector<int>> vec_of_vecs(10, std::vector<int>(10, 1));
         vec_of_vecs[0][0] = 2; // just to use the variable
         print(vec_of_vecs[0][0]);
@@ -164,15 +82,6 @@ int main() {
         // Note: primitive types like int are moved by value no matter what,
         // so the std::move does not change the behavior here.
         print(insert_val); // should be 5
-
-        // Test the speed of different PyList initialization methods.
-        // Results: equal to each other.
-        benchmark(
-            "PyList Common",
-            [&]() { PyList<int> py_list = PyList({1, 2, 3, 4, 5}); }, 50000);
-        benchmark(
-            "PyList optimal", [&]() { PyList<int> py_list({1, 2, 3, 4, 5}); },
-            50000);
 
         return 0;
     } catch (...) {
