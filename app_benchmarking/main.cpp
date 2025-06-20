@@ -225,6 +225,15 @@ int main() {
             }
         });
 
+        // Test that speed of different PyList initialization methods.
+        // The results are equal to each other.
+        benchmark(
+            "PyList Common",
+            [&]() { PyList<int> py_list = PyList({1, 2, 3, 4, 5}); }, 50000);
+        benchmark(
+            "PyList optimal", [&]() { PyList<int> py_list({1, 2, 3, 4, 5}); },
+            50000);
+
         return 0;
     } catch (...) {
         handle_fatal_exception();
