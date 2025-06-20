@@ -6,7 +6,7 @@
 
 int main() {
     try {
-        // benchmark speed for a standard for loop vs. PyZip
+        // Benchmark speed for a standard for loop vs. PyZip
         // Results: effectively no speed difference. The first
         // call is a little bit slower, like usual.
         // Conclusion: usage of zip is fine.
