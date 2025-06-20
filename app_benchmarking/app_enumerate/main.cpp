@@ -22,7 +22,7 @@ int main() {
                       << ", Value: " << py_tup.get<1>() << std::endl;
         }
 
-        // benchmark speed to a standard for loop
+        // benchmark speed to a standard for loop vs PyEnumerate
         // Results: effectively no speed difference.
         benchmark(
             "Standard for loop speed",
