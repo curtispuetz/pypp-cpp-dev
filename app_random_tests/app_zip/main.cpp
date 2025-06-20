@@ -36,11 +36,6 @@ int main() {
             }
         }
 
-        // Showing how it is built.
-        PyZip<PyList<int>, PyStr> zip(
-            PyList({1, 2, 3}),
-            PyStr("abc")); // This will zip a list of integers with a string
-
         return 0;
     } catch (...) {
         handle_fatal_exception();
