@@ -24,10 +24,6 @@ int main() {
                       << std::endl;
         }
         std::cout << "\n\n";
-        // Assinging to a variable
-        // TODO: test issue where it seems like you can only build a PyReversed
-        // or a PyZip object by inlining the argument and not passing a variable
-        PyReversed<PyList<int>> reversed_numbers(PyList<int>({1, 2, 3, 4, 5}));
 
         // Benchmark speed for a standard for loop vs. PyReversed
         // Results: effectively no speed difference.
