@@ -191,19 +191,6 @@ int main() {
         PySet<PyRange> range_set = PySet({PyRange(1)});
         print(range_set);
 
-        // Using PyEnumerate
-        PyList<PyStr> fruits = {PyStr("apple"), PyStr("banana"),
-                                PyStr("cherry")};
-        for (const auto &py_tup : PyEnumerate(fruits)) {
-            std::cout << "Index: " << py_tup.get<0>()
-                      << ", Value: " << py_tup.get<1>() << std::endl;
-        }
-        std::cout << std::endl;
-
-        PyList<int> numbers = {10, 20, 30, 40, 50};
-        PyTup<PyStr, PyList<int>> py_tup(std::move(PyStr("Numbers")),
-                                         std::move(numbers));
-
         // I need to think about all these references and moves for not just
         // PyTup, but also PyList, PySet, and PyDict, etc.. In Python, if you
         // have 2 list variables, and then you add them to a second list of size
@@ -214,6 +201,9 @@ int main() {
         // still get big performance improvements over Python for the vast
         // majority of cases
 
+        PyList<int> numbers = {10, 20, 30, 40, 50};
+        PyTup<PyStr, PyList<int>> py_tup(std::move(PyStr("Numbers")),
+                                         std::move(numbers));
         py_tup.get<1>().append(60);
         print(numbers);
 
