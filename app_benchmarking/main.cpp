@@ -1,3 +1,4 @@
+#include "benchmark.h"
 #include "exceptions/exception.h"
 #include "np_arr.h"
 #include "py_dict.h"
@@ -11,36 +12,8 @@
 #include "pypp_util/print.h"
 #include "pypp_util/to_py_str.h"
 #include <array>
-#include <chrono>
-#include <functional>
 #include <iostream>
-#include <numeric>
 #include <vector>
-
-void benchmark(const std::string &label, const std::function<void()> &func,
-               int runs = 10) {
-    // Warm up cache and JIT
-    auto start = std::chrono::high_resolution_clock::now();
-    func();
-    std::cout << label << ":" << std::endl;
-    std::cout << std::chrono::duration<double, std::milli>(
-                     std::chrono::high_resolution_clock::now() - start)
-                     .count()
-              << "ms (first call)" << std::endl;
-
-    std::vector<double> timings;
-
-    for (int i = 0; i < runs; ++i) {
-        auto start = std::chrono::high_resolution_clock::now();
-        func();
-        timings.push_back(std::chrono::duration<double, std::milli>(
-                              std::chrono::high_resolution_clock::now() - start)
-                              .count());
-    }
-
-    double avg = std::accumulate(timings.begin(), timings.end(), 0.0) / runs;
-    std::cout << avg << " ms (average over " << runs << " runs)" << std::endl;
-}
 
 int main() {
     try {
@@ -192,41 +165,8 @@ int main() {
         // so the std::move does not change the behavior here.
         print(insert_val); // should be 5
 
-        // Test initializing a vector with a size vs initializing as empty
-        benchmark("std::vector with size", [&]() {
-            // This is 2 times as fast as the empty vector on the first call
-            // and 10 times as fast on subsequent calls.
-            std::vector<int> vec_with_size(size);
-            for (int i = 0; i < size; ++i) {
-                vec_with_size[i] = i;
-            }
-        });
-        benchmark("std::vector empty then push_back", [&]() {
-            std::vector<int> vec_empty;
-            for (int i = 0; i < size; ++i) {
-                vec_empty.push_back(i);
-            }
-        });
-        // Test the same with PyList
-        // The results are equivalent to std::vector
-        benchmark("PyList with size", [&]() {
-            // The results are the same here as std::vector. 2 times as fast on
-            // the first call and 10 times as fast on subsequent calls.
-            // Very Nice!
-            PyList<int> py_list_with_size(size);
-            for (int i = 0; i < size; ++i) {
-                py_list_with_size[i] = i;
-            }
-        });
-        benchmark("PyList empty then append", [&]() {
-            PyList<int> py_list_empty;
-            for (int i = 0; i < size; ++i) {
-                py_list_empty.append(i);
-            }
-        });
-
-        // Test that speed of different PyList initialization methods.
-        // The results are equal to each other.
+        // Test the speed of different PyList initialization methods.
+        // Results: equal to each other.
         benchmark(
             "PyList Common",
             [&]() { PyList<int> py_list = PyList({1, 2, 3, 4, 5}); }, 50000);
