@@ -1,3 +1,4 @@
 add_executable(random_tests_test main.cpp)
 target_link_libraries(random_tests_test PRIVATE pypp_common)
 add_subdirectory(app_zip)
+add_subdirectory(app_dict)
