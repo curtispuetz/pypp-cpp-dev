@@ -11,8 +11,7 @@ template <typename U> struct is_pylist<PyList<U>> : std::true_type {};
 // Recursive helper to deduce the shape of a nested PyList.
 // It also validates that the list is not ragged.
 template <typename ListType>
-static void deduce_shape_recursive(const ListType &list,
-                                   PyList<size_t> &shape) {
+static void deduce_shape_recursive(const ListType &list, PyList<int> &shape) {
     // Use if-constexpr to distinguish between a list of lists and a list of
     // elements at compile time.
     if constexpr (is_pylist<typename ListType::value_type>::value) {
@@ -22,7 +21,7 @@ static void deduce_shape_recursive(const ListType &list,
             // Check for raggedness: ensure all sublists have the same
             // length.
             const auto &first_sublist = list[0];
-            for (size_t i = 1; i < list.len(); ++i) {
+            for (int i = 1; i < list.len(); ++i) {
                 if (list[i].len() != first_sublist.len()) {
                     throw PyppValueError(
                         "Inconsistent list lengths found when initializing "

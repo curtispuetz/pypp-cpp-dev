@@ -3,7 +3,6 @@
 #include "exceptions/stdexcept.h"
 #include "exceptions/system_error.h"
 #include "py_list.h"
-#include "py_tuple.h"
 #include "pypp_util/print_py_value.h"
 #include <algorithm>
 #include <format>
@@ -13,28 +12,26 @@
 #include <string>
 #include <type_traits> // Required for std::true_type, std::false_type
 #include <utility>     // Required for std::index_sequence
+#include <variant>
 #include <vector>
 
 template <typename T> class NpArr {
   private:
     std::vector<T> data_;
-    PyList<size_t> shape_;
-    std::vector<size_t> strides_;
+    PyList<int> shape_;
+    std::vector<int> strides_;
 
     // Helper to calculate the flat index from multidimensional indices
-    template <typename... Dims> size_t get_index(size_t i, Dims... dims) const {
-        // Unpack indices into a vector
-        std::vector<size_t> indices = {i, static_cast<size_t>(dims)...};
-
-        if (indices.size() != shape_.len()) {
+    int get_index(PyList<int> indices) const {
+        if (indices.len() != shape_.len()) {
             throw PyppIndexError(
-                "too many indices for array: array is " +
-                std::to_string(shape_.len()) + "-dimensional, but " +
-                std::to_string(indices.size()) + " were indexed");
+                "indices mismatch: array is " + std::to_string(shape_.len()) +
+                "-dimensional, but " + std::to_string(indices.len()) +
+                " were indexed");
         }
 
-        size_t index = 0;
-        for (size_t k = 0; k < indices.size(); ++k) {
+        int index = 0;
+        for (int k = 0; k < indices.len(); ++k) {
             if (indices[k] >= shape_[k]) {
                 throw PyppIndexError("index " + std::to_string(indices[k]) +
                                      " is out of bounds for axis " +
@@ -46,39 +43,17 @@ template <typename T> class NpArr {
         return index;
     }
 
-    // Implementation part of the tuple unpacking mechanism.
-    // It receives an index sequence (like 0, 1, 2, ...) and uses it to
-    // call get() for each index on the tuple, effectively unpacking it.
-    template <typename... Ts, size_t... Is>
-    size_t get_index_from_tuple_impl(const PyTup<Ts...> &t,
-                                     std::index_sequence<Is...>) const {
-        // This expands to: return get_index(t.template get<0>(), t.template
-        // get<1>(), ...);
-        return get_index(t.template get<Is>()...);
-    }
-
-    // Kicks off the tuple unpacking.
-    // It deduces the tuple type and creates an integer sequence from 0 to N-1,
-    // where N is the number of elements in the tuple.
-    template <typename... Ts>
-    size_t get_index_from_tuple(const PyTup<Ts...> &t) const {
-        // This generates the required std::index_sequence for the
-        // implementation function.
-        return get_index_from_tuple_impl(
-            t, std::make_index_sequence<sizeof...(Ts)>{});
-    }
-
     // Recursive helper for printing
-    void print_recursive(std::ostream &os, size_t dim_index,
-                         std::vector<size_t> &current_indices,
+    void print_recursive(std::ostream &os, int dim_index,
+                         std::vector<int> &current_indices,
                          int indent_level) const {
         if (dim_index == shape_.len() - 1) {
             // Last dimension, print elements
             os << "[";
-            for (size_t i = 0; i < shape_[dim_index]; ++i) {
+            for (int i = 0; i < shape_[dim_index]; ++i) {
                 current_indices[dim_index] = i;
-                size_t flat_index = 0;
-                for (size_t k = 0; k < current_indices.size(); ++k) {
+                int flat_index = 0;
+                for (int k = 0; k < current_indices.size(); ++k) {
                     flat_index += current_indices[k] * strides_[k];
                 }
                 print_py_value(os, data_[flat_index]);
@@ -90,7 +65,7 @@ template <typename T> class NpArr {
         } else {
             // Not the last dimension, print opening bracket
             os << "[";
-            for (size_t i = 0; i < shape_[dim_index]; ++i) {
+            for (int i = 0; i < shape_[dim_index]; ++i) {
                 current_indices[dim_index] = i;
                 if (i > 0) {
                     os << std::string(indent_level,
@@ -108,13 +83,13 @@ template <typename T> class NpArr {
 
   public:
     // Constructor takes a vector for the shape
-    NpArr(const PyList<size_t> &shape) : shape_(shape) {
+    NpArr(const PyList<int> &shape) : shape_(shape) {
         if (shape_.len() == 0) {
             throw PyppValueError("empty numpy array is not supported");
         }
-        size_t total_size =
-            std::accumulate(shape_.begin(), shape_.end(),
-                            static_cast<size_t>(1), std::multiplies<size_t>());
+        int total_size = std::accumulate(shape_.begin(), shape_.end(), 1,
+                                         std::multiplies<int>());
+
         data_.resize(total_size);
 
         strides_.resize(shape_.len());
@@ -125,7 +100,7 @@ template <typename T> class NpArr {
     }
 
     // Constructor that takes an initializer list for convenience
-    NpArr(std::initializer_list<size_t> shape) : NpArr(PyList<size_t>(shape)) {}
+    NpArr(std::initializer_list<int> shape) : NpArr(PyList<int>(shape)) {}
 
     // Default constructor for an empty array
     NpArr() : NpArr({0}) {
@@ -134,7 +109,7 @@ template <typename T> class NpArr {
 
     // Constructor for internal use by the `from_pylist` factory method.
     // It takes a shape and moves the already-flattened data vector.
-    NpArr(const PyList<size_t> &shape, std::vector<T> &&data)
+    NpArr(const PyList<int> &shape, std::vector<T> &&data)
         : shape_(shape), data_(std::move(data)) {
         // This constructor assumes the provided data is already validated and
         // flattened. It calculates the strides based on the given shape.
@@ -147,11 +122,10 @@ template <typename T> class NpArr {
         }
 
         // Final sanity check to ensure shape and data size match.
-        size_t total_size = shape_.len() == 0
-                                ? 0
-                                : std::accumulate(shape_.begin(), shape_.end(),
-                                                  static_cast<size_t>(1),
-                                                  std::multiplies<size_t>());
+        int total_size = shape_.len() == 0
+                             ? 0
+                             : std::accumulate(shape_.begin(), shape_.end(), 1,
+                                               std::multiplies<int>());
         if (data_.size() != total_size) {
             throw PyppSystemError(
                 "(this could be a Pypp bug) Data size and "
@@ -164,18 +138,41 @@ template <typename T> class NpArr {
     }
 
     // Variadic template for direct access, e.g., arr(0, 1, 2)
-    template <typename... Dims> T &operator()(size_t i, Dims... dims) {
-        return data_[get_index(i, dims...)];
+    T &operator()(PyList<int> indices) { return data_[get_index(indices)]; }
+
+    const T &operator()(PyList<int> indices) const {
+        return data_[get_index(indices)];
     }
 
-    template <typename... Dims>
-    const T &operator()(size_t i, Dims... dims) const {
-        return data_[get_index(i, dims...)];
-    }
+    // NpArr<T>
+    // operator[](const PyList<std::variant<int, PySlice>> &indices) const {
+    //     if len (indices) != shape_.len()) {
+    //             throw PyppIndexError(
+    //                 "indices mismatch for [] operator: array is " +
+    //                 std::to_string(shape_.len()) + "-dimensional, but " +
+    //                 std::to_string(len(indices)) + " were indexed");
+    //         }
+    //     // 1. Check size of indices; fill missing with PySlice(None)
+    //     // 2. For each axis: if int, adjust offset, if PySlice, append to new
+    //     // shape/strides
+    //     // 3. Build and return a view
+    //     return data_[4];
+    // }
 
-    template <typename... Dims>
-    void set(const PyTup<int, Dims...> &i, const T &value) {
-        data_[get_index_from_tuple(i)] = value;
+    // T operator[](const PyList<int> &indices) const {
+    //     if (indices.len() != shape_.len()) {
+    //         throw PyppIndexError(
+    //             "indices mismatch for [] operator: array is " +
+    //             std::to_string(shape_.len()) + "-dimensional, but " +
+    //             std::to_string(indices.len()) + " were indexed");
+    //     }
+    //     return data_[get_index(indices)];
+    // }
+
+    void set(const PyList<int> &i, const T &value) {
+        // TODO: I don't really need this because I can set the value
+        // with the () operator?
+        data_[get_index(i)] = value;
     }
 
     // Fill the entire array with a value
@@ -184,7 +181,7 @@ template <typename T> class NpArr {
     const PyList<int> shape() const {
         std::vector<int> ret;
         ret.reserve(shape_.len());
-        for (size_t val : shape_) {
+        for (int val : shape_) {
             ret.push_back(static_cast<int>(val));
         }
         return PyList(ret);
@@ -199,7 +196,7 @@ template <typename T> class NpArr {
             return;
         }
 
-        std::vector<size_t> current_indices(shape_.len());
+        std::vector<int> current_indices(shape_.len());
         print_recursive(
             os, 0, current_indices,
             1); // Start recursion from dimension 0, initial indent 1
