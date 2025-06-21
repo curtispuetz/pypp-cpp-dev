@@ -174,6 +174,8 @@ int main() {
         // slice printing
         print(PySlice(10));
         print(PySlice(5, 10));
+        print("Slice length 5: ", PySlice(5, 10).compute_slice_length(100));
+        print("Slice length 2: ", PySlice(1000).compute_slice_length(2));
         print(PySlice(5, 10, -5));
         print(PySlice(1, std::nullopt));
         // range printing

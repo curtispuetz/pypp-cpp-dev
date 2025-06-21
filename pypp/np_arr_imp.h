@@ -9,6 +9,7 @@
 #include <initializer_list>
 #include <iostream>
 #include <numeric>
+#include <optional>
 #include <string>
 #include <type_traits> // Required for std::true_type, std::false_type
 #include <utility>     // Required for std::index_sequence
@@ -82,6 +83,125 @@ template <typename T> class NpArr {
     }
 
   public:
+    class NpArrView {
+      private:
+        NpArr<T> &original_;
+        PyList<std::variant<int, PySlice>> view_indices_;
+        int num_axes_;
+        mutable std::optional<PyList<int>> cached_shape_;
+        mutable std::optional<int> cached_size_;
+
+        // TODO: change these names to 'calc'
+        PyList<int> get_original_indicies(PyList<int> indices) const {
+            if (indices.len() != num_axes_) {
+                throw PyppIndexError(
+                    "indices mismatch: view is " + std::to_string(num_axes_) +
+                    "-dimensional, but " + std::to_string(indices.len()) +
+                    " were indexed");
+            }
+            PyList<int> orig_indices;
+            int i = 0;
+            for (const auto &int_or_slice : view_indices_) {
+                if (std::holds_alternative<int>(int_or_slice)) {
+                    orig_indices.append(std::get<int>(int_or_slice));
+                } else if (std::holds_alternative<PySlice>(int_or_slice)) {
+                    const PySlice &slice = std::get<PySlice>(int_or_slice);
+                    orig_indices.append(slice.m_start +
+                                        indices[i] * slice.m_step);
+                    i += 1;
+                }
+            }
+            return orig_indices;
+        }
+
+      public:
+        NpArrView(NpArr<T> &orig,
+                  PyList<std::variant<int, PySlice>> view_indices)
+            : original_(orig), view_indices_(view_indices) {
+            num_axes_ = 0;
+            for (const auto &index : view_indices_) {
+                if (std::holds_alternative<PySlice>(index)) {
+                    num_axes_++;
+                }
+            }
+        }
+
+        NpArrView(NpArrView &other,
+                  PyList<std::variant<int, PySlice>> view_indices)
+            : original_(other.original_) {
+            // Need to calculate the new view indices and num_axes_
+            num_axes_ = 0;
+            view_indices_ = PyList<std::variant<int, PySlice>>();
+            int s = 0;
+            for (const auto &i : other.view_indices_) {
+                if (std::holds_alternative<int>(i)) {
+                    view_indices_.append(std::get<int>(i));
+                } else if (std::holds_alternative<PySlice>(i)) {
+                    const PySlice &slice = std::get<PySlice>(i);
+                    std::variant<int, PySlice> new_i = view_indices[s];
+                    if (std::holds_alternative<int>(new_i)) {
+                        view_indices_.append(std::get<int>(new_i));
+                    } else if (std::holds_alternative<PySlice>(new_i)) {
+                        view_indices_.append(std::get<PySlice>(new_i));
+                        num_axes_++;
+                    }
+                    s += 1;
+                }
+            }
+        }
+
+        T &operator[](PyList<int> indices) {
+            return original_[get_original_indicies(indices)];
+        }
+
+        const T &operator[](PyList<int> indices) const {
+            return original_[get_original_indicies(indices)];
+        }
+
+        NpArrView operator[](PyList<std::variant<int, PySlice>> indices) {
+            return NpArrView(*this, indices);
+        }
+
+        const NpArrView
+        operator[](PyList<std::variant<int, PySlice>> indices) const {
+            return NpArrView(*this, indices);
+        }
+
+        void set(const PyList<int> &i, const T &value) {
+            original_.set(get_original_indicies(i), value);
+        }
+
+        // Don't support filling a view or printing a view for now.
+
+        const PyList<int> shape() const {
+            if (cached_shape_.has_value()) {
+                return cached_shape_.value();
+            }
+            cached_shape_ = PyList<int>();
+            PyList<int> original_shape = original_.shape();
+            int i = 0;
+            for (const auto &index : view_indices_) {
+                if (std::holds_alternative<PySlice>(index)) {
+                    const PySlice &slice = std::get<PySlice>(index);
+                    cached_shape_.value().append(
+                        slice.compute_slice_length(original_shape[i]));
+                }
+                i += 1;
+            }
+            return cached_shape_.value();
+        }
+
+        int size() const {
+            if (cached_size_.has_value()) {
+                return cached_size_.value();
+            }
+            PyList<int> s = shape();
+            cached_size_ =
+                std::accumulate(s.begin(), s.end(), 1, std::multiplies<int>());
+            return cached_size_.value();
+        }
+    };
+
     // Constructor takes a vector for the shape
     NpArr(const PyList<int> &shape) : shape_(shape) {
         if (shape_.len() == 0) {
@@ -111,8 +231,9 @@ template <typename T> class NpArr {
     // It takes a shape and moves the already-flattened data vector.
     NpArr(const PyList<int> &shape, std::vector<T> &&data)
         : shape_(shape), data_(std::move(data)) {
-        // This constructor assumes the provided data is already validated and
-        // flattened. It calculates the strides based on the given shape.
+        // This constructor assumes the provided data is already validated
+        // and flattened. It calculates the strides based on the given
+        // shape.
         strides_.resize(shape_.len());
         if (!(shape_.len() == 0)) {
             strides_.back() = 1;
@@ -144,30 +265,14 @@ template <typename T> class NpArr {
         return data_[get_index(indices)];
     }
 
-    // NpArr<T>
-    // operator[](const PyList<std::variant<int, PySlice>> &indices) const {
-    //     if len (indices) != shape_.len()) {
-    //             throw PyppIndexError(
-    //                 "indices mismatch for [] operator: array is " +
-    //                 std::to_string(shape_.len()) + "-dimensional, but " +
-    //                 std::to_string(len(indices)) + " were indexed");
-    //         }
-    //     // 1. Check size of indices; fill missing with PySlice(None)
-    //     // 2. For each axis: if int, adjust offset, if PySlice, append to new
-    //     // shape/strides
-    //     // 3. Build and return a view
-    //     return data_[4];
-    // }
+    NpArrView operator[](PyList<std::variant<int, PySlice>> indices) {
+        return NpArrView(*this, indices);
+    }
 
-    // T operator[](const PyList<int> &indices) const {
-    //     if (indices.len() != shape_.len()) {
-    //         throw PyppIndexError(
-    //             "indices mismatch for [] operator: array is " +
-    //             std::to_string(shape_.len()) + "-dimensional, but " +
-    //             std::to_string(indices.len()) + " were indexed");
-    //     }
-    //     return data_[get_index(indices)];
-    // }
+    const NpArrView
+    operator[](PyList<std::variant<int, PySlice>> indices) const {
+        return NpArrView(*this, indices);
+    }
 
     void set(const PyList<int> &i, const T &value) {
         // TODO: I don't really need this because I can set the value
@@ -178,24 +283,12 @@ template <typename T> class NpArr {
     // Fill the entire array with a value
     void fill(const T &value) { std::fill(data_.begin(), data_.end(), value); }
 
-    const PyList<int> shape() const {
-        std::vector<int> ret;
-        ret.reserve(shape_.len());
-        for (int val : shape_) {
-            ret.push_back(static_cast<int>(val));
-        }
-        return PyList(ret);
-    }
+    const PyList<int> shape() const { return shape_; }
 
     int size() const { return data_.size(); }
 
     // Print method similar to NumPy
     void print(std::ostream &os) const {
-        if (shape_.len() == 1 && shape_[0] == 0) {
-            os << "[]" << std::endl;
-            return;
-        }
-
         std::vector<int> current_indices(shape_.len());
         print_recursive(
             os, 0, current_indices,

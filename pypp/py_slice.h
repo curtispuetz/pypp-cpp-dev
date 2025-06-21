@@ -16,10 +16,12 @@ struct PySlice {
     std::optional<int> m_stop;
     int m_step;
 
-    explicit PySlice(int stop) : m_start(0), m_stop(stop), m_step(1) {}
+    explicit PySlice(std::optional<int> stop)
+        : m_start(0), m_stop(stop), m_step(1) {}
     PySlice(int start, std::optional<int> stop, int step = 1)
         : m_start(start), m_stop(stop), m_step(step) {}
     std::vector<int> compute_slice_indices(int collection_length) const;
+    int compute_slice_length(int collection_length) const;
     void print(std::ostream &os) const;
     bool operator==(const PySlice &other) const;
     friend std::ostream &operator<<(std::ostream &os, const PySlice &pyslice);
