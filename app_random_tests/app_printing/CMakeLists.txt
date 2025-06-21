@@ -1,0 +1,2 @@
+add_executable(printing_test main.cpp)
+target_link_libraries(printing_test PRIVATE pypp_common)
