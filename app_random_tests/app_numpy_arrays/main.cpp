@@ -27,7 +27,7 @@ int main() {
         print("orig size:", arr3D.size());
 
         NpArr<int>::NpArrView view2D = arr3D[PyList<std::variant<int, PySlice>>(
-            {0, PySlice(std::nullopt), PySlice(std::nullopt)})];
+            {1, PySlice(std::nullopt), PySlice(std::nullopt)})];
         view2D.set(PyList<int>({0, 1}), 42);
         print(arr3D);
         print("view2D shape:", view2D.shape());
@@ -38,13 +38,13 @@ int main() {
                 {0, PySlice(std::nullopt)})];
         view1D.set(PyList<int>({2}), 99);
         print(arr3D);
-        print(view1D[PyList<int>({2})]);
+        print(view1D.at(PyList<int>({2})));
         print("view1D shape:", view1D.shape());
         print("view1D size:", view1D.size());
 
         NpArr<int>::NpArrView view1D2 =
             view2D[PyList<std::variant<int, PySlice>>(
-                {PySlice(1, std::nullopt), 1})];
+                {PySlice(std::nullopt), 1})];
         view1D2.set(PyList<int>({0}), 100);
         print(arr3D);
 

@@ -114,10 +114,46 @@ template <typename T> class NpArr {
             return orig_indices;
         }
 
+        void fill_view_indicies() {
+            // if view_indices_ length is less than original shape length,
+            // fill the rest with PySlice(std::nullopt)
+            int original_ndim = original_.shape().len();
+            int view_ndim = view_indices_.len();
+            if (view_ndim < original_ndim) {
+                int diff = original_ndim - view_ndim;
+                for (int i = 0; i < diff; ++i) {
+                    view_indices_.append(PySlice(std::nullopt));
+                }
+            } else if (view_ndim > original_ndim) {
+                std::cout << "Here2";
+                throw PyppIndexError(
+                    "too many indices for array: array is " +
+                    std::to_string(original_ndim) + "-dimensional, but " +
+                    std::to_string(view_ndim) + " were indexed");
+            }
+        }
+
+        PySlice calc_slice_of_slice(const PySlice &slice,
+                                    const PySlice &new_slice) const {
+            // Calculate the new slice based on the original slice and the new
+            // slice
+            int start = slice.m_start + new_slice.m_start * slice.m_step;
+            int step = new_slice.m_step * slice.m_step;
+            std::optional<int> stop;
+            if (new_slice.m_stop.has_value()) {
+                stop = slice.m_start + new_slice.m_stop.value() * slice.m_step;
+            } else {
+                stop = slice.m_stop;
+            }
+            return PySlice(start, stop, step);
+        }
+
       public:
         NpArrView(NpArr<T> &orig,
                   PyList<std::variant<int, PySlice>> view_indices)
             : original_(orig), view_indices_(view_indices) {
+            // For now, require the right number of slices passed.
+            // fill_view_indicies();
             num_axes_ = 0;
             for (const auto &index : view_indices_) {
                 if (std::holds_alternative<PySlice>(index)) {
@@ -126,9 +162,18 @@ template <typename T> class NpArr {
             }
         }
 
+        // TODO: I need to test thing thouroughly in python because it is too
+        // hard to test it here in C++.
         NpArrView(NpArrView &other,
                   PyList<std::variant<int, PySlice>> view_indices)
             : original_(other.original_) {
+            if (view_indices.len() > other.num_axes_) {
+                std::cout << "Here";
+                throw PyppIndexError(
+                    "too many indices for array view: view is " +
+                    std::to_string(other.num_axes_) + "-dimensional, but " +
+                    std::to_string(view_indices.len()) + " were indexed");
+            }
             // Need to calculate the new view indices and num_axes_
             num_axes_ = 0;
             view_indices_ = PyList<std::variant<int, PySlice>>();
@@ -140,22 +185,18 @@ template <typename T> class NpArr {
                     const PySlice &slice = std::get<PySlice>(i);
                     std::variant<int, PySlice> new_i = view_indices[s];
                     if (std::holds_alternative<int>(new_i)) {
-                        view_indices_.append(std::get<int>(new_i));
+                        view_indices_.append(slice.m_start +
+                                             std::get<int>(new_i));
                     } else if (std::holds_alternative<PySlice>(new_i)) {
-                        view_indices_.append(std::get<PySlice>(new_i));
+                        // This is a slice of a slice.
+                        const PySlice &new_slice = std::get<PySlice>(new_i);
+                        view_indices_.append(
+                            calc_slice_of_slice(slice, new_slice));
                         num_axes_++;
                     }
                     s += 1;
                 }
             }
-        }
-
-        T &operator[](PyList<int> indices) {
-            return original_[get_original_indicies(indices)];
-        }
-
-        const T &operator[](PyList<int> indices) const {
-            return original_[get_original_indicies(indices)];
         }
 
         NpArrView operator[](PyList<std::variant<int, PySlice>> indices) {
@@ -165,6 +206,10 @@ template <typename T> class NpArr {
         const NpArrView
         operator[](PyList<std::variant<int, PySlice>> indices) const {
             return NpArrView(*this, indices);
+        }
+
+        const T &at(PyList<int> indices) const {
+            return original_.at(get_original_indicies(indices));
         }
 
         void set(const PyList<int> &i, const T &value) {
@@ -258,13 +303,6 @@ template <typename T> class NpArr {
         }
     }
 
-    // Variadic template for direct access, e.g., arr(0, 1, 2)
-    T &operator[](PyList<int> indices) { return data_[get_index(indices)]; }
-
-    const T &operator[](PyList<int> indices) const {
-        return data_[get_index(indices)];
-    }
-
     NpArrView operator[](PyList<std::variant<int, PySlice>> indices) {
         return NpArrView(*this, indices);
     }
@@ -273,6 +311,8 @@ template <typename T> class NpArr {
     operator[](PyList<std::variant<int, PySlice>> indices) const {
         return NpArrView(*this, indices);
     }
+
+    const T &at(PyList<int> indices) const { return data_[get_index(indices)]; }
 
     void set(const PyList<int> &i, const T &value) {
         // TODO: I don't really need this because I can set the value
