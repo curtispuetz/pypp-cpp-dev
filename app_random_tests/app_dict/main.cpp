@@ -18,14 +18,6 @@ int main() {
         for (const auto &item : int_dict.items()) {
             print("item:", item.get<0>(), "->", item.get<1>());
         }
-
-        // printing keys, values, and items directly
-        print("Keys:", int_dict.keys());
-        print("Values:", int_dict.values());
-        print("Items:", int_dict.items());
-
-        print(PySet({1, 2}), 3.14);
-
     } catch (...) {
         handle_fatal_exception();
         return EXIT_FAILURE;
