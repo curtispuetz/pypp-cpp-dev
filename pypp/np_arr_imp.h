@@ -138,9 +138,9 @@ template <typename T> class NpArr {
     }
 
     // Variadic template for direct access, e.g., arr(0, 1, 2)
-    T &operator()(PyList<int> indices) { return data_[get_index(indices)]; }
+    T &operator[](PyList<int> indices) { return data_[get_index(indices)]; }
 
-    const T &operator()(PyList<int> indices) const {
+    const T &operator[](PyList<int> indices) const {
         return data_[get_index(indices)];
     }
 

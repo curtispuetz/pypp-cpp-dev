@@ -57,7 +57,7 @@ int main() {
         print(sliced_parts);
         print(parts[PySlice(0, std::nullopt, 2)]);
         NpArr<int> dyn_arr = pypp_np::ones<int>(PyList({2, 3, 4, 2}));
-        std::cout << dyn_arr(PyList({0, 0, 0, 0})) << std::endl;
+        std::cout << dyn_arr[PyList({0, 0, 0, 0})] << std::endl;
         print(dyn_arr);
         print(dyn_arr.shape());
         std::cout << "Dynamic array size: " << dyn_arr.size() << std::endl;
@@ -77,14 +77,14 @@ int main() {
             pypp_np::array<double>(PyList({PyList({1, 2}), PyList({3, 4})}));
 
         // accessing elements
-        std::cout << "Element at (0, 1): " << d(PyList({0, 1})) << std::endl;
+        std::cout << "Element at (0, 1): " << d[PyList({0, 1})] << std::endl;
         // setting elements
         d.set(PyList({0, 1}), 5.5); // This one won't be used in pypp
         std::cout << "After setting element at (0, 1) to 5.5: "
-                  << d(PyList({0, 1})) << std::endl;
+                  << d[PyList({0, 1})] << std::endl;
         d.set(PyList({0, 1}), 6.5); // This one will be used in pypp
         std::cout << "After setting element at (0, 1) to 6.5: "
-                  << d(PyList({0, 1})) << std::endl;
+                  << d[PyList({0, 1})] << std::endl;
 
         PyDict<int, PyDict<int, int>> nested_dict(
             {{0, {{0, 1}}}, {1, {{0, 1}}}});
