@@ -15,11 +15,8 @@ static void deduce_shape_recursive(const ListType &list, PyList<int> &shape) {
     // Use if-constexpr to distinguish between a list of lists and a list of
     // elements at compile time.
     if constexpr (is_pylist<typename ListType::value_type>::value) {
-        // This is a list of lists.
         shape.append(list.len());
         if (list.len() > 0) {
-            // Check for raggedness: ensure all sublists have the same
-            // length.
             const auto &first_sublist = list[0];
             for (int i = 1; i < list.len(); ++i) {
                 if (list[i].len() != first_sublist.len()) {
@@ -28,13 +25,9 @@ static void deduce_shape_recursive(const ListType &list, PyList<int> &shape) {
                         "numpy array; array is ragged.");
                 }
             }
-            // Recurse into the first sublist to determine the shape of the
-            // next dimension.
             deduce_shape_recursive(first_sublist, shape);
         }
     } else {
-        // This is the innermost list (contains type T, not PyList<...>),
-        // representing the last dimension.
         shape.append(list.len());
     }
 }
