@@ -268,6 +268,7 @@ template <typename T> class NpArr {
     NpArr(std::initializer_list<int> shape) : NpArr(PyList<int>(shape)) {}
 
     // Default constructor for an empty array
+    // TODO: delete because i don't think its supported
     NpArr() : NpArr({0}) {
         data_.clear(); // Make sure data is empty for shape (0,)
     }
