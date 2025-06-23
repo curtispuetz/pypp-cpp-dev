@@ -34,12 +34,6 @@ template <typename T> class NpArr {
         return self_data[self_ic.calc_index(indices)];
     }
 
-    // Set item
-    void set(const std::vector<int> &indices, const T &val) {
-        self_data[self_ic.calc_index(indices)] = val;
-    }
-    void set(int index, const T &val) { self_data[index] = val; }
-
     // Fill
     void fill(const T &val) {
         auto fn = [&](int i) { self_data[i] = val; };
