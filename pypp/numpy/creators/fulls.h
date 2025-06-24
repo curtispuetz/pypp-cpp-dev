@@ -13,17 +13,16 @@ inline std::size_t _calc_total_size(const std::vector<int> &shape) {
     return ret;
 }
 
-template <typename T>
-NpArr<T> np_full(const std::vector<int> &shape, const T &val) {
+template <typename T> NpArr<T> np_full(std::vector<int> shape, const T &val) {
     std::size_t total_size = _calc_total_size(shape);
     std::vector<T> data(total_size, val);
-    return NpArr<T>(shape, data);
+    return NpArr<T>::create(std::move(shape), std::move(data));
 }
 
-template <typename T = int> NpArr<T> np_zeros(const std::vector<int> &shape) {
-    return np_full<T>(shape, T{0});
+template <typename T = int> NpArr<T> np_zeros(std::vector<int> shape) {
+    return np_full<T>(std::move(shape), T{0});
 }
 
-template <typename T = int> NpArr<T> np_ones(const std::vector<int> &shape) {
-    return np_full<T>(shape, T{1});
+template <typename T = int> NpArr<T> np_ones(std::vector<int> shape) {
+    return np_full<T>(std::move(shape), T{1});
 }

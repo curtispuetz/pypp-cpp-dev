@@ -1,9 +1,11 @@
 #include "numpy/creators/fulls.h"
 #include "numpy/np_arr.h"
+#include "numpy/np_arr_sanity.h"
 #include "py_enumerate.h"
 #include "py_list.h"
 #include "py_reversed.h"
 #include "py_zip.h"
+#include "slice/creators.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
 #include <optional>
@@ -13,7 +15,9 @@
 
 int main() {
     try {
+        print("1st");
         NpArr<int> arr3D = np_zeros(std::vector({2, 2, 3}));
+        print("2nd");
         int counter = 0;
         for (int i = 0; i < 2; ++i) {
             for (int j = 0; j < 2; ++j) {
@@ -22,35 +26,78 @@ int main() {
                 }
             }
         }
+        print("3rd");
         print(arr3D.to_string());
+        print("4th");
         print("orig shape:", PyList(arr3D.shape()));
         print("orig size:", arr3D.size());
 
         arr3D.fill(100);
+        print("fill: ");
         print(arr3D.to_string());
 
-        // NpArr<int>::NpArrView view2D = arr3D[PyList<std::variant<int,
-        // PySlice>>(
-        //     {1, PySlice(std::nullopt), PySlice(std::nullopt)})];
-        // view2D.set(PyList<int>({0, 1}), 42);
-        // print(arr3D);
-        // print("view2D shape:", view2D.shape());
-        // print("view2D size:", view2D.size());
+        arr3D *= 2;
+        print("inplace mult:");
+        print(arr3D.to_string());
 
-        // NpArr<int>::NpArrView view1D =
-        //     view2D[PyList<std::variant<int, PySlice>>(
-        //         {0, PySlice(std::nullopt)})];
-        // view1D.set(PyList<int>({2}), 99);
-        // print(arr3D);
-        // print(view1D.at(PyList<int>({2})));
-        // print("view1D shape:", view1D.shape());
-        // print("view1D size:", view1D.size());
+        arr3D /= 2;
+        print("inplace divide: ");
+        print(arr3D.to_string());
 
-        // NpArr<int>::NpArrView view1D2 =
-        //     view2D[PyList<std::variant<int, PySlice>>(
-        //         {PySlice(std::nullopt), 1})];
-        // view1D2.set(PyList<int>({0}), 100);
-        // print(arr3D);
+        arr3D += 5;
+        print("inplace add:");
+        print(arr3D.to_string());
+
+        arr3D -= 5;
+        print("inplace sub:");
+        print(arr3D.to_string());
+
+        print("add: ");
+        print((arr3D + 5).to_string());
+
+        print("sub: ");
+        print((arr3D - 5).to_string());
+
+        print("mult: ");
+        print((arr3D * 2).to_string());
+
+        print("div: ");
+        print((arr3D / 2).to_string());
+
+        print("right add: ");
+        print((5 + arr3D).to_string());
+
+        print("right sub: ");
+        print((5 - arr3D).to_string());
+
+        print("right mult: ");
+        print((2 * arr3D).to_string());
+
+        print("right div: ");
+        print((400 / arr3D).to_string());
+
+        // Test view now
+        print("creating view 2D slice of 3D array");
+        NpArr<int> view2D =
+            arr3D.view(ViewSAndI({0, py_slice_empty(), py_slice_empty()}));
+
+        print("view2D:");
+        print(view2D.to_string());
+        view2D *= 5;
+        print("view2D after *= 5:");
+        print(view2D.to_string());
+        print("arr3D after view2D *= 5:");
+        print(arr3D.to_string());
+
+        print("view2D shape:", PyList(view2D.shape()));
+        print("view2D size:", view2D.size());
+
+        NpArr<int> view1D = view2D.view(ViewSAndI({py_slice_empty(), 1}));
+        view1D += 10;
+        print("view1D:");
+        print(view1D.to_string());
+        print("arr3D after view1D += 10:");
+        print(arr3D.to_string());
 
     } catch (...) {
         handle_fatal_exception();

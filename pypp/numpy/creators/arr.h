@@ -88,5 +88,5 @@ NpArr<T> np_array(const std::vector<std::vector<T>> &data) {
     throw_if_ragged_recursive(data);
     auto shape = deduce_shape(data);
     auto flat_data = flatten(data);
-    return NpArr<T>(shape, flat_data);
+    return NpArr<T>::create(std::move(shape), std::move(flat_data));
 }
