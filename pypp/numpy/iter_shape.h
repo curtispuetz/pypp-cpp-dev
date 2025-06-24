@@ -26,6 +26,7 @@ template <typename T>
 inline std::vector<T>
 new_np_arr_data(std::function<T(const std::vector<int> &)> fn,
                 const std::vector<int> &shape) {
+    // TODO: optimize this by specifying the size of the vector at the beginning
     std::vector<T> data;
     for (auto &&indices : iter_shape(shape)) {
         data.push_back(fn(indices));
