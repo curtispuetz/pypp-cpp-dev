@@ -1,4 +1,5 @@
 #pragma once
+
 #include "numpy/index_calculator.h"
 #include "numpy/iter_shape.h"
 #include "numpy/recursive_print.h"
@@ -38,11 +39,11 @@ template <typename T> class NpArr {
 
     // Indexing
     T operator[](int index) const { return self_data.g()[index]; }
-    T operator[](const std::vector<int> &indices) const {
+    T operator[](const PyList<int> &indices) const {
         return self_data.g()[self_ic.calc_index(indices)];
     }
     T &operator[](int index) { return self_data.g()[index]; }
-    T &operator[](const std::vector<int> &indices) {
+    T &operator[](const PyList<int> &indices) {
         return self_data.g()[self_ic.calc_index(indices)];
     }
 

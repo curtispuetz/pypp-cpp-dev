@@ -10,14 +10,13 @@ class NpArrIndexCalculator {
                          const std::vector<int> &strides,
                          const std::vector<ViewInfo> &view_info);
 
-    int calc_index(const std::vector<int> &indices) const;
+    int calc_index(const PyList<int> &indices) const;
 
   private:
-    int _calc_index_for_view(std::vector<int> indices) const;
-    std::vector<int>
-    _calc_indices_for_outer_view(int k, const PyList<int> &shape,
-                                 const std::vector<int> &indices) const;
-    int _calc_index_for_root(const std::vector<int> &indices) const;
+    int _calc_index_for_view(PyList<int> indices) const;
+    PyList<int> _calc_indices_for_outer_view(int k, const PyList<int> &shape,
+                                             const PyList<int> &indices) const;
+    int _calc_index_for_root(const PyList<int> &indices) const;
     // Shape
     PyList<int> shape() const;
 
