@@ -4,12 +4,12 @@
 #include <variant>
 
 NpArrIndexCalculator::NpArrIndexCalculator(
-    const std::vector<int> &shape, const std::vector<int> &strides,
+    const PyList<int> &shape, const std::vector<int> &strides,
     const std::vector<ViewInfo> &view_info)
     : self_shape(shape), self_strides(strides), self_all_view_info(view_info) {}
 
 int NpArrIndexCalculator::calc_index(const std::vector<int> &indices) const {
-    int shape_len = static_cast<int>(shape().size());
+    int shape_len = static_cast<int>(shape().len());
     if (indices.size() != static_cast<size_t>(shape_len)) {
         throw PyppIndexError("indices mismatch: array is " +
                              std::to_string(shape_len) + "-dimensional, but " +
@@ -23,7 +23,7 @@ int NpArrIndexCalculator::calc_index(const std::vector<int> &indices) const {
 
 int NpArrIndexCalculator::_calc_index_for_view(std::vector<int> indices) const {
     for (int i = static_cast<int>(self_all_view_info.size()) - 1; i >= 0; --i) {
-        std::vector<int> shape;
+        PyList<int> shape;
         if (i - 1 < 0) {
             shape = self_shape;
         } else {
@@ -35,8 +35,7 @@ int NpArrIndexCalculator::_calc_index_for_view(std::vector<int> indices) const {
 }
 
 std::vector<int> NpArrIndexCalculator::_calc_indices_for_outer_view(
-    int k, const std::vector<int> &shape,
-    const std::vector<int> &indices) const {
+    int k, const PyList<int> &shape, const std::vector<int> &indices) const {
     std::vector<int> outer_indices;
     int i = 0;
     const auto &s_and_i = self_all_view_info[k].s_and_i;
@@ -71,7 +70,7 @@ int NpArrIndexCalculator::_calc_index_for_root(
 }
 
 // Shape
-std::vector<int> NpArrIndexCalculator::shape() const {
+PyList<int> NpArrIndexCalculator::shape() const {
     if (self_all_view_info.empty()) {
         return self_shape;
     }

@@ -12,16 +12,16 @@ void _handle_size_mismatch(size_t len_view_s_and_i, size_t len_shape) {
     }
 }
 
-std::pair<std::vector<int>, int>
+std::pair<PyList<int>, int>
 _calc_view_shape_and_size(const ViewSAndI &view_s_and_i,
-                          const std::vector<int> &outer_shape) {
-    std::vector<int> ret_shape;
+                          const PyList<int> &outer_shape) {
+    PyList<int> ret_shape;
     int ret_size = 1;
     for (size_t i = 0; i < view_s_and_i.size(); ++i) {
         auto v_i = view_s_and_i[i];
         if (std::holds_alternative<PySlice2>(v_i)) {
             int s = std::get<PySlice2>(v_i).calc_slice_length(outer_shape[i]);
-            ret_shape.push_back(s);
+            ret_shape.append(s);
             ret_size *= s;
         }
     }
@@ -29,14 +29,13 @@ _calc_view_shape_and_size(const ViewSAndI &view_s_and_i,
 }
 
 std::vector<ViewInfo>
-calc_all_view_info_for_view(const std::vector<int> &arr_shape,
-                            const std::vector<int> &arr_root_shape,
+calc_all_view_info_for_view(const PyList<int> &arr_shape,
+                            const PyList<int> &arr_root_shape,
                             const std::vector<ViewInfo> current_all_view_info,
                             const ViewSAndI &view_s_and_i) {
-    _handle_size_mismatch(view_s_and_i.size(), arr_shape.size());
+    _handle_size_mismatch(view_s_and_i.size(), arr_shape.len());
     std::vector<ViewInfo> ret = current_all_view_info;
-    const std::vector<int> &shape =
-        ret.empty() ? arr_root_shape : ret.back().shape;
+    const PyList<int> &shape = ret.empty() ? arr_root_shape : ret.back().shape;
     auto [view_shape, view_size] =
         _calc_view_shape_and_size(view_s_and_i, shape);
     ret.emplace_back(view_s_and_i, view_shape, view_size);

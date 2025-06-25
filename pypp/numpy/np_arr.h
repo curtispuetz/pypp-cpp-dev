@@ -4,6 +4,7 @@
 #include "numpy/recursive_print.h"
 #include "numpy/util.h"
 #include "numpy/view_info_calculator.h"
+#include "py_list.h"
 #include "pypp_util/dependency.h"
 #include <functional>
 #include <memory>
@@ -14,20 +15,19 @@
 #include <vector>
 
 template <typename T> class NpArr {
+    // TODO: remove the .g() calls everywhere and add more class members.
   public:
-    NpArr(PyppDependency<std::vector<int>> shape,
+    NpArr(PyppDependency<PyList<int>> shape,
           PyppDependency<std::vector<T>> data,
           PyppDependency<std::vector<int>> strides,
           PyppDependency<std::vector<ViewInfo>> view_info)
         : self_shape(std::move(shape)), self_data(std::move(data)),
           self_strides(std::move(strides)),
           self_all_view_info(std::move(view_info)),
-          self_ic(self_shape.g(), self_strides.g(), self_all_view_info.g()) {
-        std::cout << "data address: " << &self_data.g() << std::endl;
-    }
+          self_ic(self_shape.g(), self_strides.g(), self_all_view_info.g()) {}
 
     NpArr<T> static create(
-        std::vector<int> shape, std::vector<T> data,
+        PyList<int> shape, std::vector<T> data,
         std::vector<int> strides = std::vector<int>(),
         std::vector<ViewInfo> view_info = std::vector<ViewInfo>()) {
         std::vector<int> calculated_strides =
@@ -54,7 +54,7 @@ template <typename T> class NpArr {
 
     // Shape
     // TODO: is it better to return a reference or constant reference here?
-    std::vector<int> shape() const {
+    PyList<int> shape() const {
         if (self_all_view_info.g().empty()) {
             return self_shape.g();
         }
@@ -158,7 +158,7 @@ template <typename T> class NpArr {
     }
 
   private:
-    PyppDependency<std::vector<int>> self_shape;
+    PyppDependency<PyList<int>> self_shape;
     PyppDependency<std::vector<T>> self_data;
     PyppDependency<std::vector<int>> self_strides;
     PyppDependency<std::vector<ViewInfo>> self_all_view_info;
@@ -173,8 +173,6 @@ template <typename T> class NpArr {
 
     // Helper to apply a function to all data
     void _apply_all_data(std::function<void(int)> fn) {
-        std::cout << "size of self_all_view_info: "
-                  << self_all_view_info.g().size() << std::endl;
         if (self_all_view_info.g().empty()) {
             for (int i = 0; i < static_cast<int>(self_data.g().size()); ++i) {
                 fn(i);
