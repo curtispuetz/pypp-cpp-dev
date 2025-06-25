@@ -17,7 +17,7 @@ _calc_view_shape_and_size(const ViewSAndI &view_s_and_i,
                           const PyList<int> &outer_shape) {
     PyList<int> ret_shape;
     int ret_size = 1;
-    for (size_t i = 0; i < view_s_and_i.size(); ++i) {
+    for (size_t i = 0; i < view_s_and_i.len(); ++i) {
         auto v_i = view_s_and_i[i];
         if (std::holds_alternative<PySlice2>(v_i)) {
             int s = std::get<PySlice2>(v_i).calc_slice_length(outer_shape[i]);
@@ -33,7 +33,7 @@ calc_all_view_info_for_view(const PyList<int> &arr_shape,
                             const PyList<int> &arr_root_shape,
                             const std::vector<ViewInfo> current_all_view_info,
                             const ViewSAndI &view_s_and_i) {
-    _handle_size_mismatch(view_s_and_i.size(), arr_shape.len());
+    _handle_size_mismatch(view_s_and_i.len(), arr_shape.len());
     std::vector<ViewInfo> ret = current_all_view_info;
     const PyList<int> &shape = ret.empty() ? arr_root_shape : ret.back().shape;
     auto [view_shape, view_size] =
