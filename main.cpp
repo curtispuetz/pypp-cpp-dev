@@ -5,12 +5,13 @@
 #include "py_list.h"
 #include "py_range.h"
 #include "py_set.h"
-#include "py_slice.h"
 #include "py_str.h"
 #include "py_tuple.h"
 #include "pypp_util/main_error_handler.h"
 #include "pypp_util/print.h"
 #include "pypp_util/to_py_str.h"
+#include "slice/creators.h"
+#include "slice/py_slice.h"
 #include <format>
 #include <iostream>
 
@@ -52,10 +53,10 @@ int main() {
             {PyStr("three"), 3},
         };
         print(my_dict2);
-        PySlice sl(1, 5, 2);
+        PySlice2 sl(1, 5, 2);
         PyList<PyStr> sliced_parts = parts[sl];
         print(sliced_parts);
-        print(parts[PySlice(0, std::nullopt, 2)]);
+        print(parts[py_slice(0, std::nullopt, 2)]);
         NpArr<int> dyn_arr = pypp_np::ones<int>(PyList({2, 3, 4, 2}));
         std::cout << dyn_arr.at(PyList({0, 0, 0, 0})) << std::endl;
         print(dyn_arr);
@@ -172,23 +173,23 @@ int main() {
         }
 
         // slice printing
-        print(PySlice(10));
-        print(PySlice(5, 10));
-        print("Slice length 5: ", PySlice(5, 10).compute_slice_length(100));
-        print("Slice length 2: ", PySlice(1000).compute_slice_length(2));
-        print(PySlice(5, 10, -5));
-        print(PySlice(1, std::nullopt));
+        print(py_slice_stop(10));
+        print(py_slice(5, 10));
+        print("Slice length 5: ", py_slice(5, 10).calc_slice_length(100));
+        print("Slice length 2: ", py_slice_stop(1000).calc_slice_length(2));
+        print(py_slice(5, 10, -5));
+        print(py_slice(1, std::nullopt));
         // range printing
         print(PyRange(10));
         print(PyRange(5, 10));
         print(PyRange(5, 10, -1));
         print(PyRange(5, 10, 1));
         // formatting slice and range
-        print(std::format("Formatted PySlice: {}", PySlice(1, 10, 2)));
+        print(std::format("Formatted PySlice: {}", py_slice(1, 10, 2)));
         print(std::format("Formatted PyRange: {}", PyRange(1, 10, 2)));
 
         // Using slice and range in sets (for hashing)
-        PySet<PySlice> slice_set = PySet({PySlice(1)});
+        PySet<PySlice2> slice_set = PySet({py_slice_stop(1)});
         print(slice_set);
         PySet<PyRange> range_set = PySet({PyRange(1)});
         print(range_set);

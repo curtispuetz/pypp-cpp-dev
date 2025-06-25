@@ -1,7 +1,7 @@
 #pragma once
 
 #include "py_list.h"
-#include "py_slice.h"
+#include "slice/py_slice.h"
 #include <format>
 #include <optional>
 #include <ostream>
@@ -133,7 +133,7 @@ class PyStr {
     void operator+=(const PyStr &other);
     void operator*=(const int rep);
     PyStr operator[](int i) const;
-    PyStr operator[](const PySlice &sl) const;
+    PyStr operator[](const PySlice2 &sl) const;
 
     bool operator==(const PyStr &other) const;
     bool operator<(const PyStr &other) const;
