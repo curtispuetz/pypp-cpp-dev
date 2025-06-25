@@ -16,6 +16,34 @@
 #include <vector>
 
 template <typename T> class NpArr {
+  private:
+    PyppDependency<PyList<int>> self_shape;
+    PyppDependency<std::vector<T>> self_data;
+    PyppDependency<std::vector<int>> self_strides;
+    PyppDependency<std::vector<ViewInfo>> self_all_view_info;
+    NpArrIndexCalculator self_ic;
+
+    // Helper to create a new NpArr with a function
+    NpArr<T> _new_np_arr(std::function<T(const std::vector<int> &)> fn) const {
+        auto new_shape = shape();
+        auto new_data = new_np_arr_data<T>(fn, new_shape);
+        return NpArr<T>::create(std::move(new_shape), std::move(new_data));
+    }
+
+    // Helper to apply a function to all data
+    void _apply_all_data(std::function<void(int)> fn) {
+        if (self_all_view_info.g().empty()) {
+            for (int i = 0; i < static_cast<int>(self_data.g().size()); ++i) {
+                fn(i);
+            }
+        } else {
+            // Need to hold shape for iter_shape since it takes a reference.
+            auto shape_ = shape();
+            for (const auto &indices : iter_shape(shape_)) {
+                fn(self_ic.calc_index(indices));
+            }
+        }
+    }
     // TODO: remove the .g() calls everywhere and add more class members.
   public:
     NpArr(PyppDependency<PyList<int>> shape,
@@ -156,34 +184,5 @@ template <typename T> class NpArr {
         return arr._new_np_arr([&](const std::vector<int> &indices) {
             return val - arr[indices];
         });
-    }
-
-  private:
-    PyppDependency<PyList<int>> self_shape;
-    PyppDependency<std::vector<T>> self_data;
-    PyppDependency<std::vector<int>> self_strides;
-    PyppDependency<std::vector<ViewInfo>> self_all_view_info;
-    NpArrIndexCalculator self_ic;
-
-    // Helper to create a new NpArr with a function
-    NpArr<T> _new_np_arr(std::function<T(const std::vector<int> &)> fn) const {
-        auto new_shape = shape();
-        auto new_data = new_np_arr_data<T>(fn, new_shape);
-        return NpArr<T>::create(std::move(new_shape), std::move(new_data));
-    }
-
-    // Helper to apply a function to all data
-    void _apply_all_data(std::function<void(int)> fn) {
-        if (self_all_view_info.g().empty()) {
-            for (int i = 0; i < static_cast<int>(self_data.g().size()); ++i) {
-                fn(i);
-            }
-        } else {
-            // Need to hold shape for iter_shape since it takes a reference.
-            auto shape_ = shape();
-            for (const auto &indices : iter_shape(shape_)) {
-                fn(self_ic.calc_index(indices));
-            }
-        }
     }
 };

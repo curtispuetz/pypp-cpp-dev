@@ -1,18 +1,13 @@
 #include "numpy/creators/arr.h"
 #include "numpy/creators/fulls.h"
 #include "numpy/np_arr.h"
-#include "numpy/np_arr_sanity.h"
-#include "py_enumerate.h"
 #include "py_list.h"
-#include "py_reversed.h"
-#include "py_zip.h"
 #include "slice/creators.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
 #include <optional>
 #include <pypp_util/main_error_handler.h>
 #include <pypp_util/print.h>
-#include <variant>
 
 int main() {
     try {
