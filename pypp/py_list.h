@@ -132,7 +132,7 @@ template <typename T> class PyList {
         return data[index];
     }
 
-    PyList<T> operator[](const PySlice2 &sl) const {
+    PyList<T> operator[](const PySlice &sl) const {
         PyList<T> result;
         PyTup<int, int, int> indices =
             sl.indices(static_cast<int>(data.size()));

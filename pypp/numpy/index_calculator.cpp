@@ -45,7 +45,7 @@ PyList<int> NpArrIndexCalculator::_calc_indices_for_outer_view(
         if (std::holds_alternative<int>(s_and_i[j])) {
             outer_indices.append(std::get<int>(s_and_i[j]));
         } else {
-            const auto &v = std::get<PySlice2>(s_and_i[j]);
+            const auto &v = std::get<PySlice>(s_and_i[j]);
             outer_indices.append(v.start_index(shape[j]) +
                                  indices[i] * v.step());
             ++i;

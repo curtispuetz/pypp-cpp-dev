@@ -149,7 +149,7 @@ PyStr PyStr::operator[](int i) const {
     return PyStr(std::string(1, s.at(i)));
 }
 
-PyStr PyStr::operator[](const PySlice2 &sl) const {
+PyStr PyStr::operator[](const PySlice &sl) const {
     std::string result;
     PyTup<int, int, int> indices = sl.indices(static_cast<int>(s.size()));
     int start = indices.get<0>();
