@@ -23,54 +23,54 @@ int main() {
             }
         }
         print("3rd");
-        print(arr3D.to_string());
+        print(arr3D);
         print("4th");
         print("orig shape:", arr3D.shape());
         print("orig size:", arr3D.size());
 
         arr3D.fill(100);
         print("fill: ");
-        print(arr3D.to_string());
+        print(arr3D);
 
         arr3D *= 2;
         print("inplace mult:");
-        print(arr3D.to_string());
+        print(arr3D);
 
         arr3D /= 2;
         print("inplace divide: ");
-        print(arr3D.to_string());
+        print(arr3D);
 
         arr3D += 5;
         print("inplace add:");
-        print(arr3D.to_string());
+        print(arr3D);
 
         arr3D -= 5;
         print("inplace sub:");
-        print(arr3D.to_string());
+        print(arr3D);
 
         print("add: ");
-        print((arr3D + 5).to_string());
+        print(arr3D + 5);
 
         print("sub: ");
-        print((arr3D - 5).to_string());
+        print(arr3D - 5);
 
         print("mult: ");
-        print((arr3D * 2).to_string());
+        print(arr3D * 2);
 
         print("div: ");
-        print((arr3D / 2).to_string());
+        print(arr3D / 2);
 
         print("right add: ");
-        print((5 + arr3D).to_string());
+        print(5 + arr3D);
 
         print("right sub: ");
-        print((5 - arr3D).to_string());
+        print(5 - arr3D);
 
         print("right mult: ");
-        print((2 * arr3D).to_string());
+        print(2 * arr3D);
 
         print("right div: ");
-        print((400 / arr3D).to_string());
+        print(400 / arr3D);
 
         // Test view now
         print("creating view 2D slice of 3D array");
@@ -78,12 +78,12 @@ int main() {
             arr3D.view(ViewSAndI({0, py_slice_empty(), py_slice_empty()}));
 
         print("view2D:");
-        print(view2D.to_string());
+        print(view2D);
         view2D *= 5;
         print("view2D after *= 5:");
-        print(view2D.to_string());
+        print(view2D);
         print("arr3D after view2D *= 5:");
-        print(arr3D.to_string());
+        print(arr3D);
 
         print("view2D shape:", view2D.shape());
         print("view2D size:", view2D.size());
@@ -91,26 +91,26 @@ int main() {
         NpArr<int> view1D = view2D.view(ViewSAndI({py_slice_empty(), 1}));
         view1D += 10;
         print("view1D:");
-        print(view1D.to_string());
+        print(view1D);
         print("arr3D after view1D += 10:");
-        print(arr3D.to_string());
+        print(arr3D);
 
         // test np::array creation function
         print("creating 1D array with np::array: ");
         PyList<int> data = PyList({1, 2, 3, 4, 5});
         NpArr<int> arr1D = np::array<int>(std::move(data));
-        print(arr1D.to_string());
+        print(arr1D);
         PyList<PyList<int>> data2d =
             PyList({PyList{1, 2, 3}, PyList{4, 5, 6}, PyList{7, 8, 9}});
         print("creating 2D array with np::array: ");
         NpArr<int> arr2D = np::array<int>(std::move(data2d));
-        print(arr2D.to_string());
+        print(arr2D);
         print("creating 3D array with np::array: ");
         PyList<PyList<PyList<int>>> data3d = PyList(
             {PyList<PyList<int>>{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}},
              PyList<PyList<int>>{{10, 11, 12}, {13, 14, 15}, {16, 17, 18}}});
         NpArr<int> arr3D2 = np::array<int>(std::move(data3d));
-        print(arr3D2.to_string());
+        print(arr3D2);
         print("creating 4D array with np::array: ");
         PyList<PyList<PyList<PyList<int>>>> data4d = PyList(
             {PyList<PyList<PyList<int>>>{{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}},
@@ -120,7 +120,7 @@ int main() {
              PyList<PyList<PyList<int>>>{
                  {{10, 11, 12}, {13, 14, 15}, {16, 17, 18}}}});
         NpArr<int> arr4D = np::array<int>(std::move(data4d));
-        print(arr4D.to_string());
+        print(arr4D);
     } catch (...) {
         handle_fatal_exception();
         return EXIT_FAILURE;
