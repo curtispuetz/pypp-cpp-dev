@@ -55,7 +55,7 @@ int main() {
             {PyStr("three"), 3},
         };
         print(my_dict2);
-        PySlice2 sl(1, 5, 2);
+        PySlice sl(1, 5, 2);
         PyList<PyStr> sliced_parts = parts[sl];
         print(sliced_parts);
         print(parts[py_slice(0, std::nullopt, 2)]);
@@ -192,7 +192,7 @@ int main() {
         print(std::format("Formatted PyRange: {}", PyRange(1, 10, 2)));
 
         // Using slice and range in sets (for hashing)
-        PySet<PySlice2> slice_set = PySet({py_slice_stop(1)});
+        PySet<PySlice> slice_set = PySet({py_slice_stop(1)});
         print(slice_set);
         PySet<PyRange> range_set = PySet({PyRange(1)});
         print(range_set);

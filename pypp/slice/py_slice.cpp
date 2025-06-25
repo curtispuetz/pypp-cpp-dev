@@ -3,7 +3,7 @@
 #include "pypp_util/floor_div.h"
 #include "slice/index_calculator.h"
 
-PySlice2::PySlice2(std::optional<int> start, std::optional<int> stop, int step)
+PySlice::PySlice(std::optional<int> start, std::optional<int> stop, int step)
     : _start(start), _stop(stop), _step(step) {
     if (step == 0) {
         throw PyppValueError("PySlice step cannot be zero");
@@ -16,20 +16,20 @@ PySlice2::PySlice2(std::optional<int> start, std::optional<int> stop, int step)
     }
 }
 
-int PySlice2::stop_index(int collection_size) const {
+int PySlice::stop_index(int collection_size) const {
     return calc_stop_index(_stop, _step, collection_size);
 }
 
-int PySlice2::start_index(int collection_size) const {
+int PySlice::start_index(int collection_size) const {
     return calc_start_index(_start, _step, collection_size);
 }
 
-PyTup<int, int, int> PySlice2::indices(int collection_size) const {
+PyTup<int, int, int> PySlice::indices(int collection_size) const {
     return PyTup(start_index(collection_size), stop_index(collection_size),
                  _step);
 }
 
-int PySlice2::calc_slice_length(int collection_size) const {
+int PySlice::calc_slice_length(int collection_size) const {
     const PyTup i = indices(collection_size);
     int start = i.get<0>();
     int stop = i.get<1>();
@@ -41,7 +41,7 @@ int PySlice2::calc_slice_length(int collection_size) const {
     }
 }
 
-void PySlice2::print(std::ostream &os) const {
+void PySlice::print(std::ostream &os) const {
     if (_start.has_value()) {
         os << "slice(" << *_start;
     } else {
@@ -55,12 +55,12 @@ void PySlice2::print(std::ostream &os) const {
     os << ", " << _step << ")";
 }
 
-bool PySlice2::operator==(const PySlice2 &other) const {
+bool PySlice::operator==(const PySlice &other) const {
     return _start == other._start && // std::optional has == defined
            _stop == other._stop && _step == other._step;
 }
 
-std::ostream &operator<<(std::ostream &os, const PySlice2 &pyslice) {
+std::ostream &operator<<(std::ostream &os, const PySlice &pyslice) {
     pyslice.print(os);
     return os;
 }

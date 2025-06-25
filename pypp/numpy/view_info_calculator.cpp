@@ -19,8 +19,8 @@ _calc_view_shape_and_size(const ViewSAndI &view_s_and_i,
     int ret_size = 1;
     for (size_t i = 0; i < view_s_and_i.len(); ++i) {
         auto v_i = view_s_and_i[i];
-        if (std::holds_alternative<PySlice2>(v_i)) {
-            int s = std::get<PySlice2>(v_i).calc_slice_length(outer_shape[i]);
+        if (std::holds_alternative<PySlice>(v_i)) {
+            int s = std::get<PySlice>(v_i).calc_slice_length(outer_shape[i]);
             ret_shape.append(s);
             ret_size *= s;
         }

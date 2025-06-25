@@ -6,7 +6,7 @@
 #include <vector>
 
 // Equivalent of Python's Union[int, PySlice]
-using ViewSAndIElem = std::variant<int, PySlice2>;
+using ViewSAndIElem = std::variant<int, PySlice>;
 using ViewSAndI = PyList<ViewSAndIElem>;
 
 struct ViewInfo {
