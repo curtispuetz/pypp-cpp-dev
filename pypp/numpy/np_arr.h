@@ -44,6 +44,14 @@ template <typename T> class NpArr {
             }
         }
     }
+    // String representation
+    std::string to_string() const {
+        return np_as_str<T>(
+            [this](const std::vector<int> &indices) {
+                return (*this)[indices];
+            },
+            shape());
+    }
     // TODO: remove the .g() calls everywhere and add more class members.
   public:
     NpArr(PyppDependency<PyList<int>> shape,
@@ -110,20 +118,6 @@ template <typename T> class NpArr {
         return self_all_view_info.g().back().size;
     }
 
-    // For string conversion
-    T _at_for_str(const std::vector<int> &indices) const {
-        return (*this)[indices];
-    }
-
-    // String representation
-    std::string to_string() const {
-        return np_as_str<T>(
-            [this](const std::vector<int> &indices) {
-                return (*this)[indices];
-            },
-            shape());
-    }
-
     // Arithmetic operators (elementwise)
     NpArr<T> operator*(const T &val) const {
         return _new_np_arr([&](const std::vector<int> &indices) {
@@ -185,4 +179,28 @@ template <typename T> class NpArr {
             return val - arr[indices];
         });
     }
+
+    void print(std::ostream &os) const { os << to_string(); }
+    template <typename U>
+    friend std::ostream &operator<<(std::ostream &os, const NpArr<U> &arr);
 };
+
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const NpArr<T> &arr) {
+    arr.print(os);
+    return os;
+}
+
+namespace std {
+// Formatter for std::format
+template <typename T> struct formatter<NpArr<T>, char> {
+    constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+
+    template <typename FormatContext>
+    auto format(const NpArr<T> &arr, FormatContext &ctx) const {
+        std::ostringstream oss;
+        arr.print(oss);
+        return std::format_to(ctx.out(), "{}", oss.str());
+    }
+};
+} // namespace std
