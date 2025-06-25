@@ -102,29 +102,28 @@ int main() {
 
         // test np::array creation function
         print("creating 1D array with np::array: ");
-        std::vector<int> data = {1, 2, 3, 4, 5};
+        PyList<int> data = PyList({1, 2, 3, 4, 5});
         NpArr<int> arr1D = np::array<int>(std::move(data));
         print(arr1D.to_string());
-        std::vector data2d = {std::vector<int>{1, 2, 3},
-                              std::vector<int>{4, 5, 6},
-                              std::vector<int>{7, 8, 9}};
+        PyList<PyList<int>> data2d =
+            PyList({PyList{1, 2, 3}, PyList{4, 5, 6}, PyList{7, 8, 9}});
         print("creating 2D array with np::array: ");
         NpArr<int> arr2D = np::array<int>(std::move(data2d));
         print(arr2D.to_string());
         print("creating 3D array with np::array: ");
-        std::vector data3d = {
-            std::vector<std::vector<int>>{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}},
-            std::vector<std::vector<int>>{
-                {10, 11, 12}, {13, 14, 15}, {16, 17, 18}}};
+        PyList<PyList<PyList<int>>> data3d = PyList(
+            {PyList<PyList<int>>{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}},
+             PyList<PyList<int>>{{10, 11, 12}, {13, 14, 15}, {16, 17, 18}}});
         NpArr<int> arr3D2 = np::array<int>(std::move(data3d));
         print(arr3D2.to_string());
         print("creating 4D array with np::array: ");
-        std::vector data4d = {std::vector<std::vector<std::vector<int>>>{
-                                  {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}},
-                                  {{10, 11, 12}, {13, 14, 15}, {16, 17, 18}}},
-                              std::vector<std::vector<std::vector<int>>>{
-                                  {{19, 20, 21}, {22, 23, 24}, {25, 26, 27}},
-                                  {{28, 29, 30}, {31, 32, 33}, {34, 35, 36}}}};
+        PyList<PyList<PyList<PyList<int>>>> data4d = PyList(
+            {PyList<PyList<PyList<int>>>{{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}},
+             PyList<PyList<PyList<int>>>{
+                 {{10, 11, 12}, {13, 14, 15}, {16, 17, 18}}},
+             PyList<PyList<PyList<int>>>{{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}},
+             PyList<PyList<PyList<int>>>{
+                 {{10, 11, 12}, {13, 14, 15}, {16, 17, 18}}}});
         NpArr<int> arr4D = np::array<int>(std::move(data4d));
         print(arr4D.to_string());
     } catch (...) {
