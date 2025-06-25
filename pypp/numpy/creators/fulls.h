@@ -1,19 +1,13 @@
 #pragma once
 
 #include "numpy/np_arr.h"
+#include "numpy/util.h"
 #include <algorithm>
 #include <cstddef>
 #include <iostream>
 #include <vector>
 
 // Helper to calculate total size from shape
-inline std::size_t _calc_total_size(const PyList<int> &shape) {
-    std::size_t ret = 1;
-    for (int s : shape) {
-        ret *= static_cast<std::size_t>(s);
-    }
-    return ret;
-}
 
 namespace np {
 template <typename T> NpArr<T> full(PyList<int> shape, const T &val) {
