@@ -31,6 +31,8 @@ template <typename T> class NpArr {
     }
 
     // Helper to apply a function to all data
+    // Note: No longer used anymore because it is slower.
+    // TODO: delete
     void _apply_all_data(std::function<void(int)> fn) {
         if (self_all_view_info.g().empty()) {
             for (int i = 0; i < static_cast<int>(self_data.g().size()); ++i) {
@@ -85,8 +87,17 @@ template <typename T> class NpArr {
 
     // Fill
     void fill(const T &val) {
-        auto fn = [&](int i) { self_data.g()[i] = val; };
-        _apply_all_data(fn);
+        if (self_all_view_info.g().empty()) {
+            for (int i = 0; i < static_cast<int>(self_data.g().size()); ++i) {
+                self_data.g()[i] = val;
+            }
+        } else {
+            // Need to hold shape for iter_shape since it takes a reference.
+            auto shape_ = shape();
+            for (const auto &indices : iter_shape(shape_)) {
+                self_data.g()[self_ic.calc_index(indices)] = val;
+            }
+        }
     }
 
     // Shape
@@ -118,23 +129,61 @@ template <typename T> class NpArr {
         return self_all_view_info.g().back().size;
     }
 
+    // TODO: support operations with two NpArrs.
+
     // Arithmetic operators (elementwise)
     NpArr<T> operator*(const T &val) const {
+        auto new_shape = shape();
+        if (new_shape.len() == 1) {
+            std::vector<T> new_data;
+            new_data.reserve(self_data.g().size());
+            for (const auto &elem : self_data.g()) {
+                new_data.push_back(elem * val);
+            }
+            return NpArr<T>::create(std::move(new_shape), std::move(new_data));
+        }
         return _new_np_arr([&](const std::vector<int> &indices) {
             return (*this)[indices] * val;
         });
     }
     NpArr<T> operator/(const T &val) const {
+        auto new_shape = shape();
+        if (new_shape.len() == 1) {
+            std::vector<T> new_data;
+            new_data.reserve(self_data.g().size());
+            for (const auto &elem : self_data.g()) {
+                new_data.push_back(elem / val);
+            }
+            return NpArr<T>::create(std::move(new_shape), std::move(new_data));
+        }
         return _new_np_arr([&](const std::vector<int> &indices) {
             return (*this)[indices] / val;
         });
     }
     NpArr<T> operator+(const T &val) const {
+        auto new_shape = shape();
+        if (new_shape.len() == 1) {
+            std::vector<T> new_data;
+            new_data.reserve(self_data.g().size());
+            for (const auto &elem : self_data.g()) {
+                new_data.push_back(elem + val);
+            }
+            return NpArr<T>::create(std::move(new_shape), std::move(new_data));
+        }
         return _new_np_arr([&](const std::vector<int> &indices) {
             return (*this)[indices] + val;
         });
     }
     NpArr<T> operator-(const T &val) const {
+        auto new_shape = shape();
+        if (new_shape.len() == 1) {
+            std::vector<T> new_data;
+            new_data.reserve(self_data.g().size());
+            for (const auto &elem : self_data.g()) {
+                new_data.push_back(elem - val);
+            }
+            return NpArr<T>::create(std::move(new_shape), std::move(new_data));
+        }
         return _new_np_arr([&](const std::vector<int> &indices) {
             return (*this)[indices] - val;
         });
@@ -142,23 +191,59 @@ template <typename T> class NpArr {
 
     // In-place arithmetic
     NpArr<T> &operator*=(const T &val) {
-        auto fn = [&](int i) { self_data.g()[i] *= val; };
-        _apply_all_data(fn);
+        if (self_all_view_info.g().empty()) {
+            for (int i = 0; i < static_cast<int>(self_data.g().size()); ++i) {
+                self_data.g()[i] *= val;
+            }
+        } else {
+            // Need to hold shape for iter_shape since it takes a reference.
+            auto shape_ = shape();
+            for (const auto &indices : iter_shape(shape_)) {
+                self_data.g()[self_ic.calc_index(indices)] *= val;
+            }
+        }
         return *this;
     }
     NpArr<T> &operator/=(const T &val) {
-        auto fn = [&](int i) { self_data.g()[i] /= val; };
-        _apply_all_data(fn);
+        if (self_all_view_info.g().empty()) {
+            for (int i = 0; i < static_cast<int>(self_data.g().size()); ++i) {
+                self_data.g()[i] /= val;
+            }
+        } else {
+            // Need to hold shape for iter_shape since it takes a reference.
+            auto shape_ = shape();
+            for (const auto &indices : iter_shape(shape_)) {
+                self_data.g()[self_ic.calc_index(indices)] /= val;
+            }
+        }
         return *this;
     }
     NpArr<T> &operator+=(const T &val) {
-        auto fn = [&](int i) { self_data.g()[i] += val; };
-        _apply_all_data(fn);
+        if (self_all_view_info.g().empty()) {
+            for (int i = 0; i < static_cast<int>(self_data.g().size()); ++i) {
+                self_data.g()[i] += val;
+            }
+        } else {
+            // Need to hold shape for iter_shape since it takes a reference.
+            auto shape_ = shape();
+            for (const auto &indices : iter_shape(shape_)) {
+                self_data.g()[self_ic.calc_index(indices)] += val;
+            }
+        }
         return *this;
     }
     NpArr<T> &operator-=(const T &val) {
-        auto fn = [&](int i) { self_data.g()[i] -= val; };
-        _apply_all_data(fn);
+        if (self_all_view_info.g().empty()) {
+            for (int i = 0; i < static_cast<int>(self_data.g().size()); ++i) {
+                self_data.g()[i] -= val;
+            }
+        } else {
+            // Need to hold shape for iter_shape since it takes a reference.
+            auto shape_ = shape();
+            for (const auto &indices : iter_shape(shape_)) {
+                self_data.g()[self_ic.calc_index(indices)] -= val;
+            }
+        }
         return *this;
     }
 
@@ -167,6 +252,15 @@ template <typename T> class NpArr {
         return arr * val;
     }
     friend NpArr<T> operator/(const T &val, const NpArr<T> &arr) {
+        auto new_shape = arr.shape();
+        if (new_shape.len() == 1) {
+            std::vector<T> new_data;
+            new_data.reserve(arr.self_data.g().size());
+            for (const auto &elem : arr.self_data.g()) {
+                new_data.push_back(val / elem);
+            }
+            return NpArr<T>::create(std::move(new_shape), std::move(new_data));
+        }
         return arr._new_np_arr([&](const std::vector<int> &indices) {
             return val / arr[indices];
         });
@@ -175,6 +269,15 @@ template <typename T> class NpArr {
         return arr + val;
     }
     friend NpArr<T> operator-(const T &val, const NpArr<T> &arr) {
+        auto new_shape = arr.shape();
+        if (new_shape.len() == 1) {
+            std::vector<T> new_data;
+            new_data.reserve(arr.self_data.g().size());
+            for (const auto &elem : arr.self_data.g()) {
+                new_data.push_back(val - elem);
+            }
+            return NpArr<T>::create(std::move(new_shape), std::move(new_data));
+        }
         return arr._new_np_arr([&](const std::vector<int> &indices) {
             return val - arr[indices];
         });

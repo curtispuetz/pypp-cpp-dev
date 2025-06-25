@@ -1,0 +1,2 @@
+add_executable(numpy_benchmarking_test main.cpp)
+target_link_libraries(numpy_benchmarking_test PRIVATE pypp_common)

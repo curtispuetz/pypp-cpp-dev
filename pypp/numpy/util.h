@@ -20,3 +20,5 @@ struct ViewInfo {
 
 // Equivalent of calc_strides
 std::vector<int> calc_strides(const PyList<int> &shape);
+
+std::size_t _calc_total_size(const PyList<int> &shape);

@@ -10,3 +10,11 @@ std::vector<int> calc_strides(const PyList<int> &shape) {
     }
     return ret;
 }
+
+std::size_t _calc_total_size(const PyList<int> &shape) {
+    std::size_t ret = 1;
+    for (int s : shape) {
+        ret *= static_cast<std::size_t>(s);
+    }
+    return ret;
+}
