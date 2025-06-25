@@ -1,0 +1,2 @@
+add_executable(dependency_management_test main.cpp)
+target_link_libraries(dependency_management_test PRIVATE pypp_common)
