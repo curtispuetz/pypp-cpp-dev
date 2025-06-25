@@ -3,6 +3,7 @@
 #include "exceptions/stdexcept.h"
 #include "exceptions/system_error.h"
 #include "py_list.h"
+#include "py_slice.h"
 #include "pypp_util/print_py_value.h"
 #include <algorithm>
 #include <format>

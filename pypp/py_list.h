@@ -1,8 +1,8 @@
 #pragma once
 
 #include "exceptions/stdexcept.h"
-#include "py_slice.h"
 #include "pypp_util/print_py_value.h"
+#include "slice/py_slice.h"
 #include <algorithm>
 #include <format>
 #include <iostream>
@@ -132,11 +132,14 @@ template <typename T> class PyList {
         return data[index];
     }
 
-    PyList<T> operator[](const PySlice &sl) const {
+    PyList<T> operator[](const PySlice2 &sl) const {
         PyList<T> result;
-        std::vector<int> indices =
-            sl.compute_slice_indices(static_cast<int>(data.size()));
-        for (int i : indices) {
+        PyTup<int, int, int> indices =
+            sl.indices(static_cast<int>(data.size()));
+        int start = indices.get<0>();
+        int stop = indices.get<1>();
+        int step = indices.get<2>();
+        for (int i = start; i < stop; i += step) {
             result.data.push_back(data[i]);
         }
         return result;

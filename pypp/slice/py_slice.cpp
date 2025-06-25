@@ -40,3 +40,27 @@ int PySlice2::calc_slice_length(int collection_size) const {
         return std::max(0, py_floor_div(start - stop - step - 1, -step));
     }
 }
+
+void PySlice2::print(std::ostream &os) const {
+    if (_start.has_value()) {
+        os << "slice(" << *_start;
+    } else {
+        os << "slice(None";
+    }
+    if (_stop.has_value()) {
+        os << ", " << *_stop;
+    } else {
+        os << ", None";
+    }
+    os << ", " << _step << ")";
+}
+
+bool PySlice2::operator==(const PySlice2 &other) const {
+    return _start == other._start && // std::optional has == defined
+           _stop == other._stop && _step == other._step;
+}
+
+std::ostream &operator<<(std::ostream &os, const PySlice2 &pyslice) {
+    pyslice.print(os);
+    return os;
+}

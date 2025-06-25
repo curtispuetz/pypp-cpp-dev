@@ -1,4 +1,5 @@
 #include "py_set.h"
+#include "py_str.h"
 #include "pypp_util/print.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <py_dict.h>
