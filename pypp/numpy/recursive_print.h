@@ -1,4 +1,5 @@
 #pragma once
+#include "py_list.h"
 #include <functional>
 #include <sstream>
 #include <string>
@@ -7,12 +8,12 @@
 template <typename T>
 std::string
 np_as_str_recursive(const std::function<T(const std::vector<int> &)> &arr_at,
-                    const std::vector<int> &shape,
-                    const std::vector<int> &indices, int indent) {
+                    const PyList<int> &shape, const std::vector<int> &indices,
+                    int indent) {
     std::ostringstream oss;
-    if (indices.size() == shape.size() - 1) {
+    if (indices.size() == shape.len() - 1) {
         oss << "[";
-        for (int k = 0; k < shape.back(); ++k) {
+        for (int k = 0; k < shape[-1]; ++k) {
             if (k > 0)
                 oss << " ";
             std::vector<int> idx = indices;
@@ -37,6 +38,6 @@ np_as_str_recursive(const std::function<T(const std::vector<int> &)> &arr_at,
 
 template <typename T>
 std::string np_as_str(const std::function<T(const std::vector<int> &)> &arr_at,
-                      const std::vector<int> &shape) {
+                      const PyList<int> &shape) {
     return np_as_str_recursive<T>(arr_at, shape, {}, 0);
 }

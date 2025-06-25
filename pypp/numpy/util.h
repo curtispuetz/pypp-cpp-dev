@@ -1,4 +1,6 @@
 #pragma once
+
+#include "py_list.h"
 #include "slice/py_slice.h"
 #include <variant>
 #include <vector>
@@ -9,13 +11,12 @@ using ViewSAndI = std::vector<ViewSAndIElem>;
 
 struct ViewInfo {
     ViewSAndI s_and_i;
-    std::vector<int> shape;
+    PyList<int> shape;
     int size;
 
-    ViewInfo(const ViewSAndI &s_and_i_, const std::vector<int> &shape_,
-             int size_)
+    ViewInfo(const ViewSAndI &s_and_i_, const PyList<int> &shape_, int size_)
         : s_and_i(s_and_i_), shape(shape_), size(size_) {}
 };
 
 // Equivalent of calc_strides
-std::vector<int> calc_strides(const std::vector<int> &shape);
+std::vector<int> calc_strides(const PyList<int> &shape);

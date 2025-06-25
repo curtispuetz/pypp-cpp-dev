@@ -5,8 +5,8 @@
 
 // TODO: move implementations to cpp file
 inline Generator<std::vector<int>>
-iter_shape_recursive(const std::vector<int> &shape, std::vector<int> indices) {
-    if (indices.size() == shape.size()) {
+iter_shape_recursive(const PyList<int> &shape, std::vector<int> indices) {
+    if (indices.size() == shape.len()) {
         co_yield indices;
         co_return;
     }
@@ -17,15 +17,14 @@ iter_shape_recursive(const std::vector<int> &shape, std::vector<int> indices) {
     }
 }
 
-inline Generator<std::vector<int>>
-iter_shape(const std::vector<int> &arr_shape) {
+inline Generator<std::vector<int>> iter_shape(const PyList<int> &arr_shape) {
     CO_YIELD_FROM(iter_shape_recursive(arr_shape, {}));
 }
 
 template <typename T>
 inline std::vector<T>
 new_np_arr_data(std::function<T(const std::vector<int> &)> fn,
-                const std::vector<int> &shape) {
+                const PyList<int> &shape) {
     // TODO: optimize this by specifying the size of the vector at the beginning
     std::vector<T> data;
     for (auto &&indices : iter_shape(shape)) {

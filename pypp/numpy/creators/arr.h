@@ -1,5 +1,6 @@
 #pragma once
 #include "numpy/np_arr.h"
+#include "py_list.h"
 #include <stdexcept>
 #include <type_traits>
 #include <variant>
@@ -28,23 +29,21 @@ void throw_if_ragged_recursive(const std::vector<std::vector<T>> &data) {
 
 // Deduce shape
 template <typename T>
-void deduce_shape_recursive(const std::vector<T> &data,
-                            std::vector<size_t> &shape) {
-    shape.push_back(data.size());
+void deduce_shape_recursive(const std::vector<T> &data, PyList<int> &shape) {
+    shape.append(static_cast<int>(data.size()));
 }
 
 template <typename T>
 void deduce_shape_recursive(const std::vector<std::vector<T>> &data,
-                            std::vector<size_t> &shape) {
-    shape.push_back(data.size());
+                            PyList<int> &shape) {
+    shape.append(static_cast<int>(data.size()));
     if (!data.empty()) {
         deduce_shape_recursive(data[0], shape);
     }
 }
 
-template <typename T>
-std::vector<size_t> deduce_shape(const std::vector<T> &data) {
-    std::vector<size_t> shape;
+template <typename T> PyList<int> deduce_shape(const std::vector<T> &data) {
+    PyList<int> shape;
     deduce_shape_recursive(data, shape);
     return shape;
 }
@@ -69,19 +68,16 @@ template <typename T> std::vector<T> flatten(const std::vector<T> &data) {
     return flattened;
 }
 
-// Main np_array function
-template <typename T> NpArr<T> np_array(const std::vector<T> &data) {
-    if (data.empty()) {
-        throw std::invalid_argument("empty numpy array is not supported");
-    }
-    throw_if_ragged_recursive(data);
-    auto shape = deduce_shape(data);
-    auto flat_data = flatten(data);
-    return NpArr<T>(shape, flat_data);
-}
-
 template <typename T>
-NpArr<T> np_array(const std::vector<std::vector<T>> &data) {
+std::vector<T> flatten(const std::vector<std::vector<T>> &data) {
+    std::vector<T> flattened;
+    flatten_recursive(data, flattened);
+    return flattened;
+}
+// TODO: there is still something not right here.
+namespace np {
+// Main np_array function
+template <typename T> NpArr<T> array(const std::vector<T> data) {
     if (data.empty()) {
         throw std::invalid_argument("empty numpy array is not supported");
     }
@@ -90,3 +86,15 @@ NpArr<T> np_array(const std::vector<std::vector<T>> &data) {
     auto flat_data = flatten(data);
     return NpArr<T>::create(std::move(shape), std::move(flat_data));
 }
+
+template <typename T> NpArr<T> array(const std::vector<std::vector<T>> data) {
+    // TODO: make this accept a PyList
+    if (data.empty()) {
+        throw std::invalid_argument("empty numpy array is not supported");
+    }
+    throw_if_ragged_recursive(data);
+    auto shape = deduce_shape(data);
+    auto flat_data = flatten(data);
+    return NpArr<T>::create(std::move(shape), std::move(flat_data));
+}
+} // namespace np
