@@ -135,6 +135,8 @@ int main() {
         }
 
         // slice printing
+        print("slice printing");
+        print(py_slice(5, 1, -1).indices(10));
         print(py_slice(10));
         print(py_slice(5, 10));
         print("Slice length 5: ", py_slice(5, 10).calc_slice_length(100));

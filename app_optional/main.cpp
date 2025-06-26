@@ -6,15 +6,6 @@
 
 int main() {
     try {
-        PyDict<int, PyList<int>> int_dict = {{0, PyList<int>({1, 2})},
-                                             {1, PyList<int>({3, 4})}};
-        std::optional<PyList<int>> d1 = int_dict.dg_opt(0);
-        if (d1.has_value()) {
-            d1.value().append(5);
-        }
-        std::cout << "Dict after dg_opt modification: " << int_dict
-                  << std::endl;
-
         int x = 42;
         std::optional<int> opt1(x);
         std::optional<int> opt2; // Empty optional
