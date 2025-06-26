@@ -1,5 +1,4 @@
 #include "py_dict.h"
-#include "pypp_optional.h"
 #include "pypp_os.h"
 #include "pypp_resources.h"
 #include "pypp_text_io.h"
