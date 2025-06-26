@@ -139,8 +139,14 @@ template <typename T> class PyList {
         int start = indices.get<0>();
         int stop = indices.get<1>();
         int step = indices.get<2>();
-        for (int i = start; i < stop; i += step) {
-            result.data.push_back(data[i]);
+        if (step > 0) {
+            for (int i = start; i < stop; i += step) {
+                result.data.push_back(data[i]);
+            }
+        } else {
+            for (int i = start; i > stop; i += step) {
+                result.data.push_back(data[i]);
+            }
         }
         return result;
     }

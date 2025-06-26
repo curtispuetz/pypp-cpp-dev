@@ -155,8 +155,14 @@ PyStr PyStr::operator[](const PySlice &sl) const {
     int start = indices.get<0>();
     int stop = indices.get<1>();
     int step = indices.get<2>();
-    for (int i = start; i < stop; i += step) {
-        result += s[i];
+    if (step > 0) {
+        for (int i = start; i < stop; i += step) {
+            result += s[i];
+        }
+    } else {
+        for (int i = start; i > stop; i += step) {
+            result += s[i];
+        }
     }
     return PyStr(result);
 }

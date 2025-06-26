@@ -7,7 +7,6 @@
 #include <format>
 #include <initializer_list>
 #include <iostream>
-#include <optional>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -197,14 +196,6 @@ template <typename K, typename V> class PyDict {
         if (it == data.end())
             throw PyppKeyError("dict[x]: x not in dict");
         return it->second;
-    }
-
-    // get_opt(key)
-    std::optional<V> dg_opt(const K &key) {
-        auto it = data.find(key);
-        if (it != data.end())
-            return std::optional<V>(it->second);
-        return std::nullopt;
     }
 
     V get(const K &key, const V &default_value) const {
