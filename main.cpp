@@ -135,10 +135,10 @@ int main() {
         }
 
         // slice printing
-        print(py_slice_stop(10));
+        print(py_slice(10));
         print(py_slice(5, 10));
         print("Slice length 5: ", py_slice(5, 10).calc_slice_length(100));
-        print("Slice length 2: ", py_slice_stop(1000).calc_slice_length(2));
+        print("Slice length 2: ", py_slice(1000).calc_slice_length(2));
         print(py_slice(5, 10, -5));
         print(py_slice(1, std::nullopt));
         // range printing
@@ -151,7 +151,7 @@ int main() {
         print(std::format("Formatted PyRange: {}", PyRange(1, 10, 2)));
 
         // Using slice and range in sets (for hashing)
-        PySet<PySlice> slice_set = PySet({py_slice_stop(1)});
+        PySet<PySlice> slice_set = PySet({py_slice(1)});
         print(slice_set);
         PySet<PyRange> range_set = PySet({PyRange(1)});
         print(range_set);
