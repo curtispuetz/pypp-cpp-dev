@@ -1,7 +1,4 @@
 #include "exceptions/exception.h"
-#include "numpy/creators/arr.h"
-#include "numpy/creators/fulls.h"
-#include "numpy/np_arr.h"
 #include "py_dict.h"
 #include "py_enumerate.h"
 #include "py_list.h"
@@ -21,13 +18,6 @@ int main() {
     try {
         std::cout << "Hello, World!" << std::endl;
         // Use an initializer list directly
-        auto arr_zeros = np::zeros<int>({2, 3, 4});
-
-        std::cout << "Created a zero-initialized array with shape: ";
-        for (size_t dim : arr_zeros.shape()) {
-            std::cout << dim << " ";
-        }
-        std::cout << std::endl;
         PyStr s = PyStr("This is a test string.");
         std::cout << "string size: " << s.len() << std::endl;
         PyList<PyStr> parts = s.split(PyStr(" "));
@@ -59,36 +49,6 @@ int main() {
         PyList<PyStr> sliced_parts = parts[sl];
         print(sliced_parts);
         print(parts[py_slice(0, std::nullopt, 2)]);
-        NpArr<int> dyn_arr = np::ones<int>(PyList({2, 3, 4, 2}));
-        std::cout << dyn_arr[PyList({0, 0, 0, 0})] << std::endl;
-        print(dyn_arr);
-        print(dyn_arr.shape());
-        std::cout << "Dynamic array size: " << dyn_arr.size() << std::endl;
-        NpArr<int> dyn_arr2 = np::full<int>(PyList({2, 3, 4}), 7);
-        print(dyn_arr2);
-
-        PyList<PyList<PyList<PyList<float>>>> nested_list_moved = {
-            {{{1.1, 2}, {4, 5}}, {{10, 11}, {13, 14}}},
-            {{{1, 2}, {1, 2}}, {{1, 2}, {1, 2}}}};
-
-        NpArr<float> arr_from_nested =
-            np::array<float>(std::move(nested_list_moved));
-        print(arr_from_nested);
-        NpArr<int> arr_from_nested2 = np::array<int>(PyList({1, 2, 3}));
-        print(arr_from_nested2);
-
-        NpArr<double> d =
-            np::array<double>(PyList({PyList({1, 2}), PyList({3, 4})}));
-
-        // accessing elements
-        std::cout << "Element at (0, 1): " << d[PyList({0, 1})] << std::endl;
-        // setting elements
-        d[PyList({0, 1})] = 5.5; // This one won't be used in pypp
-        std::cout << "After setting element at (0, 1) to 5.5: "
-                  << d[PyList({0, 1})] << std::endl;
-        d[PyList({0, 1})] = 6.5; // This one will be used in pypp
-        std::cout << "After setting element at (0, 1) to 6.5: "
-                  << d[PyList({0, 1})] << std::endl;
 
         PyDict<int, PyDict<int, int>> nested_dict(
             {{0, {{0, 1}}}, {1, {{0, 1}}}});
@@ -138,10 +98,9 @@ int main() {
 
         print(std::format("Formatted string: {}", 42));
         print(std::format("Formatted string with PyStr: {}, PyTup: {}, PySet: "
-                          "{}, PyList: {}, PyDict: {}, NpArr: {}",
+                          "{}, PyList: {}, PyDict: {}",
                           PyStr("Hello"), PyTup(1, 2), PySet({1, 2, 3}),
-                          PyList({1, 2, 3}), PyDict<int, int>({{0, 1}}),
-                          np::array<int>(PyList({1, 2, 3}))));
+                          PyList({1, 2, 3}), PyDict<int, int>({{0, 1}})));
 
         // Testing that hashing works
         PyDict<PyTup<int, int>, PyStr> dict_of_tups = {

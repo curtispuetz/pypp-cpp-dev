@@ -1,2 +1,0 @@
-add_executable(numpy_arrays_test main.cpp)
-target_link_libraries(numpy_arrays_test PRIVATE pypp_common)
