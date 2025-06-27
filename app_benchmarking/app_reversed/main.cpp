@@ -16,10 +16,8 @@ int main() {
         PyList<PyStr> words =
             PyList<PyStr>({PyStr("one"), PyStr("two"), PyStr("three")});
         std::cout << "Reversing a vector of integers:" << std::endl;
-        for (const auto &py_tup :
+        for (const auto &[word, number] :
              PyZip(PyReversed(words), PyReversed(numbers))) {
-            auto word = py_tup.get<0>();   // PyStr
-            auto number = py_tup.get<1>(); // int
             std::cout << "Word: " << word << ", Number: " << number
                       << std::endl;
         }

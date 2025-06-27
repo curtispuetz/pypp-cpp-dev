@@ -174,6 +174,16 @@ int main() {
         py_tup.get<1>().append(60);
         print(numbers);
 
+        // Tuple structured binding
+        PyTup<int, int, PyStr, PyList<int>> tup2(1, 2, PyStr("Hello"),
+                                                 PyList<int>({1, 2, 3}));
+        auto &[first, second, third, fourht] = tup2;    // references
+        auto [first2, second2, third2, fourth2] = tup2; // copies
+
+        for (const auto &[i, val] : PyEnumerate(PyList({10, 20, 30}))) {
+            std::cout << "Index: " << i << ", Value: " << val << std::endl;
+        }
+
         return 0;
     } catch (...) {
         handle_fatal_exception();

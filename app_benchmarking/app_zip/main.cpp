@@ -26,9 +26,9 @@ int main() {
             [&]() {
                 PyList<int> list1 = {1, 2, 3, 4, 5};
                 PyList<int> list2 = {6, 7, 8, 9, 10};
-                for (const auto &py_tup : PyZip(list1, list2)) {
-                    auto value1 = py_tup.get<0>();
-                    auto value2 = py_tup.get<1>();
+                for (const auto &[val1, val2] : PyZip(list1, list2)) {
+                    auto value1 = val1;
+                    auto value2 = val2;
                 }
             },
             1000);

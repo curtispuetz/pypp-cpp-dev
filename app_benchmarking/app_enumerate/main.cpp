@@ -12,14 +12,12 @@ int main() {
         // Using PyEnumerate
         PyList<PyStr> fruits = {PyStr("apple"), PyStr("banana"),
                                 PyStr("cherry")};
-        for (const auto &py_tup : PyEnumerate(fruits)) {
-            std::cout << "Index: " << py_tup.get<0>()
-                      << ", Value: " << py_tup.get<1>() << std::endl;
+        for (const auto &[i, val] : PyEnumerate(fruits)) {
+            std::cout << "Index: " << i << ", Value: " << val << std::endl;
         }
         std::cout << std::endl;
-        for (const auto &py_tup : PyEnumerate(PyList({1, 2, 3}))) {
-            std::cout << "Index: " << py_tup.get<0>()
-                      << ", Value: " << py_tup.get<1>() << std::endl;
+        for (const auto &[i, val] : PyEnumerate(PyList({1, 2, 3}))) {
+            std::cout << "Index: " << i << ", Value: " << val << std::endl;
         }
 
         // benchmark speed to a standard for loop vs PyEnumerate
@@ -35,8 +33,8 @@ int main() {
         benchmark(
             "PyEnumerate speed",
             [&]() {
-                for (const auto &py_tup : PyEnumerate(fruits)) {
-                    auto value = py_tup.get<1>();
+                for (const auto &[i, fruit] : PyEnumerate(fruits)) {
+                    auto value = fruit;
                 }
             },
             1000);
