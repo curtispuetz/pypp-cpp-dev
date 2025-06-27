@@ -8,6 +8,10 @@ PyTup<int, double, PyStr> get_tuple() {
     return PyTup<int, double, PyStr>(100, 2.718, PyStr("World"));
 }
 
+void unpack_tuple(int a, int b) {
+    std::cout << "Unpacked values: a = " << a << ", b = " << b << std::endl;
+}
+
 int main() {
     try {
         // getting elements from a tuple
@@ -24,6 +28,10 @@ int main() {
         std::cout << "x: " << x << "\n";
         std::cout << "y: " << y << "\n";
         std::cout << "z: " << z.str() << "\n";
+
+        // unpacking a tuple in function call
+        PyTup<int, int> py_tuple(10, 20);
+        std::apply(unpack_tuple, py_tuple.raw());
 
         return 0;
     } catch (...) {
