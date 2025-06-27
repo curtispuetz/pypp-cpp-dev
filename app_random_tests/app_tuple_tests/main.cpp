@@ -33,6 +33,12 @@ int main() {
         PyTup<int, int> py_tuple(10, 20);
         std::apply(unpack_tuple, py_tuple.raw());
 
+        // Moving tuple elements
+        PyTup<int, int> move_tuple = PyTup(std::move(30), std::move(40));
+        std::cout << "Moved tuple elements:\n";
+        std::cout << "First: " << move_tuple.get<0>() << "\n";
+        std::cout << "Second: " << move_tuple.get<1>() << "\n";
+
         return 0;
     } catch (...) {
         handle_fatal_exception();
