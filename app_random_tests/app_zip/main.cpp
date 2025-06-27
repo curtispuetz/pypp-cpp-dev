@@ -18,11 +18,7 @@ int main() {
         // Use PyZip in a range-based for loop.
         // The type of 'item' will be a PyTup holding references to the
         // elements.
-        for (const auto &item : PyZip(numbers, words, decimals)) {
-            // Use structured bindings (C++17) to unpack the PyTup
-            auto num = item.get<0>();  // int
-            auto word = item.get<1>(); // std::string&
-            auto dec = item.get<2>();  // double
+        for (const auto &[num, word, dec] : PyZip(numbers, words, decimals)) {
 
             // Print the values
             std::cout << "Number: " << num << ", Word: \"" << word
