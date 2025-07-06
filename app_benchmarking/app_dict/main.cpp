@@ -20,7 +20,7 @@ int main() {
         }
         PyDict<int, int> big_py_dict;
         for (int i = 0; i < size; ++i) {
-            big_py_dict[i] = i * 2;
+            big_py_dict[std::move(i)] = i * 2;
         }
         benchmark("Standard for loop over std::unordered_map keys", [&]() {
             for (const auto &[key, _] : bigMap) {
