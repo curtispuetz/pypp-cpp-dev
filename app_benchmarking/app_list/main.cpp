@@ -59,11 +59,11 @@ int main() {
         // Results: The speed is identical.
         PyDict<int, PyStr> big_py_dict1;
         for (int i = 0; i < 100000; ++i) {
-            big_py_dict1[i] = PyStr("test");
+            big_py_dict1[std::move(i)] = PyStr("test");
         }
         PyDict<int, PyStr> big_py_dict2;
         for (int i = 0; i < 100000; ++i) {
-            big_py_dict2[i] = PyStr("test");
+            big_py_dict2[std::move(i)] = PyStr("test");
         }
         benchmark("Created pylist by moving a big PyDict", [&]() {
             PyList<PyDict<int, PyStr>> small_list = {std::move(big_py_dict1),
