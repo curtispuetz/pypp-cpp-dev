@@ -19,14 +19,14 @@ int main() {
         benchmark("create list of the same list", [&]() {
             PyList<PyList<int>> list;
             for (int i = 0; i < iter_length; ++i) {
-                list.append(larger_list);
+                list.append(std::move(larger_list));
             }
         });
         benchmark("create list of many creadted lists", [&]() {
             PyList<PyList<int>> list;
             for (int i = 0; i < iter_length; ++i) {
                 PyList<int> inner = PyList<int>({1}) * list_size;
-                list.append(inner);
+                list.append(std::move(inner));
             }
         });
         benchmark("create list of many creadted lists directly", [&]() {
@@ -43,13 +43,6 @@ int main() {
                           list.append(std::move(inner));
                       }
                   });
-        benchmark("Same as above, but without move", [&]() {
-            PyList<PyList<int>> list;
-            for (int i = 0; i < iter_length; ++i) {
-                PyList<int> inner = PyList<int>({1}) * list_size;
-                list.append(inner);
-            }
-        });
         benchmark("create list of many creadted lists with move constructor, "
                   "different way",
                   [&]() {
@@ -69,17 +62,6 @@ int main() {
                           list.append(std::move(inner));
                       }
                   });
-        benchmark("Same as above, but without move", [&]() {
-            // Without the move makes a difference here! Because the variable
-            // exists. I think if the variable does not exist and is inlined,
-            // then it doesn't matter if you use std::move or not.
-            PyList<PyList<int>> list;
-            for (int i = 0; i < iter_length; ++i) {
-                PyList<int> inner = PyList<int>({1});
-                inner *= list_size;
-                list.append(inner);
-            }
-        });
         benchmark("create list of many creadted lists with move constructor, "
                   "different new third way",
                   [&]() {

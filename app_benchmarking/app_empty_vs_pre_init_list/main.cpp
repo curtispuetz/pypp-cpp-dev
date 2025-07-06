@@ -35,7 +35,7 @@ int main() {
         benchmark("PyList empty then append", [&]() {
             PyList<int> py_list_empty;
             for (int i = 0; i < size; ++i) {
-                py_list_empty.append(i);
+                py_list_empty.append(std::move(i));
             }
         });
 

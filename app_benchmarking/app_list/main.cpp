@@ -96,7 +96,7 @@ int main() {
         benchmark("PyList append", [&]() {
             PyList<int> py_list;
             for (int i = 0; i < size; ++i) {
-                py_list.append(i);
+                py_list.append(std::move(i));
             }
         });
 
