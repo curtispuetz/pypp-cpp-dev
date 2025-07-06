@@ -23,7 +23,7 @@ int main() {
         benchmark("PySet add", [&]() {
             PySet<int> py_set;
             for (int i = 0; i < size; ++i) {
-                py_set.add(i);
+                py_set.add(std::move(i));
             }
         });
         benchmark("std::unordered_set insert (i.e. add)", [&]() {
@@ -42,7 +42,7 @@ int main() {
             PySet<std::string> py_set;
             for (int i = 0; i < 10; ++i) {
                 std::string big_string(10000, 'a');
-                py_set.add(big_string);
+                py_set.add(std::move(big_string));
             }
         });
         benchmark("std::unordered_set with big elements", [&]() {
