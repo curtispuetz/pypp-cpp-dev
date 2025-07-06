@@ -12,6 +12,15 @@ void unpack_tuple(int a, int b) {
     std::cout << "Unpacked values: a = " << a << ", b = " << b << std::endl;
 }
 
+// Creating a new tuple from a tuple. So, in Pypp you would have to do:
+// def get_new_tup(tup: valu(tuple[int, float]) -> tuple[int, float]:
+//    a: int = pypp_tg(tup, 0)
+//    return (a, pypp_tg(tup, 1) + 1.0)
+PyTup<int, double> get_new_tup(PyTup<int, double> tup) {
+    int a = tup.get<0>();
+    return PyTup<int, double>(std::move(a), tup.get<1>() + 1.0);
+}
+
 int main() {
     try {
         // getting elements from a tuple
@@ -28,6 +37,11 @@ int main() {
         std::cout << "x: " << x << "\n";
         std::cout << "y: " << y << "\n";
         std::cout << "z: " << z.str() << "\n";
+
+        PyTup<int, double> new_tup = PyTup(std::move(1), std::move(2.0));
+        std::cout << "New tuple after move:\n";
+        std::cout << "First: " << new_tup.get<0>() << "\n";
+        std::cout << "Second: " << new_tup.get<1>() << "\n";
 
         // unpacking a tuple in function call
         PyTup<int, int> py_tuple(10, 20);
