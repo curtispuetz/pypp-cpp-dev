@@ -14,6 +14,9 @@
 #include <format>
 #include <iostream>
 
+// function that returns by reference an argument that is passed by reference
+PyList<int> &get_list(PyList<int> &list) { return list; }
+
 int main() {
     try {
         std::cout << "Hello, World!" << std::endl;
@@ -183,6 +186,12 @@ int main() {
         for (const auto &[i, val] : PyEnumerate(PyList({10, 20, 30}))) {
             std::cout << "Index: " << i << ", Value: " << val << std::endl;
         }
+
+        // Testing function that returns by reference
+        PyList<int> numbers2 = {10, 20, 30, 40, 50};
+        PyList<int> &list_returned_by_ref = get_list(numbers2);
+        list_returned_by_ref.append(70);
+        print(numbers2);
 
         return 0;
     } catch (...) {
