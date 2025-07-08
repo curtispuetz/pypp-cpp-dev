@@ -174,6 +174,8 @@ template <typename K, typename V> class PyDictItems {
 
 template <typename K, typename V> class PyDict {
   public:
+    using key_type = K;
+    using value_type = V;
     // Underlying map
     std::unordered_map<K, V> data;
 
@@ -274,6 +276,9 @@ template <typename K, typename V> class PyDict {
     template <typename U, typename Z>
     friend std::ostream &operator<<(std::ostream &os, const PyDict<U, Z> &dict);
 };
+
+template <typename K, typename V>
+PyDict(std::initializer_list<std::pair<const K, V>>) -> PyDict<K, V>;
 
 template <typename K, typename V>
 std::ostream &operator<<(std::ostream &os, const PyDict<K, V> &dict) {
