@@ -8,7 +8,7 @@
 // function which takes Uni as an argument
 void process_union(Uni<int, double> union_value) {
     if (union_value.isinst<int>()) {
-        std::cout << "Processing int: " << union_value.vg<int>() << std::endl;
+        std::cout << "Processing int: " << union_value.ug<int>() << std::endl;
     }
 }
 
@@ -19,7 +19,7 @@ int main() {
     try {
         Uni<int, double> union_value(42);
         if (union_value.isinst<int>()) {
-            std::cout << "The union contains an int: " << union_value.vg<int>()
+            std::cout << "The union contains an int: " << union_value.ug<int>()
                       << std::endl;
         }
         if (!union_value.isinst<double>()) {
@@ -37,7 +37,7 @@ int main() {
         Uni<int, double> union_value3(3.14);
         if (union_value3.isinst<double>()) {
             std::cout << "The union contains a double: "
-                      << union_value3.vg<double>() << std::endl;
+                      << union_value3.ug<double>() << std::endl;
         }
 
         // moving
@@ -45,12 +45,19 @@ int main() {
         Uni<PyList<int>> union_value4(std::move(list));
         if (union_value4.isinst<PyList<int>>()) {
             std::cout << "The union contains a PyList<int> with elements: ";
-            for (const auto &item : union_value4.vg<PyList<int>>()) {
+            for (const auto &item : union_value4.ug<PyList<int>>()) {
                 std::cout << item << " ";
             }
             std::cout << std::endl;
         }
         // copying not supported.
+
+        // with monostate (i.e. None)
+        Uni<std::monostate, int, double> union_value5(std::monostate{});
+        if (union_value5.is_none()) {
+            std::cout << "The union contains a monostate (i.e. None)."
+                      << std::endl;
+        }
 
         return 0;
     } catch (...) {
