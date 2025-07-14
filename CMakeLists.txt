@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 4.0)
 project(pypp LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -12,6 +12,9 @@ target_include_directories(pypp_common PUBLIC ${CMAKE_SOURCE_DIR}/src ${CMAKE_SO
 
 add_executable(pyppDefaultExeName main.cpp)
 target_link_libraries(pyppDefaultExeName PRIVATE pypp_common)
+
+add_executable(test1 test.cpp)
+target_link_libraries(test1 PRIVATE pypp_common)
 
 add_subdirectory(app_benchmarking)
 add_subdirectory(app_optional)
