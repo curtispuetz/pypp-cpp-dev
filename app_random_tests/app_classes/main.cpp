@@ -1,3 +1,4 @@
+#include "config_test.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
 #include <pypp_util/main_error_handler.h>
@@ -51,6 +52,8 @@ int main() {
     std::cout << _child_struct.add(2) << std::endl;
     std::cout << _child_struct.multiply(2) << std::endl;
     std::cout << _child_struct.subtract(2) << std::endl;
+
+    std::cout << MyConfigInstance.a << std::endl;
 
     try {
         return 0;
