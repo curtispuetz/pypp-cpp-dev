@@ -9,32 +9,34 @@
 int main() {
     try {
         // int
-        PyDefaultDict<int, int> d([] { return 0; });
+        auto d = PyDefaultDict<int, int>([] { return 0; });
         d[1] += 5;
         print(d[1]);
 
         // double
-        PyDefaultDict<int, double> d_double([] { return 0.0; });
+        auto d_double = PyDefaultDict<int, double>([] { return 0.0; });
         d_double[1] += 3.14;
         print(d_double[1]);
 
         // PyStr
-        PyDefaultDict<int, PyStr> d_str([] { return PyStr(""); });
+        auto d_str = PyDefaultDict<int, PyStr>([] { return PyStr(""); });
         d_str[1] += PyStr("one");
         print(d_str[1]);
 
         // PyList
-        PyDefaultDict<int, PyList<int>> d_list([] { return PyList<int>(); });
+        auto d_list =
+            PyDefaultDict<int, PyList<int>>([] { return PyList<int>(); });
         d_list[1].append(1);
         print(d_list[1]);
 
         // PySet
-        PyDefaultDict<int, PySet<int>> d_set([] { return PySet<int>(); });
+        auto d_set =
+            PyDefaultDict<int, PySet<int>>([] { return PySet<int>(); });
         d_set[1].add(1);
         print(d_set[1]);
 
         // PyDict
-        PyDefaultDict<int, PyDict<int, int>> d_dict(
+        auto d_dict = PyDefaultDict<int, PyDict<int, int>>(
             [] { return PyDict<int, int>(); });
         d_dict[1][2] = 3;
         print(d_dict[1]);
