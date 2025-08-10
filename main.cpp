@@ -1,4 +1,5 @@
 #include "exceptions/exception.h"
+#include "lib_test/t.h"
 #include "py_dict.h"
 #include "py_enumerate.h"
 #include "py_list.h"
@@ -192,6 +193,8 @@ int main() {
         PyList<int> &list_returned_by_ref = get_list(numbers2);
         list_returned_by_ref.append(70);
         print(numbers2);
+        PseudoCustomTypeCpp pct(42);
+        std::cout << "pct.a_: " << pct.get_a() << std::endl;
 
         return 0;
     } catch (...) {
