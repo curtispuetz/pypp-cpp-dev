@@ -1,4 +1,4 @@
-#include "pypp_random.h"
+#include "compy_random.h"
 
 namespace random {
 

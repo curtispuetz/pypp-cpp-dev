@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 4.0)
 
-project(pyppDefaultProjectName LANGUAGES CXX)
+project(compyDefaultProjectName LANGUAGES CXX)
 
 # C++ standard settings
 set(CMAKE_CXX_STANDARD 23)
@@ -8,22 +8,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # for clangd and tooling support (creates compile_commands.json in build/)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Collect all .cpp source files from src/ and pypp/ directories recursively
+# Collect all .cpp source files from src/ and compy/ directories recursively
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
-file(GLOB_RECURSE PYPP_FILES pypp/*.cpp)
+file(GLOB_RECURSE COMPY_FILES compy/*.cpp)
 
 # Define the executable with main.cpp and all source files
-add_executable(pyppDefaultExeName
+add_executable(compyDefaultExeName
     main.cpp
     ${SRC_FILES}
-    ${PYPP_FILES}
+    ${COMPY_FILES}
 )
 
-# Add the src and pypp directories to the include path, scoped to this target
-target_include_directories(pyppDefaultExeName
+# Add the src and compy directories to the include path, scoped to this target
+target_include_directories(compyDefaultExeName
     PRIVATE
         ${CMAKE_SOURCE_DIR}/src
-        ${CMAKE_SOURCE_DIR}/pypp
+        ${CMAKE_SOURCE_DIR}/compy
 )
 
 # Link any needed libraries here (empty for now)

@@ -1,2 +1,0 @@
-add_executable(pypp_union_test main.cpp)
-target_link_libraries(pypp_union_test PRIVATE compy_common)

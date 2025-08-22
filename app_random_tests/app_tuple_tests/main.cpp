@@ -14,8 +14,8 @@ void unpack_tuple(int a, int b) {
 
 // Creating a new tuple from a tuple. So, in Pypp you would have to do:
 // def get_new_tup(tup: valu(tuple[int, float]) -> tuple[int, float]:
-//    a: int = pypp_tg(tup, 0)
-//    return (a, pypp_tg(tup, 1) + 1.0)
+//    a: int = compy_tg(tup, 0)
+//    return (a, compy_tg(tup, 1) + 1.0)
 PyTup<int, double> get_new_tup(PyTup<int, double> tup) {
     int a = tup.get<0>();
     return PyTup<int, double>(std::move(a), tup.get<1>() + 1.0);
