@@ -1,7 +1,7 @@
 #include "py_dict.h"
+#include <compy_util/main_error_handler.h>
 #include <iostream>
 #include <optional>
-#include <pypp_util/main_error_handler.h>
 #include <vector>
 
 int main() {

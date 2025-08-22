@@ -1,8 +1,8 @@
 #include "py_str.h"
 #include "py_tuple.h"
+#include <compy_util/main_error_handler.h>
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
-#include <pypp_util/main_error_handler.h>
 
 PyTup<int, double, PyStr> get_tuple() {
     return PyTup<int, double, PyStr>(100, 2.718, PyStr("World"));
