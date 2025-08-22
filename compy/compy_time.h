@@ -2,7 +2,7 @@
 #include <chrono>
 #include <thread>
 
-namespace pypp_time {
+namespace compy_time {
 // Returns the current wall time point (system_clock::time_point)
 inline std::chrono::system_clock::time_point start() {
     return std::chrono::system_clock::now();
@@ -36,4 +36,4 @@ perf_counter_end(std::chrono::high_resolution_clock::time_point start_time) {
         .count();
 }
 
-} // namespace pypp_time
+} // namespace compy_time

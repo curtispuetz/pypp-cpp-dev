@@ -1,7 +1,7 @@
+#include "compy_os.h"
+#include "compy_resources.h"
+#include "compy_text_io.h"
 #include "py_dict.h"
-#include "pypp_os.h"
-#include "pypp_resources.h"
-#include "pypp_text_io.h"
 #include <compy_util/main_error_handler.h>
 #include <filesystem>
 #include <fstream>
@@ -12,7 +12,7 @@
 int main() {
     try {
         // Get the resources path
-        PyStr dir_path = pypp_get_resources(
+        PyStr dir_path = compy_get_resources(
             PyStr("test")); // Ensure resources can be accessed
         std::cout << "dir path: " << dir_path << std::endl;
 
