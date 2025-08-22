@@ -2,14 +2,14 @@
 #include <string>
 #include <system_error>
 
-class PyppOSError : public std::system_error {
+class CompyOSError : public std::system_error {
   public:
-    PyppOSError(const std::string &msg, std::error_code ec)
-        : std::system_error(ec, "PyppOsError: " + msg) {}
+    CompyOSError(const std::string &msg, std::error_code ec)
+        : std::system_error(ec, "CompyOsError: " + msg) {}
 };
 
-class PyppSystemError : public std::system_error {
+class CompySystemError : public std::system_error {
   public:
-    PyppSystemError(const std::string &msg, std::error_code ec)
-        : std::system_error(ec, "PyppSystemError: " + msg) {}
+    CompySystemError(const std::string &msg, std::error_code ec)
+        : std::system_error(ec, "CompySystemError: " + msg) {}
 };

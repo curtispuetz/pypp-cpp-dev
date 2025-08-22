@@ -25,7 +25,7 @@ template <typename T> class PySet {
     void remove(const T &value) {
         auto it = data.find(value);
         if (it == data.end()) {
-            throw PyppKeyError("set.remove(x): x not in set");
+            throw CompyKeyError("set.remove(x): x not in set");
         }
         data.erase(it);
     }

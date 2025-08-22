@@ -12,7 +12,7 @@ void unpack_tuple(int a, int b) {
     std::cout << "Unpacked values: a = " << a << ", b = " << b << std::endl;
 }
 
-// Creating a new tuple from a tuple. So, in Pypp you would have to do:
+// Creating a new tuple from a tuple. So, in Compy you would have to do:
 // def get_new_tup(tup: valu(tuple[int, float]) -> tuple[int, float]:
 //    a: int = compy_tg(tup, 0)
 //    return (a, compy_tg(tup, 1) + 1.0)

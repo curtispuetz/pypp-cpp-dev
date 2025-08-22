@@ -192,11 +192,11 @@ template <typename K, typename V> class PyDict {
     PyDictValues<K, V> values() const { return PyDictValues<K, V>(data); }
     PyDictItems<K, V> items() const { return PyDictItems<K, V>(data); }
 
-    // dg == dict get. matches pypp's naming.
+    // dg == dict get. matches projects naming.
     V &dg(const K &key) {
         auto it = data.find(key);
         if (it == data.end())
-            throw PyppKeyError("dict[x]: x not in dict");
+            throw CompyKeyError("dict[x]: x not in dict");
         return it->second;
     }
 
@@ -213,7 +213,7 @@ template <typename K, typename V> class PyDict {
             data.erase(it);
             return value;
         }
-        throw PyppKeyError("dict.pop(x): x not in dict");
+        throw CompyKeyError("dict.pop(x): x not in dict");
     }
 
     V pop(const K &key, const V &default_value) {

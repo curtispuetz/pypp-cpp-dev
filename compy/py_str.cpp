@@ -30,14 +30,14 @@ int PyStr::find(const PyStr &sub) const {
 int PyStr::index(const PyStr &sub) const {
     int pos = find(sub);
     if (pos == -1)
-        throw PyppValueError("substring not found");
+        throw CompyValueError("substring not found");
     return pos;
 }
 
 int PyStr::rindex(const PyStr &sub) const {
     size_t pos = s.rfind(sub.str());
     if (pos == std::string::npos)
-        throw PyppValueError("substring not found");
+        throw CompyValueError("substring not found");
     return static_cast<int>(pos);
 }
 
@@ -153,12 +153,12 @@ void PyStr::operator*=(const int rep) { s = repeat_string(s, rep); }
 
 PyStr PyStr::operator[](int i) const {
     if (i > static_cast<int>(s.length()) - 1) {
-        throw PyppIndexError("string index out of range");
+        throw CompyIndexError("string index out of range");
     }
     if (i < 0) {
         i += s.length();
         if (i < 0)
-            throw PyppIndexError("string index out of range");
+            throw CompyIndexError("string index out of range");
     }
     return PyStr(std::string(1, s.at(i)));
 }

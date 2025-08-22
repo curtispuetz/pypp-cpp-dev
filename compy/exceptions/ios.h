@@ -2,8 +2,8 @@
 #include <ios>
 #include <string>
 
-class PyppIOError : public std::ios_base::failure {
+class CompyIOError : public std::ios_base::failure {
   public:
-    explicit PyppIOError(const std::string &msg)
-        : std::ios_base::failure("PyppIOError: " + msg) {}
+    explicit CompyIOError(const std::string &msg)
+        : std::ios_base::failure("CompyIOError: " + msg) {}
 };

@@ -1,9 +1,9 @@
 #pragma once
 #include <new>
 
-class PyppMemoryError : public std::bad_alloc {
+class CompyMemoryError : public std::bad_alloc {
   public:
     const char *what() const noexcept override {
-        return "PyppMemoryError: failed to allocate memory";
+        return "CompyMemoryError: failed to allocate memory";
     }
 };
