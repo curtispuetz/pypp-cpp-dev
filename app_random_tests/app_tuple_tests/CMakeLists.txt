@@ -1,2 +1,2 @@
 add_executable(tuple_tests_test main.cpp)
-target_link_libraries(tuple_tests_test PRIVATE pypp_common)
+target_link_libraries(tuple_tests_test PRIVATE compy_common)
