@@ -12,7 +12,7 @@ inline void rmtree(const PyStr &path) {
     std::filesystem::path fs_path(path.str());
     std::filesystem::remove_all(fs_path, ec);
     if (ec) {
-        throw PyppFileSystemError("shutil::rmtree failed", fs_path);
+        throw CompyFileSystemError("shutil::rmtree failed", fs_path);
     }
 }
 } // namespace shutil

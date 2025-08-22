@@ -4,15 +4,15 @@
 #include <variant>
 
 // A generic wrapper that can either own or reference a dependency
-template <typename T> class PyppDependency {
+template <typename T> class CompyDependency {
     std::variant<std::reference_wrapper<T>, T> data_;
 
   public:
     // Construct with reference
-    PyppDependency(T &ref) : data_(std::ref(ref)) {}
+    CompyDependency(T &ref) : data_(std::ref(ref)) {}
 
     // Construct by moving
-    PyppDependency(T &&obj) : data_(std::move(obj)) {}
+    CompyDependency(T &&obj) : data_(std::move(obj)) {}
 
     // Accessors
     T &g() {

@@ -2,58 +2,58 @@
 #include <stdexcept>
 #include <string>
 
-class PyppRuntimeError : public std::runtime_error {
+class CompyRuntimeError : public std::runtime_error {
   public:
-    explicit PyppRuntimeError(const std::string &msg)
-        : std::runtime_error("PyppRuntimeError: " + msg) {}
+    explicit CompyRuntimeError(const std::string &msg)
+        : std::runtime_error("CompyRuntimeError: " + msg) {}
 };
 
-class PyppValueError : public std::invalid_argument {
+class CompyValueError : public std::invalid_argument {
   public:
-    explicit PyppValueError(const std::string &msg)
-        : std::invalid_argument("PyppValueError: " + msg) {}
+    explicit CompyValueError(const std::string &msg)
+        : std::invalid_argument("CompyValueError: " + msg) {}
 };
 
-class PyppTypeError : public std::invalid_argument {
+class CompyTypeError : public std::invalid_argument {
   public:
-    explicit PyppTypeError(const std::string &msg)
-        : std::invalid_argument("PyppTypeError: " + msg) {}
+    explicit CompyTypeError(const std::string &msg)
+        : std::invalid_argument("CompyTypeError: " + msg) {}
 };
 
-class PyppIndexError : public std::out_of_range {
+class CompyIndexError : public std::out_of_range {
   public:
-    explicit PyppIndexError(const std::string &msg)
-        : std::out_of_range("PyppIndexError: " + msg) {}
+    explicit CompyIndexError(const std::string &msg)
+        : std::out_of_range("CompyIndexError: " + msg) {}
 };
 
-class PyppKeyError : public std::out_of_range {
+class CompyKeyError : public std::out_of_range {
   public:
-    explicit PyppKeyError(const std::string &msg)
-        : std::out_of_range("PyppKeyError: " + msg) {}
+    explicit CompyKeyError(const std::string &msg)
+        : std::out_of_range("CompyKeyError: " + msg) {}
 };
 
 // This is not used and zero division will do indefined behavior in the C++
 // execution?
-class PyppZeroDivisionError : public std::domain_error {
+class CompyZeroDivisionError : public std::domain_error {
   public:
-    explicit PyppZeroDivisionError(const std::string &msg)
-        : std::domain_error("PyppZeroDivisionError: " + msg) {}
+    explicit CompyZeroDivisionError(const std::string &msg)
+        : std::domain_error("CompyZeroDivisionError: " + msg) {}
 };
 
-class PyppAssertionError : public std::logic_error {
+class CompyAssertionError : public std::logic_error {
   public:
-    explicit PyppAssertionError(const std::string &msg)
-        : std::logic_error("PyppAssertionError: " + msg) {}
+    explicit CompyAssertionError(const std::string &msg)
+        : std::logic_error("CompyAssertionError: " + msg) {}
 };
 
-class PyppNotImplementedError : public std::logic_error {
+class CompyNotImplementedError : public std::logic_error {
   public:
-    explicit PyppNotImplementedError(const std::string &msg)
-        : std::logic_error("PyppNotImplementedError: " + msg) {}
+    explicit CompyNotImplementedError(const std::string &msg)
+        : std::logic_error("CompyNotImplementedError: " + msg) {}
 };
 
-class PyppAttributeError : public std::logic_error {
+class CompyAttributeError : public std::logic_error {
   public:
-    explicit PyppAttributeError(const std::string &msg)
-        : std::logic_error("PyppAttributeError: " + msg) {}
+    explicit CompyAttributeError(const std::string &msg)
+        : std::logic_error("CompyAttributeError: " + msg) {}
 };

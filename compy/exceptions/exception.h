@@ -2,10 +2,10 @@
 #include <exception>
 #include <string>
 
-class PyppException : public std::exception {
+class CompyException : public std::exception {
   public:
-    explicit PyppException(const std::string &msg)
-        : msg_("PyppException: " + msg) {}
+    explicit CompyException(const std::string &msg)
+        : msg_("CompyException: " + msg) {}
 
     const char *what() const noexcept override { return msg_.c_str(); }
 
@@ -13,20 +13,20 @@ class PyppException : public std::exception {
     std::string msg_;
 };
 
-class PyppNameError : public PyppException {
+class CompyNameError : public CompyException {
   public:
-    explicit PyppNameError(const std::string &msg)
-        : PyppException("PyppNameError: " + msg) {}
+    explicit CompyNameError(const std::string &msg)
+        : CompyException("CompyNameError: " + msg) {}
 };
 
-class PyppImportError : public PyppException {
+class CompyImportError : public CompyException {
   public:
-    explicit PyppImportError(const std::string &msg)
-        : PyppException("PyppImportError: " + msg) {}
+    explicit CompyImportError(const std::string &msg)
+        : CompyException("CompyImportError: " + msg) {}
 };
 
-class PyppStopIteration : public PyppException {
+class CompyStopIteration : public CompyException {
   public:
-    explicit PyppStopIteration(const std::string &msg = "Iteration stopped")
-        : PyppException("PyppStopIteration: " + msg) {}
+    explicit CompyStopIteration(const std::string &msg = "Iteration stopped")
+        : CompyException("CompyStopIteration: " + msg) {}
 };
