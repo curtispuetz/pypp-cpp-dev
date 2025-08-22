@@ -1,9 +1,9 @@
 #include "py_list.h"
 #include "py_str.h"
 #include "pypp_union.h"
+#include <compy_util/main_error_handler.h>
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
-#include <pypp_util/main_error_handler.h>
 
 // function which takes Uni as an argument
 void process_union(Uni<int, double> union_value) {

@@ -2,11 +2,11 @@
 #include "pypp_os.h"
 #include "pypp_resources.h"
 #include "pypp_text_io.h"
+#include <compy_util/main_error_handler.h>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <optional>
-#include <pypp_util/main_error_handler.h>
 #include <vector>
 
 int main() {

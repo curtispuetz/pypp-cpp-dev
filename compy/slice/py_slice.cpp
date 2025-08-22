@@ -1,6 +1,6 @@
 #include "slice/py_slice.h"
+#include "compy_util/floor_div.h"
 #include "exceptions/stdexcept.h"
-#include "pypp_util/floor_div.h"
 #include "slice/index_calculator.h"
 
 PySlice::PySlice(std::optional<int> start, std::optional<int> stop, int step)

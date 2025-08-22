@@ -1,4 +1,4 @@
-#include "pypp_util/main_error_handler.h"
+#include "compy_util/main_error_handler.h"
 #include <cstdlib>
 #include <exception>
 #include <iostream>

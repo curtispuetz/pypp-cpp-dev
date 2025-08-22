@@ -1,8 +1,8 @@
 #include "py_tuple.h"
 #include "py_zip.h"
 #include <array>
+#include <compy_util/main_error_handler.h>
 #include <cstdlib> // Required for EXIT_FAILURE
-#include <pypp_util/main_error_handler.h>
 #include <vector>
 int main() {
     try {

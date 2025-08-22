@@ -1,10 +1,10 @@
 #include "benchmark.h"
+#include "compy_util/print.h"
 #include "py_dict.h"
 #include "py_list.h"
-#include "pypp_util/print.h"
+#include <compy_util/main_error_handler.h>
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <py_str.h>
-#include <pypp_util/main_error_handler.h>
 int main() {
     try {
         // Test moving before benchmarking to show it works as expected
