@@ -40,9 +40,7 @@ template <typename T> class PyList {
     PyList(const int size, const T &value) : data(size, value) {}
     PyList(const int size) : data(size) {}
 
-    void append(T &&value) {
-        data.push_back(std::move(value)); // move
-    }
+    void append(T &&value) { data.push_back(std::move(value)); }
 
     // Pop
     T pop(int index = -1) {
@@ -73,6 +71,13 @@ template <typename T> class PyList {
         if (index > static_cast<int>(data.size()))
             index = data.size();
         data.insert(data.begin() + index, std::move(value));
+    }
+
+    // Extend: add all elements from another PyList
+    void extend(PyList<T> &&other) {
+        data.insert(data.end(), std::make_move_iterator(other.data.begin()),
+                    std::make_move_iterator(other.data.end()));
+        other.data.clear();
     }
 
     // Remove
