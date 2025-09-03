@@ -1,7 +1,7 @@
-#include "compy_random.h"
-#include "compy_util/print.h"
-#include <compy_util/main_error_handler.h>
+#include "pypp_random.h"
+#include "pypp_util/print.h"
 #include <cstdlib> // Required for EXIT_FAILURE
+#include <pypp_util/main_error_handler.h>
 
 int main() {
     try {

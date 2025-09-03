@@ -1,8 +1,8 @@
 #include "benchmark.h"
 #include "py_list.h"
 #include "py_zip.h"
-#include <compy_util/main_error_handler.h>
 #include <cstdlib> // Required for EXIT_FAILURE
+#include <pypp_util/main_error_handler.h>
 
 int main() {
     try {

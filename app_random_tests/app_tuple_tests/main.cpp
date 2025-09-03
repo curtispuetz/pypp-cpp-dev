@@ -1,8 +1,8 @@
 #include "py_str.h"
 #include "py_tuple.h"
-#include <compy_util/main_error_handler.h>
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
+#include <pypp_util/main_error_handler.h>
 
 PyTup<int, double, PyStr> get_tuple() {
     return PyTup<int, double, PyStr>(100, 2.718, PyStr("World"));
@@ -12,10 +12,10 @@ void unpack_tuple(int a, int b) {
     std::cout << "Unpacked values: a = " << a << ", b = " << b << std::endl;
 }
 
-// Creating a new tuple from a tuple. So, in Compy you would have to do:
+// Creating a new tuple from a tuple. So, in Py++ you would have to do:
 // def get_new_tup(tup: valu(tuple[int, float]) -> tuple[int, float]:
-//    a: int = compy_tg(tup, 0)
-//    return (a, compy_tg(tup, 1) + 1.0)
+//    a: int = pypp_tg(tup, 0)
+//    return (a, pypp_tg(tup, 1) + 1.0)
 PyTup<int, double> get_new_tup(PyTup<int, double> tup) {
     int a = tup.get<0>();
     return PyTup<int, double>(std::move(a), tup.get<1>() + 1.0);

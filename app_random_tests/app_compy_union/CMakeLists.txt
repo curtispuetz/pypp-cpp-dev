@@ -1,2 +1,0 @@
-add_executable(compy_union_test main.cpp)
-target_link_libraries(compy_union_test PRIVATE compy_common)

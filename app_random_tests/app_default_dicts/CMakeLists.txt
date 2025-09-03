@@ -1,2 +1,2 @@
 add_executable(default_dicts_test main.cpp)
-target_link_libraries(default_dicts_test PRIVATE compy_common)
+target_link_libraries(default_dicts_test PRIVATE pypp_common)

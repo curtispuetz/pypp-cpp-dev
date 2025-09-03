@@ -1,6 +1,3 @@
-#include "compy_util/main_error_handler.h"
-#include "compy_util/print.h"
-#include "compy_util/to_py_str.h"
 #include "exceptions/exception.h"
 #include "lib_test/t.h"
 #include "py_dict.h"
@@ -10,6 +7,9 @@
 #include "py_set.h"
 #include "py_str.h"
 #include "py_tuple.h"
+#include "pypp_util/main_error_handler.h"
+#include "pypp_util/print.h"
+#include "pypp_util/to_py_str.h"
 #include "slice/creators.h"
 #include "slice/py_slice.h"
 #include <format>
@@ -72,17 +72,17 @@ int main() {
             std::cout << val;
         }
         // for loops over dict items
-        for (const auto &compy_it_tup : int_dict.items()) {
-            auto &k = compy_it_tup.get<0>();
-            auto &v = compy_it_tup.get<1>();
+        for (const auto &pypp_it_tup : int_dict.items()) {
+            auto &k = pypp_it_tup.get<0>();
+            auto &v = pypp_it_tup.get<1>();
             std::cout << k << ": " << v << std::endl;
         }
         // for loops over list of tuples
         PyList<PyTup<int, int>> list_of_tuples =
             PyList({PyTup(1, 2), PyTup(3, 4)});
-        for (const auto &compy_it_tup : list_of_tuples) {
-            auto &first = compy_it_tup.get<0>();
-            auto &second = compy_it_tup.get<1>();
+        for (const auto &pypp_it_tup : list_of_tuples) {
+            auto &first = pypp_it_tup.get<0>();
+            auto &second = pypp_it_tup.get<1>();
             std::cout << first << ", " << second << std::endl;
         }
         print(list_of_tuples);

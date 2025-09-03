@@ -1,7 +1,7 @@
 #include "config_test.h"
-#include <compy_util/main_error_handler.h>
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
+#include <pypp_util/main_error_handler.h>
 
 class ClassA {
   public:

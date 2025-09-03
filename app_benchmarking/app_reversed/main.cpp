@@ -4,10 +4,10 @@
 #include "py_set.h"
 #include "py_str.h"
 #include "py_zip.h"
-#include <compy_util/main_error_handler.h>
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
 #include <py_reversed.h>
+#include <pypp_util/main_error_handler.h>
 
 int main() {
     try {
