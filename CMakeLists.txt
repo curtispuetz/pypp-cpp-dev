@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 4.0)
-project(compy LANGUAGES CXX)
+project(pypp LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -13,28 +13,28 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(glfw)
 
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
-file(GLOB_RECURSE COMPY_FILES compy/*.cpp)
+file(GLOB_RECURSE PYPP_FILES pypp/*.cpp)
 file(GLOB_RECURSE LIB_FILES libs/*.cpp)
 
 add_library(
-    compy_common STATIC 
+    pypp_common STATIC 
     ${SRC_FILES} 
-    ${COMPY_FILES} 
+    ${PYPP_FILES} 
     ${LIB_FILES}
 )
 target_include_directories(
-    compy_common PUBLIC 
+    pypp_common PUBLIC 
     ${CMAKE_SOURCE_DIR}/src 
-    ${CMAKE_SOURCE_DIR}/compy 
+    ${CMAKE_SOURCE_DIR}/pypp 
     ${CMAKE_SOURCE_DIR}/libs
 )
-target_link_libraries(compy_common PUBLIC glfw)
+target_link_libraries(pypp_common PUBLIC glfw)
 
-add_executable(compyDefaultExeName main.cpp)
-target_link_libraries(compyDefaultExeName PRIVATE compy_common)
+add_executable(pyppDefaultExeName main.cpp)
+target_link_libraries(pyppDefaultExeName PRIVATE pypp_common)
 
 add_executable(glfw_test glfw_test.cpp)
-target_link_libraries(glfw_test PRIVATE compy_common)
+target_link_libraries(glfw_test PRIVATE pypp_common)
 
 add_subdirectory(app_benchmarking)
 add_subdirectory(app_optional)

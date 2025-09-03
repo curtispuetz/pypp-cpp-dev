@@ -1,2 +1,2 @@
 add_executable(list_test_test main.cpp)
-target_link_libraries(list_test_test PRIVATE compy_common)
+target_link_libraries(list_test_test PRIVATE pypp_common)

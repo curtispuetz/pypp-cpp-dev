@@ -1,4 +1,4 @@
-#include "compy_util/main_error_handler.h"
+#include "pypp_util/main_error_handler.h"
 #include <GLFW/glfw3.h>
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <string>

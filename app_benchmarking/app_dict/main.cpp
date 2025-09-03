@@ -1,8 +1,8 @@
 #include "benchmark.h"
-#include <compy_util/main_error_handler.h>
-#include <compy_util/print.h>
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <py_dict.h>
+#include <pypp_util/main_error_handler.h>
+#include <pypp_util/print.h>
 #include <unordered_map>
 
 int main() {

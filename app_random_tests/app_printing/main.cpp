@@ -3,9 +3,9 @@
 #include "py_set.h"
 #include "py_str.h"
 #include "py_tuple.h"
-#include <compy_util/main_error_handler.h>
-#include <compy_util/print.h>
 #include <cstdlib> // Required for EXIT_FAILURE
+#include <pypp_util/main_error_handler.h>
+#include <pypp_util/print.h>
 
 int main() {
     try {
