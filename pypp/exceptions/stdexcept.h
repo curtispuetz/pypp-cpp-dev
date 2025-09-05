@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <string>
 
+// TODO: these should all take PyStr
 class PyppRuntimeError : public std::runtime_error {
   public:
     explicit PyppRuntimeError(const std::string &msg)

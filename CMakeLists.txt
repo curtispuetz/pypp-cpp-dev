@@ -5,12 +5,20 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
+# DEPENDENCIES
 FetchContent_Declare(
   glfw
   GIT_REPOSITORY https://github.com/glfw/glfw.git
   GIT_TAG        3.4
 )
 FetchContent_MakeAvailable(glfw)
+FetchContent_Declare(
+  glad
+  GIT_REPOSITORY https://github.com/Dav1dde/glad.git
+  GIT_TAG        v0.1.36
+)
+FetchContent_MakeAvailable(glad)
+# END DEPENDENCIES
 
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
 file(GLOB_RECURSE PYPP_FILES pypp/*.cpp)
@@ -28,13 +36,19 @@ target_include_directories(
     ${CMAKE_SOURCE_DIR}/pypp 
     ${CMAKE_SOURCE_DIR}/libs
 )
-target_link_libraries(pypp_common PUBLIC glfw)
+target_link_libraries(pypp_common PUBLIC glfw glad)
 
 add_executable(pyppDefaultExeName main.cpp)
 target_link_libraries(pyppDefaultExeName PRIVATE pypp_common)
 
 add_executable(glfw_test glfw_test.cpp)
 target_link_libraries(glfw_test PRIVATE pypp_common)
+
+add_executable(opengl_test opengl_test.cpp)
+target_link_libraries(opengl_test PRIVATE pypp_common)
+
+add_executable(opengl_test2 opengl_test2.cpp)
+target_link_libraries(opengl_test2 PRIVATE pypp_common)
 
 add_subdirectory(app_benchmarking)
 add_subdirectory(app_optional)
