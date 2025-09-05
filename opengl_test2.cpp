@@ -1,5 +1,5 @@
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include "exceptions/stdexcept.h"
 #include "opengl/first.h"
@@ -41,8 +41,8 @@ GLuint compileShader(PyStr &source, GLenum type) {
     shader_source(shader, source);
     glCompileShader(shader);
     if (!get_shader_iv(shader, GL_COMPILE_STATUS)) {
-        throw PyppRuntimeError("Shader compilation failed: " +
-                               get_shader_info_log(shader).str());
+        throw PyppRuntimeError(PyStr("Shader compilation failed: ") +
+                               get_shader_info_log(shader));
     }
     return shader;
 }
@@ -52,8 +52,8 @@ GLuint compileShader(PyList<PyStr> &sources, GLenum type) {
     shader_source(shader, sources);
     glCompileShader(shader);
     if (!get_shader_iv(shader, GL_COMPILE_STATUS)) {
-        throw PyppRuntimeError("Shader compilation failed: " +
-                               get_shader_info_log(shader).str());
+        throw PyppRuntimeError(PyStr("Shader compilation failed: ") +
+                               get_shader_info_log(shader));
     }
     return shader;
 }
@@ -69,8 +69,8 @@ GLuint createShaderProgram() {
     glLinkProgram(program);
 
     if (!get_program_iv(program, GL_LINK_STATUS)) {
-        throw PyppRuntimeError("Program linking failed: " +
-                               get_program_info_log(program).str());
+        throw PyppRuntimeError(PyStr("Program linking failed: ") +
+                               get_program_info_log(program));
     }
 
     glDeleteShader(vertexShader);
@@ -100,7 +100,7 @@ int main() {
     glfwMakeContextCurrent(window);
 
     // Load OpenGL function pointers with GLAD
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    if (!gladLoadGL(glfwGetProcAddress)) {
         std::cerr << "Failed to initialize GLAD" << std::endl;
         return -1;
     }

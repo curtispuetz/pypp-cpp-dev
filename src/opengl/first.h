@@ -1,6 +1,6 @@
 #include "py_list.h"
 #include "py_str.h"
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 GLuint gen_buffer();
 PyList<GLuint> gen_buffers(int n);

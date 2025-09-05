@@ -15,9 +15,12 @@ FetchContent_MakeAvailable(glfw)
 FetchContent_Declare(
   glad
   GIT_REPOSITORY https://github.com/Dav1dde/glad.git
-  GIT_TAG        v0.1.36
+  GIT_TAG        v2.0.8
+  GIT_PROGRESS   TRUE
+  SOURCE_SUBDIR  cmake
 )
 FetchContent_MakeAvailable(glad)
+glad_add_library(glad_gl_core_43 STATIC REPRODUCIBLE LOADER API gl:core=4.3)
 # END DEPENDENCIES
 
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
@@ -36,7 +39,7 @@ target_include_directories(
     ${CMAKE_SOURCE_DIR}/pypp 
     ${CMAKE_SOURCE_DIR}/libs
 )
-target_link_libraries(pypp_common PUBLIC glfw glad)
+target_link_libraries(pypp_common PUBLIC glfw glad_gl_core_43)
 
 add_executable(pyppDefaultExeName main.cpp)
 target_link_libraries(pyppDefaultExeName PRIVATE pypp_common)
