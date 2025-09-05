@@ -1,5 +1,5 @@
 #include "opengl/first.h"
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -116,7 +116,7 @@ int main() {
     glfwMakeContextCurrent(window);
 
     // Load OpenGL function pointers with GLAD
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    if (!gladLoadGL(glfwGetProcAddress)) {
         std::cerr << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
