@@ -47,61 +47,61 @@ template <typename T> class ZDep {
     }
 };
 
-void second_function_with_dependency(ZDep<PyList<int>> dep) {
+void second_function_with_dependency(ZDep<pypp::PyList<int>> dep) {
     dep.g().append(100);
 }
 
-void function_with_dependency(ZDep<PyList<int>> dep) {
+void function_with_dependency(ZDep<pypp::PyList<int>> dep) {
     dep.g().append(42);
     second_function_with_dependency(dep.g());
-    print("Inside function_with_dependency, list contents:", dep.g());
+    pypp::print("Inside function_with_dependency, list contents:", dep.g());
     second_function_with_dependency(std::move(dep)); // Move the dependency
-    print("Inside function_with_dependency after move, list contents:",
-          dep.g());
+    pypp::print("Inside function_with_dependency after move, list contents:",
+                dep.g());
 }
 
 class ClassA {
-    ZDep<PyList<int>> zself_dep;
-    PyList<int> &self_dep;
+    ZDep<pypp::PyList<int>> zself_dep;
+    pypp::PyList<int> &self_dep;
 
   public:
-    ClassA(ZDep<PyList<int>> dep)
+    ClassA(ZDep<pypp::PyList<int>> dep)
         : zself_dep(std::move(dep)), self_dep(zself_dep.g()) {}
-    void m() { print("Inside ClassA::m, list contents:", self_dep); }
+    void m() { pypp::print("Inside ClassA::m, list contents:", self_dep); }
 };
 
 class ClassB {
-    ZDep<PyList<int>> self_dep;
+    ZDep<pypp::PyList<int>> self_dep;
 
   public:
-    ClassB(ZDep<PyList<int>> dep) : self_dep(std::move(dep)) {}
-    void m() { print("Inside ClassB::m, list contents:", self_dep.g()); }
+    ClassB(ZDep<pypp::PyList<int>> dep) : self_dep(std::move(dep)) {}
+    void m() { pypp::print("Inside ClassB::m, list contents:", self_dep.g()); }
 };
 
 // NOTE: Don't support returning a reference. Instead, the reference should be
 // injected directly to where it is needed.
-//  ZDep<PyList<int>> returning_dependency(PyList<int> &list) {}
+//  ZDep<pypp::PyList<int>> returning_dependency(pypp::PyList<int> &list) {}
 
 int main() {
     try {
         // This demonstrates passing-by-reference with a function.
-        PyList<int> my_list = PyList<int>({1, 2, 3});
+        pypp::PyList<int> my_list = pypp::PyList<int>({1, 2, 3});
         function_with_dependency(my_list); // Pass by reference
-        print("List after function call:", my_list);
+        pypp::print("List after function call:", my_list);
         // This demonstrates moving with a function.
-        PyList<int> my_list2 = PyList<int>({4, 5, 6});
+        pypp::PyList<int> my_list2 = pypp::PyList<int>({4, 5, 6});
         function_with_dependency(std::move(my_list2)); // Pass by move
-        print("List after move function call:", my_list2);
+        pypp::print("List after move function call:", my_list2);
 
         // This demonstrates passing-by-reference with a class.
-        PyList<int> my_list3 = PyList<int>({7, 8, 9});
+        pypp::PyList<int> my_list3 = pypp::PyList<int>({7, 8, 9});
         ClassA class_a(my_list3); // pass by reference
         my_list3.append(10);
         class_a.m();
 
         // This demonstrates that you should not move an object if you have
         // references to that object in different places.
-        PyList<int> my_list4 = PyList<int>({7, 8, 9});
+        pypp::PyList<int> my_list4 = pypp::PyList<int>({7, 8, 9});
         ClassA class_a2(my_list4); // pass by reference
         my_list4.append(10);
         ClassB class_b(std::move(my_list4)); // pass by move
@@ -110,7 +110,7 @@ int main() {
         return 0;
     } catch (...) {
 
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

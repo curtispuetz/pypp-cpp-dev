@@ -9,18 +9,19 @@
 
 int main() {
     try {
-        // Using PyEnumerate
-        PyList<PyStr> fruits = {PyStr("apple"), PyStr("banana"),
-                                PyStr("cherry")};
-        for (const auto &[i, val] : PyEnumerate(fruits)) {
+        // Using pypp::PyEnumerate
+        pypp::PyList<pypp::PyStr> fruits = {
+            pypp::PyStr("apple"), pypp::PyStr("banana"), pypp::PyStr("cherry")};
+        for (const auto &[i, val] : pypp::PyEnumerate(fruits)) {
             std::cout << "Index: " << i << ", Value: " << val << std::endl;
         }
         std::cout << std::endl;
-        for (const auto &[i, val] : PyEnumerate(PyList({1, 2, 3}))) {
+        for (const auto &[i, val] :
+             pypp::PyEnumerate(pypp::PyList({1, 2, 3}))) {
             std::cout << "Index: " << i << ", Value: " << val << std::endl;
         }
 
-        // benchmark speed to a standard for loop vs PyEnumerate
+        // benchmark speed to a standard for loop vs pypp::PyEnumerate
         // Results: effectively no speed difference.
         benchmark(
             "Standard for loop speed",
@@ -31,9 +32,9 @@ int main() {
             },
             1000);
         benchmark(
-            "PyEnumerate speed",
+            "pypp::PyEnumerate speed",
             [&]() {
-                for (const auto &[i, fruit] : PyEnumerate(fruits)) {
+                for (const auto &[i, fruit] : pypp::PyEnumerate(fruits)) {
                     auto value = fruit;
                 }
             },
@@ -41,7 +42,7 @@ int main() {
 
         return 0;
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

@@ -6,8 +6,8 @@ GLuint gen_buffer() {
     return buffer;
 }
 
-PyList<GLuint> gen_buffers(int n) {
-    PyList<GLuint> buffers(n);
+pypp::PyList<GLuint> gen_buffers(int n) {
+    pypp::PyList<GLuint> buffers(n);
     glGenBuffers(n, buffers.data_ref().data());
     return buffers;
 }
@@ -18,18 +18,18 @@ GLuint gen_vertex_array() {
     return array;
 }
 
-PyList<GLuint> gen_vertex_arrays(int n) {
-    PyList<GLuint> arrays(n);
+pypp::PyList<GLuint> gen_vertex_arrays(int n) {
+    pypp::PyList<GLuint> arrays(n);
     glGenVertexArrays(n, arrays.data_ref().data());
     return arrays;
 }
 
-void shader_source(GLuint shader, PyStr &source) {
+void shader_source(GLuint shader, pypp::PyStr &source) {
     const char *src = source.str().c_str();
     glShaderSource(shader, 1, &src, nullptr);
 }
 
-void shader_source(GLuint shader, PyList<PyStr> &sources) {
+void shader_source(GLuint shader, pypp::PyList<pypp::PyStr> &sources) {
     std::vector<const char *> c_strs;
     c_strs.reserve(sources.len());
     for (int i = 0; i < sources.len(); ++i) {
@@ -51,14 +51,14 @@ GLint get_program_iv(GLuint program, GLenum pname) {
     return param;
 }
 
-PyStr get_shader_info_log(GLuint shader) {
+pypp::PyStr get_shader_info_log(GLuint shader) {
     char infoLog[512];
     glGetShaderInfoLog(shader, 512, nullptr, infoLog);
-    return PyStr(infoLog);
+    return pypp::PyStr(infoLog);
 }
 
-PyStr get_program_info_log(GLuint program) {
+pypp::PyStr get_program_info_log(GLuint program) {
     char infoLog[512];
     glGetProgramInfoLog(program, 512, nullptr, infoLog);
-    return PyStr(infoLog);
+    return pypp::PyStr(infoLog);
 }

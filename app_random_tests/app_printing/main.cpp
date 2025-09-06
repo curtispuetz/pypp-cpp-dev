@@ -9,31 +9,32 @@
 
 int main() {
     try {
-        // Below shows the printing of PyStr inside collectiosn where the single
-        // quotes are correctly printed around the strings.
-        // list
-        PyList<PyStr> str_list = {PyStr("one"), PyStr("two"), PyStr("three")};
-        print("String List:", str_list);
+        // Below shows the printing of pypp::PyStr inside collectiosn where the
+        // single quotes are correctly printed around the strings. list
+        pypp::PyList<pypp::PyStr> str_list = {
+            pypp::PyStr("one"), pypp::PyStr("two"), pypp::PyStr("three")};
+        pypp::print("String List:", str_list);
         // set
-        PySet<PyStr> str_set = {PyStr("apple"), PyStr("banana"),
-                                PyStr("cherry")};
-        print("String Set:", str_set);
+        pypp::PySet<pypp::PyStr> str_set = {
+            pypp::PyStr("apple"), pypp::PyStr("banana"), pypp::PyStr("cherry")};
+        pypp::print("String Set:", str_set);
         // dict
-        PyDict<PyStr, PyStr> str_dict = {{PyStr("onek"), PyStr("one")},
-                                         {PyStr("twok"), PyStr("two")},
-                                         {PyStr("threek"), PyStr("three")}};
-        print("String Dict:", str_dict);
+        pypp::PyDict<pypp::PyStr, pypp::PyStr> str_dict = {
+            {pypp::PyStr("onek"), pypp::PyStr("one")},
+            {pypp::PyStr("twok"), pypp::PyStr("two")},
+            {pypp::PyStr("threek"), pypp::PyStr("three")}};
+        pypp::print("String Dict:", str_dict);
         // dict keys and values
-        print("String Keys:", str_dict.keys());
-        print("String Values:", str_dict.values());
-        print("String Items:", str_dict.items());
+        pypp::print("String Keys:", str_dict.keys());
+        pypp::print("String Values:", str_dict.values());
+        pypp::print("String Items:", str_dict.items());
         // tuple
-        PyTup<int, PyStr> int_str_tup(1, PyStr("one"));
-        print("Int-String Tuple:", int_str_tup);
+        pypp::PyTup<int, pypp::PyStr> int_str_tup(1, pypp::PyStr("one"));
+        pypp::print("Int-String Tuple:", int_str_tup);
 
         return 0;
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

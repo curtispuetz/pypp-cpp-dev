@@ -9,7 +9,7 @@
 #include <iostream>
 
 // Vertex shader source
-PyStr _VERTEX_SHADER_SRC = PyStr(R"(
+pypp::PyStr _VERTEX_SHADER_SRC = pypp::PyStr(R"(
 #version 330 core
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 color;
@@ -24,36 +24,38 @@ void main()
  )");
 
 // Fragment shader source
-PyList<PyStr> _FRAGMENT_SHADER_SRC = PyList({PyStr(R"(
+pypp::PyList<pypp::PyStr> _FRAGMENT_SHADER_SRC = pypp::PyList({pypp::PyStr(R"(
 #version 330 core
 in vec3 vertexColor;
 out vec4 FragColor;
 )"),
-                                             PyStr(R"(
+                                                               pypp::PyStr(R"(
 void main()
 {
     FragColor = vec4(vertexColor, 1.0);
 }
  )")});
 
-GLuint compileShader(PyStr &source, GLenum type) {
+GLuint compileShader(pypp::PyStr &source, GLenum type) {
     GLuint shader = glCreateShader(type);
     shader_source(shader, source);
     glCompileShader(shader);
     if (!get_shader_iv(shader, GL_COMPILE_STATUS)) {
-        throw PyppRuntimeError(PyStr("Shader compilation failed: ") +
-                               get_shader_info_log(shader));
+        throw pypp::PyppRuntimeError(
+            pypp::PyStr("Shader compilation failed: ") +
+            get_shader_info_log(shader));
     }
     return shader;
 }
 
-GLuint compileShader(PyList<PyStr> &sources, GLenum type) {
+GLuint compileShader(pypp::PyList<pypp::PyStr> &sources, GLenum type) {
     GLuint shader = glCreateShader(type);
     shader_source(shader, sources);
     glCompileShader(shader);
     if (!get_shader_iv(shader, GL_COMPILE_STATUS)) {
-        throw PyppRuntimeError(PyStr("Shader compilation failed: ") +
-                               get_shader_info_log(shader));
+        throw pypp::PyppRuntimeError(
+            pypp::PyStr("Shader compilation failed: ") +
+            get_shader_info_log(shader));
     }
     return shader;
 }
@@ -69,8 +71,8 @@ GLuint createShaderProgram() {
     glLinkProgram(program);
 
     if (!get_program_iv(program, GL_LINK_STATUS)) {
-        throw PyppRuntimeError(PyStr("Program linking failed: ") +
-                               get_program_info_log(program));
+        throw pypp::PyppRuntimeError(pypp::PyStr("Program linking failed: ") +
+                                     get_program_info_log(program));
     }
 
     glDeleteShader(vertexShader);
@@ -106,7 +108,7 @@ int main() {
     }
 
     // Vertex data (positions + colors) using std::vector
-    PyList<float> vertices = {
+    pypp::PyList<float> vertices = {
         // positions        // colors
         -0.5, -0.5, 0.0, 1.0, 0.0, 0.0, // bottom left (red)
         0.5,  -0.5, 0.0, 0.0, 1.0, 0.0, // bottom right (green)
