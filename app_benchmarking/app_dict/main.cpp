@@ -8,7 +8,7 @@
 int main() {
     try {
         // Benchmark speed for a standard for loop over std::unordered_map vs.
-        // PyDict keys, values, and items methods.
+        // pypp::PyDict keys, values, and items methods.
         // Results: for keys(), values(), and items() all speeds are virtually
         // identical. As usual, the very first call seems to be a bit slower, no
         // matter which benchmark is placed first. Conclusion: it is fine to use
@@ -18,7 +18,7 @@ int main() {
         for (int i = 0; i < size; ++i) {
             bigMap[i] = i * 2;
         }
-        PyDict<int, int> big_py_dict;
+        pypp::PyDict<int, int> big_py_dict;
         for (int i = 0; i < size; ++i) {
             big_py_dict[std::move(i)] = i * 2;
         }
@@ -27,7 +27,7 @@ int main() {
                 auto value = key * 2;
             }
         });
-        benchmark("PyDict keys method", [&]() {
+        benchmark("pypp::PyDict keys method", [&]() {
             for (const auto &key : big_py_dict.keys()) {
                 auto value = key * 2;
             }
@@ -37,7 +37,7 @@ int main() {
                 auto result = value + 1;
             }
         });
-        benchmark("PyDict values method", [&]() {
+        benchmark("pypp::PyDict values method", [&]() {
             for (const auto &value : big_py_dict.values()) {
                 auto result = value + 1;
             }
@@ -47,7 +47,7 @@ int main() {
                 auto result = key + value;
             }
         });
-        benchmark("PyDict items method", [&]() {
+        benchmark("pypp::PyDict items method", [&]() {
             for (const auto &item : big_py_dict.items()) {
                 auto result = item.get<0>() + item.get<1>();
             }
@@ -55,7 +55,7 @@ int main() {
 
         return 0;
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

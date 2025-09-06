@@ -6,22 +6,23 @@
 
 int main() {
     try {
-        // Test the speed of differeent ways to initialize a PySet.
+        // Test the speed of differeent ways to initialize a pypp::PySet.
         // Results: I think the results are comparable. It depends on which you
         // put first. The first one is typically slower. The average over the
         // 500000 runs is equal.
         // Conclusion: The common way is fine.
         benchmark(
-            "PySet optimal", [&]() { PySet<int> py_set({1, 2, 3}); }, 50000);
+            "pypp::PySet optimal",
+            [&]() { pypp::PySet<int> py_set({1, 2, 3}); }, 50000);
         benchmark(
-            "PySet Common", [&]() { PySet<int> py_set = PySet({1, 2, 3}); },
-            50000);
+            "pypp::PySet Common",
+            [&]() { pypp::PySet<int> py_set = pypp::PySet({1, 2, 3}); }, 50000);
 
         // Test Add speed
         // Results: The speed is identical to std::unordered_set insert.
         const int size = 50000;
-        benchmark("PySet add", [&]() {
-            PySet<int> py_set;
+        benchmark("pypp::PySet add", [&]() {
+            pypp::PySet<int> py_set;
             for (int i = 0; i < size; ++i) {
                 py_set.add(std::move(i));
             }
@@ -38,8 +39,8 @@ int main() {
         // Conclusion: I am thinking about just not using the std::move
         // and worry about that latter. Because I think for my programs
         // I am going to be fine without it.
-        benchmark("PySet with big elements", [&]() {
-            PySet<std::string> py_set;
+        benchmark("pypp::PySet with big elements", [&]() {
+            pypp::PySet<std::string> py_set;
             for (int i = 0; i < 10; ++i) {
                 std::string big_string(10000, 'a');
                 py_set.add(std::move(big_string));
@@ -62,7 +63,7 @@ int main() {
 
         return 0;
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

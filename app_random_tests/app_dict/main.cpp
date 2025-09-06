@@ -7,26 +7,27 @@
 
 int main() {
     try {
-        // Iterate over a PyDicts keys, values, and items
-        PyDict<int, PyStr> int_dict = {
-            {1, PyStr("a")}, {3, PyStr("b")}, {5, PyStr("c")}};
+        // Iterate over a pypp::PyDicts keys, values, and items
+        pypp::PyDict<int, pypp::PyStr> int_dict = {{1, pypp::PyStr("a")},
+                                                   {3, pypp::PyStr("b")},
+                                                   {5, pypp::PyStr("c")}};
         for (const auto &key : int_dict.keys()) {
-            print("key:", key);
+            pypp::print("key:", key);
         }
         for (const auto &value : int_dict.values()) {
-            print("value:", value);
+            pypp::print("value:", value);
         }
         for (const auto &item : int_dict.items()) {
-            print("item:", item.get<0>(), "->", item.get<1>());
+            pypp::print("item:", item.get<0>(), "->", item.get<1>());
         }
-        int_dict[7] = PyStr("d");
-        print("After adding 7->d:", int_dict);
+        int_dict[7] = pypp::PyStr("d");
+        pypp::print("After adding 7->d:", int_dict);
         int a = 3;
-        int_dict[std::move(a)] = PyStr("new_value");
+        int_dict[std::move(a)] = pypp::PyStr("new_value");
         int_dict.dg(3);
         int_dict.dg(a);
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

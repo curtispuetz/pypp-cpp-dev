@@ -15,10 +15,11 @@ int main() {
         std::cout << "The loop will stop when the shortest container (the list "
                      "of words) is exhausted.\n\n";
 
-        // Use PyZip in a range-based for loop.
-        // The type of 'item' will be a PyTup holding references to the
+        // Use pypp::PyZip in a range-based for loop.
+        // The type of 'item' will be a pypp::PyTup holding references to the
         // elements.
-        for (const auto &[num, word, dec] : PyZip(numbers, words, decimals)) {
+        for (const auto &[num, word, dec] :
+             pypp::PyZip(numbers, words, decimals)) {
 
             // Print the values
             std::cout << "Number: " << num << ", Word: \"" << word
@@ -34,7 +35,7 @@ int main() {
 
         return 0;
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

@@ -33,7 +33,7 @@ int main() {
         std::cout << opt2.value_or(0) << std::endl; // Should print 0
         return 0;
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

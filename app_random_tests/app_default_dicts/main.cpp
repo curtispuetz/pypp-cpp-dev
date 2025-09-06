@@ -9,72 +9,77 @@
 int main() {
     try {
         // int
-        auto d = PyDefaultDict<int, int>([] { return 0; });
+        auto d = pypp::PyDefaultDict<int, int>([] { return 0; });
         d[1] += 5;
-        print(d[1]);
+        pypp::print(d[1]);
 
         // double
-        auto d_double = PyDefaultDict<int, double>([] { return 0.0; });
+        auto d_double = pypp::PyDefaultDict<int, double>([] { return 0.0; });
         d_double[1] += 3.14;
-        print(d_double[1]);
+        pypp::print(d_double[1]);
 
-        // PyStr
-        auto d_str = PyDefaultDict<int, PyStr>([] { return PyStr(""); });
-        d_str[1] += PyStr("one");
-        print(d_str[1]);
+        // pypp::PyStr
+        auto d_str = pypp::PyDefaultDict<int, pypp::PyStr>(
+            [] { return pypp::PyStr(""); });
+        d_str[1] += pypp::PyStr("one");
+        pypp::print(d_str[1]);
 
-        // PyList
-        auto d_list =
-            PyDefaultDict<int, PyList<int>>([] { return PyList<int>(); });
+        // pypp::PyList
+        auto d_list = pypp::PyDefaultDict<int, pypp::PyList<int>>(
+            [] { return pypp::PyList<int>(); });
         d_list[1].append(1);
-        print(d_list[1]);
+        pypp::print(d_list[1]);
 
-        // PySet
-        auto d_set =
-            PyDefaultDict<int, PySet<int>>([] { return PySet<int>(); });
+        // pypp::PySet
+        auto d_set = pypp::PyDefaultDict<int, pypp::PySet<int>>(
+            [] { return pypp::PySet<int>(); });
         d_set[1].add(1);
-        print(d_set[1]);
+        pypp::print(d_set[1]);
 
-        // PyDict
-        auto d_dict = PyDefaultDict<int, PyDict<int, int>>(
-            [] { return PyDict<int, int>(); });
+        // pypp::PyDict
+        auto d_dict = pypp::PyDefaultDict<int, pypp::PyDict<int, int>>(
+            [] { return pypp::PyDict<int, int>(); });
         d_dict[1][2] = 3;
-        print(d_dict[1]);
+        pypp::print(d_dict[1]);
 
         // default factory for int
-        auto d_int_default = PyDefaultDict<int, int>::int_factory();
+        auto d_int_default = pypp::PyDefaultDict<int, int>::int_factory();
         int a = d_int_default[1];
-        print(d_int_default);
+        pypp::print(d_int_default);
 
         // default factory for double
-        auto d_double_default = PyDefaultDict<int, double>::float_factory();
+        auto d_double_default =
+            pypp::PyDefaultDict<int, double>::float_factory();
         double c = d_double_default[1];
-        print(d_double_default);
+        pypp::print(d_double_default);
 
-        // default factory for PyStr
-        auto d_str_default = PyDefaultDict<int, PyStr>::str_factory();
-        PyStr s = d_str_default[1];
-        print(d_str_default);
+        // default factory for pypp::PyStr
+        auto d_str_default =
+            pypp::PyDefaultDict<int, pypp::PyStr>::str_factory();
+        pypp::PyStr s = d_str_default[1];
+        pypp::print(d_str_default);
 
-        // default factory for PySet
-        auto d_set_default = PyDefaultDict<int, PySet<int>>::set_factory();
-        PySet<int> a_set = d_set_default[1];
-        print(d_set_default);
+        // default factory for pypp::PySet
+        auto d_set_default =
+            pypp::PyDefaultDict<int, pypp::PySet<int>>::set_factory();
+        pypp::PySet<int> a_set = d_set_default[1];
+        pypp::print(d_set_default);
 
-        // default factory for PyDict
+        // default factory for pypp::PyDict
         auto d_dict_default =
-            PyDefaultDict<int, PyDict<int, int>>::dict_factory();
-        PyDict<int, int> a_dict = d_dict_default[1];
-        print(d_dict_default);
+            pypp::PyDefaultDict<int, pypp::PyDict<int, int>>::dict_factory();
+        pypp::PyDict<int, int> a_dict = d_dict_default[1];
+        pypp::print(d_dict_default);
 
-        // default factory for PyList
-        auto d_list_default = PyDefaultDict<int, PyList<int>>::list_factory();
-        PyList<int> b = d_list_default[1];
-        print(d_list_default);
+        // default factory for pypp::PyList
+        auto d_list_default =
+            pypp::PyDefaultDict<int, pypp::PyList<int>>::list_factory();
+        pypp::PyList<int> b = d_list_default[1];
+        pypp::print(d_list_default);
 
         return 0;
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

@@ -33,7 +33,7 @@ int main() {
         glfwTerminate();
         return 0;
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

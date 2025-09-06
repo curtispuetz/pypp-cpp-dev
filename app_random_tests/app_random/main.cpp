@@ -5,19 +5,19 @@
 
 int main() {
     try {
-        random::Random rng = random::Random(42);
+        pypp::random::Random rng = pypp::random::Random(42);
         double r = rng.random();
-        print(r);
+        pypp::print(r);
         int i = rng.randint(1, 10);
-        print(i);
-        PyList<int> vec = PyList({1, 2, 3, 4, 5});
+        pypp::print(i);
+        pypp::PyList<int> vec = pypp::PyList({1, 2, 3, 4, 5});
         rng.shuffle(vec);
-        print(vec);
+        pypp::print(vec);
         int choice = rng.choice(vec);
-        print(choice);
+        pypp::print(choice);
         return 0;
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

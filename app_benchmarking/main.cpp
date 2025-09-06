@@ -38,9 +38,9 @@ int main() {
         });
 
         // Test array iteration with a tranditional C++ for loop vs. a for loop
-        // with PyRange.
-        // Results: The PyRange is a little slower. But it adds at most 0.01ms
-        // over 50,000 iterations. Which would be 0.2ms for 1 million
+        // with pypp::PyRange.
+        // Results: The pypp::PyRange is a little slower. But it adds at most
+        // 0.01ms over 50,000 iterations. Which would be 0.2ms for 1 million
         // iterations. So, this very rarely would matter and therefore is fine
         // to use.
         std::array<int, size> arr2;
@@ -49,15 +49,15 @@ int main() {
                 arr2[i] = i;
             }
         });
-        benchmark("std::array iteration with PyRange", [&]() {
-            for (const auto &i : PyRange(size)) {
+        benchmark("std::array iteration with pypp::PyRange", [&]() {
+            for (const auto &i : pypp::PyRange(size)) {
                 arr2[i] = i;
             }
         });
 
         return 0;
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }

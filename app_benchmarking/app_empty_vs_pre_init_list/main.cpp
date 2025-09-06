@@ -21,19 +21,19 @@ int main() {
                 vec_empty.push_back(i);
             }
         });
-        // Test the same with PyList
+        // Test the same with pypp::PyList
         // The results are equivalent to std::vector
-        benchmark("PyList with size", [&]() {
+        benchmark("pypp::PyList with size", [&]() {
             // The results are the same here as std::vector. 2 times as fast on
             // the first call and 10 times as fast on subsequent calls.
             // Very Nice!
-            PyList<int> py_list_with_size(size);
+            pypp::PyList<int> py_list_with_size(size);
             for (int i = 0; i < size; ++i) {
                 py_list_with_size[i] = i;
             }
         });
-        benchmark("PyList empty then append", [&]() {
-            PyList<int> py_list_empty;
+        benchmark("pypp::PyList empty then append", [&]() {
+            pypp::PyList<int> py_list_empty;
             for (int i = 0; i < size; ++i) {
                 py_list_empty.append(std::move(i));
             }
@@ -41,7 +41,7 @@ int main() {
 
         return 0;
     } catch (...) {
-        handle_fatal_exception();
+        pypp::handle_fatal_exception();
         return EXIT_FAILURE;
     }
 }
