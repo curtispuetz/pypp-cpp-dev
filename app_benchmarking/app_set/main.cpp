@@ -1,5 +1,7 @@
 #include "benchmark.h"
 #include "py_set.h"
+#include "pypp_util/create/set.h"
+#include "pypp_util/print.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <pypp_util/main_error_handler.h>
 #include <string>
@@ -60,6 +62,25 @@ int main() {
                 std_set.insert(std::move(big_string));
             }
         });
+
+        // Constructing
+        pypp::PySet<int> py_set_a = {1, 2, 3, 4, 5};
+        pypp::PySet<int> py_set_b = pypp::set(py_set_a);
+        py_set_a.add(6);
+        pypp::print(py_set_a);
+        pypp::print(py_set_b);
+
+        pypp::PyList<int> py_list_a = {1, 2, 3, 4};
+        pypp::PySet<int> py_set_c = pypp::set(py_list_a);
+        pypp::print(py_set_c);
+
+        pypp::PyDict<int, int> py_dict_a = {{1, 2}, {3, 4}, {5, 6}};
+        pypp::PySet<int> py_set_d = pypp::set(py_dict_a);
+        pypp::print(py_set_d);
+
+        pypp::PyStr py_str = pypp::PyStr("hello");
+        pypp::PySet<pypp::PyStr> py_set_e = pypp::set(py_str);
+        pypp::print(py_set_e);
 
         return 0;
     } catch (...) {
