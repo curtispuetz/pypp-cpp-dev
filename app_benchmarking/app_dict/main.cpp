@@ -89,6 +89,12 @@ int main() {
         pypp::PyStr str_value = py_dict_e.get(200, pypp::PyStr("default"));
         pypp::print(str_value); // should print "default"
 
+        // min and max
+        int min_key = py_dict_a.min();
+        int max_key = py_dict_a.max();
+        pypp::print("Min key:", min_key); // should print 1
+        pypp::print("Max key:", max_key); // should print 9
+
         return 0;
     } catch (...) {
         pypp::handle_fatal_exception();

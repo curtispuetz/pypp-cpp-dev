@@ -32,9 +32,6 @@ class PyDefaultDict {
         return it->second;
     }
 
-    // at/dg: like dict.get, but inserts default if missing
-    V &dg(const K &key) { return (*this)[key]; }
-
     // Expose PyDict-like methods
     void clear() { data.clear(); }
     int len() const { return data.len(); }
