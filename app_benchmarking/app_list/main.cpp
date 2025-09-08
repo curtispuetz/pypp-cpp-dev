@@ -1,11 +1,11 @@
 #include "benchmark.h"
 #include "py_dict.h"
 #include "py_list.h"
+#include "py_str.h"
 #include "pypp_util/create/list.h"
 #include "pypp_util/main_error_handler.h"
 #include "pypp_util/print.h"
 #include <cstdlib> // Required for EXIT_FAILURE
-#include <py_str.h>
 
 int main() {
     try {
