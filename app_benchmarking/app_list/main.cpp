@@ -105,6 +105,20 @@ int main() {
             }
         });
 
+        benchmark(
+            "pypp::PyList repeating",
+            [&]() {
+                pypp::PyList<int> py_list;
+                py_list = pypp::PyList({1}) * 100000;
+            },
+            1000);
+        benchmark(
+            "pypp::PyList constructor with size",
+            [&]() { pypp::PyList<double> py_list(100000, 1.0); }, 1000);
+        benchmark(
+            "pypp::PyList constructor with size no value",
+            [&]() { pypp::PyList<int> py_list(100000); }, 1000);
+
         return 0;
     } catch (...) {
         pypp::handle_fatal_exception();
