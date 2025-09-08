@@ -9,18 +9,15 @@ namespace pypp {
 template <typename T> PyList<T> list(const PySet<T> &set) {
     return PyList<T>(set.begin(), set.end());
 }
+
 template <typename T> PyList<T> list(const PyList<T> &lst) {
     return PyList<T>(lst);
 }
+
 template <typename T, typename U> PyList<T> list(const PyDict<T, U> &dict) {
     auto keys = dict.keys();
     return PyList<T>(keys.begin(), keys.end());
 }
-PyList<PyStr> list(const PyStr &s) {
-    PyList<PyStr> chars;
-    for (auto c : s) {
-        chars.append(std::move(c));
-    }
-    return chars;
-}
+
+PyList<PyStr> list(const PyStr &s);
 } // namespace pypp
