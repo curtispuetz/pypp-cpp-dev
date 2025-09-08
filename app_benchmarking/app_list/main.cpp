@@ -1,10 +1,12 @@
 #include "benchmark.h"
 #include "py_dict.h"
 #include "py_list.h"
+#include "pypp_util/create_list.h"
+#include "pypp_util/main_error_handler.h"
 #include "pypp_util/print.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <py_str.h>
-#include <pypp_util/main_error_handler.h>
+
 int main() {
     try {
         // Test moving before benchmarking to show it works as expected
@@ -118,6 +120,25 @@ int main() {
         benchmark(
             "pypp::PyList constructor with size no value",
             [&]() { pypp::PyList<int> py_list(100000); }, 1000);
+
+        // Constructing
+        pypp::PyList<int> py_list_a = {1, 2, 3, 4, 5};
+        pypp::PyList<int> py_list_b = pypp::list(py_list_a);
+        py_list_a.append(6);
+        pypp::print(py_list_a);
+        pypp::print(py_list_b);
+
+        pypp::PySet<int> py_set_a = {1, 2, 3, 4};
+        pypp::PyList<int> py_list_c = pypp::list(py_set_a);
+        print(py_list_c);
+
+        pypp::PyDict<int, int> py_dict_a = {{1, 2}, {3, 4}, {5, 6}};
+        pypp::PyList<int> py_list_d = pypp::list(py_dict_a);
+        print(py_list_d);
+
+        pypp::PyStr py_str = pypp::PyStr("hello");
+        pypp::PyList<pypp::PyStr> py_list_e = pypp::list(py_str);
+        print(py_list_e);
 
         return 0;
     } catch (...) {
