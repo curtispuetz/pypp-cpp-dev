@@ -77,6 +77,17 @@ int main() {
         pypp::PyList<int> b = d_list_default[1];
         pypp::print(d_list_default);
 
+        // copy
+        auto d_copy = d_list_default.copy();
+        d_list_default[1].append(42);
+        pypp::print(d_list_default);
+        pypp::print(d_copy);
+
+        // Initializing with values
+        auto d_init = pypp::PyDefaultDict<int, int>::int_factory(
+            {{1, 2}, {3, 4}, {5, 6}});
+        pypp::print(d_init);
+
         return 0;
     } catch (...) {
         pypp::handle_fatal_exception();
