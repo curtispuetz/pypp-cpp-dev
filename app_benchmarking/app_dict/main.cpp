@@ -83,6 +83,12 @@ int main() {
         py_dict_a[9] = 9;
         pypp::print(py_dict_f);
 
+        // get with default value
+        int value = py_dict_a.get(100, -1);
+        pypp::print(value); // should print -1
+        pypp::PyStr str_value = py_dict_e.get(200, pypp::PyStr("default"));
+        pypp::print(str_value); // should print "default"
+
         return 0;
     } catch (...) {
         pypp::handle_fatal_exception();
