@@ -1,7 +1,8 @@
 #include "benchmark.h"
+#include "py_dict.h"
+#include "py_str.h"
 #include "pypp_util/create/dict.h"
 #include <cstdlib> // Required for EXIT_FAILURE
-#include <py_dict.h>
 #include <pypp_util/main_error_handler.h>
 #include <pypp_util/print.h>
 #include <unordered_map>
@@ -71,6 +72,11 @@ int main() {
             pypp::dict(pypp::PyList<pypp::PyTup<int, int>>(
                 {pypp::PyTup(1, 2), pypp::PyTup(3, 4)}));
         pypp::print(py_dict_d);
+
+        // empty
+        pypp::PyDict<int, pypp::PyStr> py_dict_e =
+            pypp::dict<int, pypp::PyStr>();
+        pypp::print(py_dict_e);
 
         return 0;
     } catch (...) {

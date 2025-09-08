@@ -140,6 +140,10 @@ int main() {
         pypp::PyList<pypp::PyStr> py_list_e = pypp::list(py_str);
         print(py_list_e);
 
+        // empty list
+        pypp::PyList<int> py_list_f = pypp::list<int>();
+        pypp::print(py_list_f);
+
         return 0;
     } catch (...) {
         pypp::handle_fatal_exception();
