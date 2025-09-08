@@ -144,6 +144,11 @@ int main() {
         pypp::PyList<int> py_list_f = pypp::list<int>();
         pypp::print(py_list_f);
 
+        // copy
+        pypp::PyList<int> py_list_g = py_list_a.copy();
+        py_list_a.append(7);
+        pypp::print(py_list_g);
+
         return 0;
     } catch (...) {
         pypp::handle_fatal_exception();
