@@ -82,6 +82,10 @@ int main() {
         pypp::PySet<pypp::PyStr> py_set_e = pypp::set(py_str);
         pypp::print(py_set_e);
 
+        // with an inline list
+        pypp::PySet<int> py_set_f = pypp::set(pypp::PyList<int>({1, 2, 3}));
+        pypp::print(py_set_f);
+
         return 0;
     } catch (...) {
         pypp::handle_fatal_exception();
