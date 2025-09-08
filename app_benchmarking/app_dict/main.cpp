@@ -1,4 +1,5 @@
 #include "benchmark.h"
+#include "pypp_util/create/dict.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <py_dict.h>
 #include <pypp_util/main_error_handler.h>
@@ -52,6 +53,24 @@ int main() {
                 auto result = item.get<0>() + item.get<1>();
             }
         });
+
+        // Constructing
+        pypp::PyDict<int, int> py_dict_a = {{1, 2}, {3, 4}, {5, 6}};
+        pypp::PyDict<int, int> py_dict_b = pypp::dict(py_dict_a);
+        py_dict_a[7] = 8;
+        pypp::print(py_dict_a);
+        pypp::print(py_dict_b);
+
+        pypp::PyList<pypp::PyTup<int, int>> lst_of_tuples(
+            {pypp::PyTup(1, 2), pypp::PyTup(3, 4)});
+        pypp::PyDict<int, int> py_dict_c = pypp::dict(lst_of_tuples);
+        pypp::print(py_dict_c);
+
+        // inline list of tuples
+        pypp::PyDict<int, int> py_dict_d =
+            pypp::dict(pypp::PyList<pypp::PyTup<int, int>>(
+                {pypp::PyTup(1, 2), pypp::PyTup(3, 4)}));
+        pypp::print(py_dict_d);
 
         return 0;
     } catch (...) {
