@@ -90,6 +90,11 @@ int main() {
         pypp::PySet<int> py_set_g = pypp::set<int>();
         pypp::print(py_set_g);
 
+        // copy
+        pypp::PySet<int> py_set_h = py_set_a.copy();
+        py_set_a.add(7);
+        pypp::print(py_set_h);
+
         return 0;
     } catch (...) {
         pypp::handle_fatal_exception();

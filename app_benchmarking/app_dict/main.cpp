@@ -78,6 +78,11 @@ int main() {
             pypp::dict<int, pypp::PyStr>();
         pypp::print(py_dict_e);
 
+        // copy
+        pypp::PyDict<int, int> py_dict_f = py_dict_a.copy();
+        py_dict_a[9] = 9;
+        pypp::print(py_dict_f);
+
         return 0;
     } catch (...) {
         pypp::handle_fatal_exception();
