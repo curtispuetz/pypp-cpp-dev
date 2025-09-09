@@ -1,9 +1,10 @@
 #include "py_list.h"
 #include "py_str.h"
 #include "pypp_union.h"
+#include "pypp_util/main_error_handler.h"
+#include "pypp_util/print.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
-#include <pypp_util/main_error_handler.h>
 
 // function which takes Uni as an argument
 void process_union(pypp::Uni<int, double> union_value) {
@@ -59,6 +60,12 @@ int main() {
             std::cout << "The union contains a monostate (i.e. None)."
                       << std::endl;
         }
+
+        // printing
+        union_value.print();
+        pypp::print(union_value);
+        pypp::print(union_value == pypp::Uni<int, double>(42));
+        pypp::print(union_value != pypp::Uni<int, double>(3.14));
 
         return 0;
     } catch (...) {
