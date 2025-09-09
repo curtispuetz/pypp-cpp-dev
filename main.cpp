@@ -206,6 +206,11 @@ int main() {
         PseudoCustomTypeCpp pct(42);
         std::cout << "pct.a_: " << pct.get_a() << std::endl;
 
+        // String min and max
+        pypp::PyStr abc = pypp::PyStr("abc");
+        pypp::print(pypp::PyStr("abc min: "), abc.min());
+        pypp::print(pypp::PyStr("abc max: "), abc.max());
+
         return 0;
     } catch (...) {
         pypp::handle_fatal_exception();
