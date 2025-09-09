@@ -41,8 +41,8 @@ target_include_directories(
 )
 target_link_libraries(pypp_common PUBLIC glfw glad_gl_core_43)
 
-add_executable(pyppDefaultExeName main.cpp)
-target_link_libraries(pyppDefaultExeName PRIVATE pypp_common)
+add_executable(main main.cpp)
+target_link_libraries(main PRIVATE pypp_common)
 
 add_executable(glfw_test glfw_test.cpp)
 target_link_libraries(glfw_test PRIVATE pypp_common)
