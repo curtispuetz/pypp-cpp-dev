@@ -19,6 +19,18 @@ int main() {
         pypp::print(list_of_lists);
         pypp::print(inner_list1); // prints [] because it was moved
 
+        // assignment with move
+
+        pypp::PyList<pypp::PyList<int>> b =
+            pypp::PyList({pypp::PyList({1, 2}), pypp::PyList({3, 4})});
+        pypp::print(b);
+
+        pypp::PyList<int> inner_list2 = pypp::PyList({5, 6});
+        b[0] = inner_list2;            // copy
+        b[1] = std::move(inner_list2); // move
+        pypp::print(b);
+        pypp::print(inner_list2);
+
         return 0;
     } catch (...) {
         pypp::handle_fatal_exception();
