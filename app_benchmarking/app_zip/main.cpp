@@ -7,9 +7,11 @@
 int main() {
     try {
         // Benchmark speed for a standard for loop vs. pypp::PyZip
-        // Results: effectively no speed difference. The first
-        // call is a little bit slower, like usual.
-        // Conclusion: usage of zip is fine.
+        // Results: For large lists, zip is about 5 times slower. For small
+        // lists, there is no noticable difference.
+        // Conclusion: for many
+        // practical purposes, zip is fine, but for high performant tight loops,
+        // it is better to use the standard for loop.
         benchmark(
             "Standard for loop speed",
             [&]() {
@@ -27,6 +29,31 @@ int main() {
                 pypp::PyList<int> list1 = {1, 2, 3, 4, 5};
                 pypp::PyList<int> list2 = {6, 7, 8, 9, 10};
                 for (const auto &[val1, val2] : pypp::PyZip(list1, list2)) {
+                    auto value1 = val1;
+                    auto value2 = val2;
+                }
+            },
+            1000);
+
+        // For large lists
+
+        pypp::PyList<int> large_list1(100000, 1);
+        pypp::PyList<int> large_list2(100000, 2);
+
+        benchmark(
+            "Standard for loop speed with large lists",
+            [&]() {
+                for (size_t i = 0; i < large_list1.len(); ++i) {
+                    auto value1 = large_list1[i];
+                    auto value2 = large_list2[i];
+                }
+            },
+            1000);
+        benchmark(
+            "pypp::PyZip speed with large lists",
+            [&]() {
+                for (const auto &[val1, val2] :
+                     pypp::PyZip(large_list1, large_list2)) {
                     auto value1 = val1;
                     auto value2 = val2;
                 }

@@ -24,8 +24,11 @@ int main() {
         std::cout << "\n\n";
 
         // Benchmark speed for a standard for loop vs. pypp::PyReversed
-        // Results: effectively no speed difference.
-        // Conclusion: usage of reversed is fine.
+        // Results: For large lists PyReversed is about 10 times slower, but for
+        // smaller lists there is no noticable difference.
+        // Conclusion: for many
+        // practical purposes, reversed is fine, but for high performant tight
+        // loops, it is better to use the standard for loop.
         benchmark(
             "Standard for loop speed",
             [&]() {
@@ -41,6 +44,27 @@ int main() {
             [&]() {
                 pypp::PyList<int> list1 = {1, 2, 3, 4, 5};
                 for (const auto &value : pypp::PyReversed(list1)) {
+                    auto v = value * 2;
+                }
+            },
+            1000);
+        // For large lists
+
+        pypp::PyList<int> large_list(100000, 1);
+
+        benchmark(
+            "Standard for loop speed with large list",
+            [&]() {
+                for (size_t i = 0; i < large_list.len(); ++i) {
+                    auto value = large_list[i];
+                    auto v = value * 2;
+                }
+            },
+            1000);
+        benchmark(
+            "pypp::PyReversed speed with large list",
+            [&]() {
+                for (const auto &value : pypp::PyReversed(large_list)) {
                     auto v = value * 2;
                 }
             },

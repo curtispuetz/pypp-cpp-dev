@@ -1,3 +1,4 @@
+#include "py_str.h"
 #include "py_tuple.h"
 #include "py_zip.h"
 #include <array>
@@ -24,13 +25,14 @@ int main() {
             // Print the values
             std::cout << "Number: " << num << ", Word: \"" << word
                       << "\", Decimal: " << dec << std::endl;
+        }
 
-            // You can also modify the elements of the original containers if
-            // they are not const For example, to prove we have a reference:
-            // NOTE: do I care about this? I can't support it I think.
-            if (num == 2) {
-                word = "TWO (modified)";
-            }
+        // over a PyStr
+        pypp::PyStr hello = pypp::PyStr("Hello");
+        pypp::PyStr world = pypp::PyStr("World");
+
+        for (const auto &[h, w] : pypp::PyZip(hello, world)) {
+            std::cout << h << w << " ";
         }
 
         return 0;
