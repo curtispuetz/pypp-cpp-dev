@@ -21,21 +21,26 @@ int main() {
             std::cout << "Index: " << i << ", Value: " << val << std::endl;
         }
 
+        pypp::PyList<int> long_list(100000, 5);
+
         // benchmark speed to a standard for loop vs pypp::PyEnumerate
-        // Results: effectively no speed difference.
+        // Results: effectively no speed difference with a small sized list
+        // but for a large list, PyEnumerate can be like 2.5 times slower.
+        // Conclusion: In performance critical tight loops a standard for loop
+        // is prefered, but for lots of practical cases PyEnumerate is fine.
         benchmark(
             "Standard for loop speed",
             [&]() {
-                for (size_t i = 0; i < fruits.len(); ++i) {
-                    auto value = fruits[i];
+                for (size_t i = 0; i < long_list.len(); ++i) {
+                    auto value = long_list[i];
                 }
             },
             1000);
         benchmark(
             "pypp::PyEnumerate speed",
             [&]() {
-                for (const auto &[i, fruit] : pypp::PyEnumerate(fruits)) {
-                    auto value = fruit;
+                for (const auto &[i, v] : pypp::PyEnumerate(long_list)) {
+                    auto value = v;
                 }
             },
             1000);

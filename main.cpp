@@ -193,8 +193,8 @@ int main() {
         auto &[first, second, third, fourht] = tup2;    // references
         auto [first2, second2, third2, fourth2] = tup2; // copies
 
-        for (const auto &[i, val] :
-             pypp::PyEnumerate(pypp::PyList({10, 20, 30}))) {
+        pypp::PyList<int> my_list = pypp::PyList({10, 20, 30});
+        for (const auto &[i, val] : pypp::PyEnumerate(my_list)) {
             std::cout << "Index: " << i << ", Value: " << val << std::endl;
         }
 
