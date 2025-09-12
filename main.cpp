@@ -7,6 +7,8 @@
 #include "py_set.h"
 #include "py_str.h"
 #include "py_tuple.h"
+#include "pypp_util/create/cstdint.h"
+#include "pypp_util/create/others.h"
 #include "pypp_util/main_error_handler.h"
 #include "pypp_util/print.h"
 #include "pypp_util/to_py_str.h"
@@ -210,6 +212,22 @@ int main() {
         pypp::PyStr abc = pypp::PyStr("abc");
         pypp::print(pypp::PyStr("abc min: "), abc.min());
         pypp::print(pypp::PyStr("abc max: "), abc.max());
+
+        // conversion
+        double my_float = 3.67;
+        float my_float_32 = 3.124;
+        int my_int = 2;
+        bool my_bool = true;
+        pypp::print("int_: ", pypp::int_(my_float), pypp::int_(my_float_32),
+                    pypp::int_(my_bool));
+        pypp::print("float_: ", pypp::float_(my_int), pypp::float_(my_float_32),
+                    pypp::float_(my_bool));
+        pypp::print("float32_: ", pypp::to_float32(my_int),
+                    pypp::to_float32(my_float), pypp::to_float32(my_bool));
+        pypp::print("bool: ", pypp::bool_(my_int), pypp::bool_(my_float),
+                    pypp::bool_(my_float_32));
+        pypp::print("int16_t: ", pypp::to_int16_t(my_int),
+                    pypp::to_int16_t(my_float), pypp::to_int16_t(my_float_32));
 
         return 0;
     } catch (...) {
