@@ -94,10 +94,10 @@ int main() {
             std::cout << i << " ";
             i += 1;
         }
-        // pypp::to_pystr
-        pypp::print(pypp::to_pystr(1));
-        pypp::print(pypp::to_pystr(3.14));
-        pypp::print(pypp::to_pystr("Hello"));
+        // pypp::str
+        pypp::print(pypp::str(1));
+        pypp::print(pypp::str(3.14));
+        pypp::print(pypp::str("Hello"));
 
         // print
         pypp::print(pypp::PyStr("This is a test of the print function."));
