@@ -1,6 +1,7 @@
 #include "py_set.h"
 #include "py_str.h"
 #include "pypp_util/print.h"
+#include "pypp_util/to_py_str.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <py_dict.h>
 #include <pypp_util/main_error_handler.h>
@@ -26,6 +27,17 @@ int main() {
         int_dict[std::move(a)] = pypp::PyStr("new_value");
         int_dict.dg(3);
         int_dict.dg(a);
+
+        // exceptions
+
+        pypp::PyDict<int, int> dict = {{0, 1}, {1, 2}};
+        try {
+            dict.pop(-1);
+        } catch (const pypp::KeyError &e) {
+            std::string msg = e.msg_;
+            pypp::print(pypp::PyStr("key error: ") + pypp::str(msg));
+        }
+
     } catch (...) {
         pypp::handle_fatal_exception();
         return EXIT_FAILURE;
