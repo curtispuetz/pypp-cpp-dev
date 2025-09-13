@@ -30,4 +30,9 @@ class PermissionError : public OSError {
     PermissionError(const PyStr &msg);
 };
 
+class FileExistsError : public OSError {
+  public:
+    FileExistsError(const PyStr &msg);
+};
+
 } // namespace pypp

@@ -14,4 +14,7 @@ NotADirectoryError::NotADirectoryError(const PyStr &msg)
 PermissionError::PermissionError(const PyStr &msg)
     : OSError(PyStr("PermissionError: ") + msg) {}
 
+FileExistsError::FileExistsError(const PyStr &msg)
+    : OSError(PyStr("FileExistsError: ") + msg) {}
+
 } // namespace pypp

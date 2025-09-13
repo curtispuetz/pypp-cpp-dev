@@ -17,9 +17,8 @@ int main() {
         std::cout << "dir path: " << dir_path << std::endl;
 
         // Create a directory in resources
-        if (pypp::os::makedirs(dir_path)) {
-            std::cout << "Created directory: " << dir_path << std::endl;
-        }
+        pypp::os::makedirs(dir_path);
+        std::cout << "Created directory: " << dir_path << std::endl;
 
         // create and write to a file in the directory
         pypp::PyStr file_path =
