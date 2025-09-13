@@ -1,7 +1,7 @@
 
 #include <glad/gl.h>
 
-#include "exceptions/stdexcept.h"
+#include "exceptions/common.h"
 #include "opengl/first.h"
 #include "py_list.h"
 #include "py_str.h"

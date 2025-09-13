@@ -1,5 +1,5 @@
 #include "py_str.h"
-#include "exceptions/stdexcept.h"
+#include "exceptions/common.h"
 #include <algorithm>
 #include <cctype>
 #include <iostream>
