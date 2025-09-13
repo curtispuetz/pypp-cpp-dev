@@ -41,9 +41,8 @@ GLuint compileShader(pypp::PyStr &source, GLenum type) {
     shader_source(shader, source);
     glCompileShader(shader);
     if (!get_shader_iv(shader, GL_COMPILE_STATUS)) {
-        throw pypp::PyppRuntimeError(
-            pypp::PyStr("Shader compilation failed: ") +
-            get_shader_info_log(shader));
+        throw pypp::RuntimeError(pypp::PyStr("Shader compilation failed: ") +
+                                 get_shader_info_log(shader));
     }
     return shader;
 }
@@ -53,9 +52,8 @@ GLuint compileShader(pypp::PyList<pypp::PyStr> &sources, GLenum type) {
     shader_source(shader, sources);
     glCompileShader(shader);
     if (!get_shader_iv(shader, GL_COMPILE_STATUS)) {
-        throw pypp::PyppRuntimeError(
-            pypp::PyStr("Shader compilation failed: ") +
-            get_shader_info_log(shader));
+        throw pypp::RuntimeError(pypp::PyStr("Shader compilation failed: ") +
+                                 get_shader_info_log(shader));
     }
     return shader;
 }
@@ -71,8 +69,8 @@ GLuint createShaderProgram() {
     glLinkProgram(program);
 
     if (!get_program_iv(program, GL_LINK_STATUS)) {
-        throw pypp::PyppRuntimeError(pypp::PyStr("Program linking failed: ") +
-                                     get_program_info_log(program));
+        throw pypp::RuntimeError(pypp::PyStr("Program linking failed: ") +
+                                 get_program_info_log(program));
     }
 
     glDeleteShader(vertexShader);
