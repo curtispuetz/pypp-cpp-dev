@@ -18,6 +18,18 @@
 #include <format>
 #include <iostream>
 
+// TODO: run clang-format and clang-tidy on all files
+// How do you run them on all files?
+// You can use the following commands:
+// clang-format -i src/*.h src/*.cpp
+// clang-tidy src/*.cpp -- -Iinclude -std=c++23
+// You might need to adjust the include path and standard version as needed.
+// You can also set up a .clang-format file in the root directory of your
+// project to define your formatting style.
+
+// TODO: I think I need to add a -DCMAKE_BUILD_TYPE=Release flag to the first
+// cmake command too, in order to get dependencies built in Release mode.
+
 // function that returns by reference an argument that is passed by reference
 pypp::PyList<int> &get_list(pypp::PyList<int> &list) { return list; }
 
@@ -78,8 +90,8 @@ int main() {
         }
         // for loops over dict items
         for (const auto &pypp_it_tup : int_dict.items()) {
-            auto &k = pypp_it_tup.get<0>();
-            auto &v = pypp_it_tup.get<1>();
+            auto &k = pypp_it_tup.first;
+            auto &v = pypp_it_tup.second;
             std::cout << k << ": " << v << std::endl;
         }
         // for loops over list of tuples
@@ -245,9 +257,18 @@ int main() {
         pypp::print("list1: ", list1);
         pypp::print("tup3: ", tup3);
 
-        // Uni initialization (example of copying behavior that we want to avoid
-        // in Py++)
-        pypp::Uni<int, float, pypp::PyList<int>> u1();
+        // enumerate with dict items
+        pypp::PyDict<int, pypp::PyStr> my_dict3 = {
+            {1, pypp::PyStr("one")},
+            {2, pypp::PyStr("two")},
+            {3, pypp::PyStr("three")},
+        };
+        for (const auto &[i, item] : pypp::PyEnumerate(my_dict3.items())) {
+            auto &k = item.first;
+            auto &v = item.second;
+            std::cout << "Index: " << i << ", Key: " << k << ", Value: " << v
+                      << std::endl;
+        }
 
         return 0;
     } catch (...) {

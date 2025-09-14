@@ -51,7 +51,7 @@ int main() {
         });
         benchmark("pypp::PyDict items method", [&]() {
             for (const auto &item : big_py_dict.items()) {
-                auto result = item.get<0>() + item.get<1>();
+                auto result = item.first + item.second;
             }
         });
 

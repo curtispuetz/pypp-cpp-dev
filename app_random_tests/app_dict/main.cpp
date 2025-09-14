@@ -19,7 +19,7 @@ int main() {
             pypp::print("value:", value);
         }
         for (const auto &item : int_dict.items()) {
-            pypp::print("item:", item.get<0>(), "->", item.get<1>());
+            pypp::print("item:", item.first, "->", item.second);
         }
         int_dict[7] = pypp::PyStr("d");
         pypp::print("After adding 7->d:", int_dict);

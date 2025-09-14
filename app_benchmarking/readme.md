@@ -1,0 +1,1 @@
+note: the benchmarking in this folder should be discarded. I want doing benchmarks like this before I started using google benchmarks. The google benchmarks are greatly better. Those are in the `benchmarks` folder of this project.
