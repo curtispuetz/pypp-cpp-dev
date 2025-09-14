@@ -65,21 +65,28 @@ add_executable(bench_lists benchmarks/lists.cpp)
 target_link_libraries(bench_lists
   PRIVATE
     benchmark::benchmark
-    pypp_common              # your library target that contains MyVector
+    pypp_common
 )
 
 add_executable(bench_sets benchmarks/sets.cpp)
 target_link_libraries(bench_sets
   PRIVATE
     benchmark::benchmark
-    pypp_common              # your library target that contains MyVector
+    pypp_common
 )
 
 add_executable(bench_dicts benchmarks/dicts.cpp)
 target_link_libraries(bench_dicts
   PRIVATE
     benchmark::benchmark
-    pypp_common              # your library target that contains MyVector
+    pypp_common
+)
+
+add_executable(bench_loops benchmarks/loops.cpp)
+target_link_libraries(bench_loops
+  PRIVATE
+    benchmark::benchmark
+    pypp_common
 )
 
 add_subdirectory(app_benchmarking)
