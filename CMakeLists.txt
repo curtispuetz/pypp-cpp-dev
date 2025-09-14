@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 4.0)
+set(CMAKE_CXX_COMPILER clang++)
+set(CMAKE_C_COMPILER clang)
 project(pypp LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -21,6 +23,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(glad)
 glad_add_library(glad_gl_core_43 STATIC REPRODUCIBLE LOADER API gl:core=4.3)
+FetchContent_Declare(
+  benchmark
+  GIT_REPOSITORY https://github.com/google/benchmark.git
+  GIT_TAG v1.9.4
+)
+FetchContent_MakeAvailable(benchmark)
 # END DEPENDENCIES
 
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
@@ -52,6 +60,27 @@ target_link_libraries(opengl_test PRIVATE pypp_common)
 
 add_executable(opengl_test2 opengl_test2.cpp)
 target_link_libraries(opengl_test2 PRIVATE pypp_common)
+
+add_executable(bench_lists benchmarks/lists.cpp)
+target_link_libraries(bench_lists
+  PRIVATE
+    benchmark::benchmark
+    pypp_common              # your library target that contains MyVector
+)
+
+add_executable(bench_sets benchmarks/sets.cpp)
+target_link_libraries(bench_sets
+  PRIVATE
+    benchmark::benchmark
+    pypp_common              # your library target that contains MyVector
+)
+
+add_executable(bench_dicts benchmarks/dicts.cpp)
+target_link_libraries(bench_dicts
+  PRIVATE
+    benchmark::benchmark
+    pypp_common              # your library target that contains MyVector
+)
 
 add_subdirectory(app_benchmarking)
 add_subdirectory(app_optional)
