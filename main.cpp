@@ -7,6 +7,7 @@
 #include "py_set.h"
 #include "py_str.h"
 #include "py_tuple.h"
+#include "pypp_union.h"
 #include "pypp_util/create/cstdint.h"
 #include "pypp_util/create/others.h"
 #include "pypp_util/main_error_handler.h"
@@ -228,6 +229,25 @@ int main() {
                     pypp::bool_(my_float_32));
         pypp::print("int16_t: ", pypp::to_int16_t(my_int),
                     pypp::to_int16_t(my_float), pypp::to_int16_t(my_float_32));
+
+        // List initialization (example of copying behavior that we want to
+        // avoid in Py++)
+        pypp::PyList<int> list1 = {1, 2, 3};
+        pypp::PyList<pypp::PyList<int>> list2 = {list1, pypp::PyList({4, 5})};
+        list1.append(10);
+        pypp::print("list1: ", list1);
+        pypp::print("list2: ", list2);
+
+        // tuple initlialization (example of copying behavior that we want to
+        // avoid in Py++)
+        pypp::PyTup<int, pypp::PyList<int>> tup3(1, list1);
+        list1.append(20);
+        pypp::print("list1: ", list1);
+        pypp::print("tup3: ", tup3);
+
+        // Uni initialization (example of copying behavior that we want to avoid
+        // in Py++)
+        pypp::Uni<int, float, pypp::PyList<int>> u1();
 
         return 0;
     } catch (...) {
