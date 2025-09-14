@@ -13,7 +13,7 @@ int main() {
     try {
         // Get the resources path
         pypp::PyStr resource_path =
-            pypp::pypp_get_resource_dir(); // Ensure resources can be accessed
+            pypp::res_dir(); // Ensure resources can be accessed
         pypp::PyStr dir_path =
             pypp::os::path::join(resource_path, pypp::PyStr("test"));
         std::cout << "dir path: " << dir_path << std::endl;
