@@ -2,9 +2,9 @@
 #include <glad/gl.h>
 
 #include "exceptions/common.h"
-#include "opengl/first.h"
 #include "py_list.h"
 #include "py_str.h"
+#include "src/opengl/first.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 

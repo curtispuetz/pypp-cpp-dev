@@ -1,4 +1,4 @@
-#include "config_test.h"
+#include "src/config_test.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
 #include <pypp_util/main_error_handler.h>

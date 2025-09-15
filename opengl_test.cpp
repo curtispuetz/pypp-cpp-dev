@@ -1,4 +1,4 @@
-#include "opengl/first.h"
+#include "src/opengl/first.h"
 #include <glad/gl.h>
 
 #include <GLFW/glfw3.h>

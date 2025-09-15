@@ -1,6 +1,6 @@
-#include "benchmark.h"
 #include "py_list.h"
 #include "py_zip.h"
+#include "src/benchmark.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <pypp_util/main_error_handler.h>
 
