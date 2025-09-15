@@ -31,7 +31,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(benchmark)
 # END DEPENDENCIES
 
-file(GLOB_RECURSE SRC_FILES src/*.cpp)
+set(SRC_FILES
+    src/benchmark.cpp
+    src/opengl/first.cpp
+)
 file(GLOB_RECURSE PYPP_FILES pypp/*.cpp)
 file(GLOB_RECURSE LIB_FILES libs/*.cpp)
 
@@ -43,7 +46,7 @@ add_library(
 )
 target_include_directories(
     pypp_common PUBLIC 
-    ${CMAKE_SOURCE_DIR}/src 
+    ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/pypp 
     ${CMAKE_SOURCE_DIR}/libs
 )
@@ -60,6 +63,9 @@ target_link_libraries(opengl_test PRIVATE pypp_common)
 
 add_executable(opengl_test2 opengl_test2.cpp)
 target_link_libraries(opengl_test2 PRIVATE pypp_common)
+
+add_executable(test_main_file src/opengl/test_main_file.cpp)
+target_link_libraries(test_main_file PRIVATE pypp_common)
 
 add_executable(bench_lists benchmarks/lists.cpp)
 target_link_libraries(bench_lists

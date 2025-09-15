@@ -1,9 +1,9 @@
-#include "benchmark.h"
 #include "py_dict.h"
 #include "py_list.h"
 #include "py_set.h"
 #include "py_str.h"
 #include "py_zip.h"
+#include "src/benchmark.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
 #include <py_reversed.h>

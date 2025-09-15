@@ -1,4 +1,4 @@
-#include "benchmark.h"
+#include "src/benchmark.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <iostream>
 #include <py_enumerate.h>

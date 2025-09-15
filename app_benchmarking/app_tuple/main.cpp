@@ -1,8 +1,8 @@
-#include "benchmark.h"
 #include "py_list.h"
 #include "py_str.h"
 #include "py_tuple.h"
 #include "pypp_util/print.h"
+#include "src/benchmark.h"
 #include <cstdlib> // Required for EXIT_FAILURE
 #include <pypp_util/main_error_handler.h>
 
