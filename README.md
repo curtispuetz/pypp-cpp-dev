@@ -1,6 +1,13 @@
 # The Py++ development repo for C++ code
 This is the C++ development repo for [Py++](https://github.com/curtispuetz/pypp-cli).
 
-This repo contains the C++ implementations that are part of every Py++ project's generated C++ code (e.g. PyList, PySet, PyDict, etc.). It also includes some test code for these implementations.
+The code under the `pypp` directory is what I call the 'Py++ cpp template'. It is the code that is included in the generated C++ code for every Py++ project, as the C++ code that the Py++ transpiler generates relies on this code.
 
-The code developed in this repo under the 'pypp' directory is ultimately copied to the Py++ source code to be shipped. When Py++ initializes your projects' cpp repo, it copies this directory into there.
+The project also includes some random test code and some benchmarking using the google benchamrks library.
+
+## Building the project
+
+```text
+$ cmake -S . -B build -G "Ninja" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release
+$ cmake --build build --config Release
+```
