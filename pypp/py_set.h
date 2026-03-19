@@ -2,6 +2,7 @@
 
 #include "exceptions/common.h"
 #include "pypp_util/print_py_value.h"
+#include <algorithm>
 #include <format>
 #include <initializer_list>
 #include <iostream>

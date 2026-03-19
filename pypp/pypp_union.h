@@ -6,9 +6,9 @@
 #include <variant>
 
 namespace pypp {
-template <typename... Types> class Uni {
+template <typename First, typename... Rest> class Uni {
   public:
-    using VariantType = std::variant<Types...>;
+    using VariantType = std::variant<First, Rest...>;
 
     // Delete default constructor to require a value
     Uni() = delete;
@@ -18,7 +18,8 @@ template <typename... Types> class Uni {
     Uni &operator=(Uni &&) = default;
 
     template <typename T, typename = std::enable_if_t<
-                              (std::disjunction_v<std::is_same<T, Types>...>)>>
+                              (std::disjunction_v<std::is_same<T, First>,
+                                                  std::is_same<T, Rest>...>)>>
     explicit Uni(T &&value) : data_(std::move(value)) {}
 
     // Check if the stored value is of type T
@@ -50,12 +51,13 @@ template <typename... Types> class Uni {
     VariantType data_;
 };
 
-template <typename... Types>
-std::ostream &operator<<(std::ostream &os, const pypp::Uni<Types...> &u) {
+template <typename First, typename... Rest>
+std::ostream &operator<<(std::ostream &os, const pypp::Uni<First, Rest...> &u) {
     u.print(os);
     return os;
 }
 
 // deduction guide
-template <typename... Ts> Uni(Ts...) -> Uni<Ts...>;
+template <typename First, typename... Rest>
+Uni(First, Rest...) -> Uni<First, Rest...>;
 } // namespace pypp
