@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 4.0)
-set(CMAKE_CXX_COMPILER clang++)
-set(CMAKE_C_COMPILER clang)
+set(CMAKE_CXX_COMPILER g++)
+set(CMAKE_C_COMPILER gcc)
 project(pypp LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 23)
